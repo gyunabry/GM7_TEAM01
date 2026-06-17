@@ -40,6 +40,7 @@ public class EnemySpawner : MonoBehaviour
             for(int i =0; i<theSpawnCount; i++)
             {
                 GameObject enemy = Instantiate(info.enemyPrefab);
+                // EnemyData enemyData = info.enemyData;
 
                 Transform randomPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
                 enemy.transform.position = randomPoint.position;
