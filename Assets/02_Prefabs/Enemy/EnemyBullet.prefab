@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7834955126025159239}
   - component: {fileID: 309963622050813361}
   - component: {fileID: 6691277468675130261}
+  - component: {fileID: 3417943345609019291}
   m_Layer: 0
   m_Name: EnemyBullet
   m_TagString: Untagged
@@ -156,3 +157,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &3417943345609019291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7085451030641730648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c06b69c89899d4ab6c5626b84775d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBullet

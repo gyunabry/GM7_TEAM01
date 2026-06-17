@@ -41,13 +41,13 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
-        currentHp = maxHp;
-    }
+        // 풀에서 꺼내어질 때 스스로 기본 데이터 초기화
+        maxHp = currentEnemy.maxHp;
+        armor = currentEnemy.armor;
+        moveSpeed = currentEnemy.moveSpeed;
 
-    // 임시 초기화
-    private void Start()
-    {
-        Initialize(currentEnemy);
+        currentHp = maxHp;
+        ApplyStatusAgent();
     }
 
     private void Update()
@@ -59,24 +59,6 @@ public class EnemyController : MonoBehaviour
         {
             chaseCoroutine = StartCoroutine(ChaseTargetCo());
         }
-    }
-
-    private void OnDisable()
-    {
-        
-    }
-
-    // 외부에서 적 오브젝트에게 데이터를 주입하는 메서드
-    public void Initialize(EnemyData data)
-    {
-        currentEnemy = data;
-
-        maxHp = data.maxHp;
-        armor = data.armor;
-        moveSpeed = data.moveSpeed;
-
-        // 웨이브 데이터도 함께 주입받아 적용 ex) 난이도별 이동속도 배수
-        ApplyStatusAgent();
     }
 
     private void DetectTarget()
@@ -106,5 +88,10 @@ public class EnemyController : MonoBehaviour
             yield return chaseInterval;
         }
         chaseCoroutine = null;
+    }
+
+    private void ReturnToPool()
+    {
+        PoolManager.Instance.ReturnPool(this);
     }
 }

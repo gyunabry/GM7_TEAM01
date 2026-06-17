@@ -10,11 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86f345fbc89e2d84b90147dd1b778b5d, type: 3}
-  m_Name: Wave01
+  m_Name: Wave00
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
-  waveStartTiming: 5
-  waveDuration: 25
-  spawnList:
-  - enemyPrefab: {fileID: 7085451030641730648, guid: ead5f00e5285a2749af527468e022cf1, type: 3}
-    spawnCount: 2
-    spawnInterval: 2.5
+  waveStartTiming: 0
+  waveDuration: 5
+  spawnList: []

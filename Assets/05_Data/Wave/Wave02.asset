@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Wave02
   m_EditorClassIdentifier: Assembly-CSharp::WaveData
   waveStartTiming: 30
-  waveDuration: 60
+  waveDuration: 30
   spawnList:
   - enemyPrefab: {fileID: 7085451030641730648, guid: ead5f00e5285a2749af527468e022cf1, type: 3}
-    spawnCount: 5
+    spawnCount: 4
     spawnInterval: 2.5

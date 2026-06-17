@@ -17,16 +17,10 @@ public class EnemyAttack : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    // 임시 초기화
-    private void Start()
+    private void OnEnable()
     {
-        Initialize(attackData);
-    }
-
-    public void Initialize(EnemyAttackData data)
-    {
-        attackData = data;
-        attackTimer = data.attackCooltime;
+        // 풀에서 꺼내어질 때 스스로 기본 데이터 초기화
+        attackTimer = attackData.attackCooltime;
     }
 
     private void Update()
@@ -146,10 +140,10 @@ public class EnemyAttack : MonoBehaviour
 
     private void SpawnProjectile(Vector2 direction)
     {
-        // TODO: 오브젝트 풀링 적용
-        GameObject projectile = Instantiate(attackData.projectilePrefab, transform.position, Quaternion.identity);
-
-        Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
+        EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
+        // 투사체의 현재 위치를 몬스터의 위치로 설정
+        bullet.transform.position = transform.position;
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         if (rb != null)
         {
             rb.linearVelocity = direction * attackData.projectileSpeed;
