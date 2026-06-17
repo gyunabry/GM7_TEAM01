@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,6 +25,9 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rb;
     private NavMeshAgent agent;
 
+    // 코루틴 내에서 SetDestination 호출 딜레이
+    private WaitForSeconds chaseInterval = new WaitForSeconds(0.2f);
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -41,10 +46,17 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         DetectTarget();
+
+        // 타겟을 찾았다면 추적 코루틴 실행
         if (target != null)
         {
-            ChaseTarget();
+            StartCoroutine(SetDestinationToTarget());
         }
+    }
+
+    private void OnDisable()
+    {
+        
     }
 
     // 외부에서 적 오브젝트에게 데이터를 주입하는 메서드
@@ -56,6 +68,7 @@ public class EnemyController : MonoBehaviour
         armor = data.armor;
         moveSpeed = data.moveSpeed;
 
+        // 웨이브 데이터도 함께 주입받아 적용 ex) 난이도별 이동속도 배수
         ApplyStatusAgent();
     }
 
@@ -70,20 +83,17 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    // 플레이어를 추적해 이동하는 메서드
-    private void ChaseTarget()
-    {
-        //Vector3 direction = target.position - transform.position;
-        //direction.Normalize();
-
-        //Vector3 nextPosition = transform.position + direction * moveSpeed * Time.fixedDeltaTime;
-        //rb.MovePosition(nextPosition);
-        agent.SetDestination(target.position);
-    }
-
     // 주입받은 데이터를 NavMeshAgent의 필드에 할당
     private void ApplyStatusAgent()
     {
         agent.speed = moveSpeed;
+    }
+
+    // NavMeshAgent의 이동 목적지로 타겟의 위치를 설정
+    // 최적화를 위해 코루틴에서 SetDestination 호출에 딜레이
+    private IEnumerator SetDestinationToTarget()
+    {
+        agent.SetDestination(target.position);
+        yield return chaseInterval;
     }
 }

@@ -2,16 +2,13 @@ using UnityEngine;
 
 public enum AttackType
 {
-    None,
     Melee,
     Dash,
     Range,
-    Length
 }
 
 public enum BulletPattern
 {
-    None,
     Straight,
     Cone,
     Circle,
@@ -34,8 +31,12 @@ public class EnemyAttackData : ScriptableObject
     public GameObject projectilePrefab;
     public float projectileSpeed;
 
+    [Tooltip("투사체 개수")]
     public int projectileCount;
+    [Tooltip("투사체 발사 각도")]
     public float spreadAngle;
+    [Tooltip("궤도 반지름")]
     public float orbitRadius;
+    [Tooltip("궤도 회전 속도")]
     public float orbitSpeed;
 }
