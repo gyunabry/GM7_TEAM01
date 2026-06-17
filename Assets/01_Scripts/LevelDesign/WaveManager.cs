@@ -31,7 +31,10 @@ public class WaveManager : MonoBehaviour
     }
 
 
-
+    public void SetupStageWaves(List<WaveData> newstageWaves)
+    {
+        this.stageWaves = newstageWaves;
+    }
     public void StartStage()
     {
         stageTime = 0f;
