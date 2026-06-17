@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,20 +16,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string enemyAttackTagName;
 
     [Header("Player Stat")]
-    [SerializeField] private float maxHp;
-    [SerializeField] private float hpRegen;
-    [SerializeField] private float hpAbs;
-    [SerializeField] private float damage;
-    [SerializeField] private float armorPiercing;
-    [SerializeField] private float attackSpeed;
-    [SerializeField] private float cri;
-    [SerializeField] private float range;
-    [SerializeField] private float armor;
-    [SerializeField] private float evasion;
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float maxHp = 100;
+    [SerializeField] private float hpRegen = 0;
+    [SerializeField] private float hpAbs = 0;
+    [SerializeField] private float damage = 100;
+    [SerializeField] private float armorPiercing = 0;
+    [SerializeField] private float attackSpeed = 100;
+    [SerializeField] private float cri = 0;
+    [SerializeField] private float range = 0;
+    [SerializeField] private float armor = 0;
+    [SerializeField] private float evasion = 0;
+    [SerializeField] private float moveSpeed = 100;
 
     [Header("Player default")]
-    [SerializeField] private float baseSpeed;
+    [SerializeField] private float baseSpeed = 500;
 
     private void Awake()
     {
@@ -54,5 +56,24 @@ public class PlayerController : MonoBehaviour
         {
 
         }
+    }
+
+    public Dictionary<string, float> PlayerStat()
+    {
+        Dictionary<string, float> playerStat = new Dictionary<string, float>();
+        playerStat.Add("maxHp", maxHp);
+        playerStat.Add("hpRegen", hpRegen);
+        playerStat.Add("hpAbs", hpAbs);
+        playerStat.Add("damage", damage);
+        playerStat.Add("armorPiercing", armorPiercing);
+        playerStat.Add("attackSpeed", attackSpeed);
+        playerStat.Add("cri", cri);
+        playerStat.Add("range", range);
+        playerStat.Add("armor", armor);
+        playerStat.Add("evasion", evasion);
+        playerStat.Add("moveSpeed", moveSpeed);
+
+        return playerStat;
+         
     }
 }
