@@ -28,7 +28,7 @@ public class EnemyAttackData : ScriptableObject
 
     [Header("원거리 공격 설정")]
     public BulletPattern bulletPattern;
-    public GameObject projectilePrefab;
+    public EnemyBullet projectilePrefab;
     public float projectileSpeed;
 
     [Tooltip("투사체 개수")]
