@@ -19,14 +19,15 @@ public class EnemyController : MonoBehaviour
     private int currentHp;
 
     // 현재 적 오브젝트에 주입된 몬스터 데이터
-    private EnemyData currentEnemy;
+    [SerializeField] private EnemyData currentEnemy;
     public Transform target;
 
     private Rigidbody2D rb;
     private NavMeshAgent agent;
 
+    private Coroutine chaseCoroutine;
     // 코루틴 내에서 SetDestination 호출 딜레이
-    private WaitForSeconds chaseInterval = new WaitForSeconds(0.2f);
+    private WaitForSeconds chaseInterval = new WaitForSeconds(0.5f);
 
     private void Awake()
     {
@@ -40,7 +41,13 @@ public class EnemyController : MonoBehaviour
 
     private void OnEnable()
     {
+        // 풀에서 꺼내어질 때 스스로 기본 데이터 초기화
+        maxHp = currentEnemy.maxHp;
+        armor = currentEnemy.armor;
+        moveSpeed = currentEnemy.moveSpeed;
+
         currentHp = maxHp;
+        ApplyStatusAgent();
     }
 
     private void Update()
@@ -48,28 +55,10 @@ public class EnemyController : MonoBehaviour
         DetectTarget();
 
         // 타겟을 찾았다면 추적 코루틴 실행
-        if (target != null)
+        if (target != null || chaseCoroutine == null)
         {
-            StartCoroutine(SetDestinationToTarget());
+            chaseCoroutine = StartCoroutine(ChaseTargetCo());
         }
-    }
-
-    private void OnDisable()
-    {
-        
-    }
-
-    // 외부에서 적 오브젝트에게 데이터를 주입하는 메서드
-    public void Initialize(EnemyData data)
-    {
-        currentEnemy = data;
-
-        maxHp = data.maxHp;
-        armor = data.armor;
-        moveSpeed = data.moveSpeed;
-
-        // 웨이브 데이터도 함께 주입받아 적용 ex) 난이도별 이동속도 배수
-        ApplyStatusAgent();
     }
 
     private void DetectTarget()
@@ -91,9 +80,18 @@ public class EnemyController : MonoBehaviour
 
     // NavMeshAgent의 이동 목적지로 타겟의 위치를 설정
     // 최적화를 위해 코루틴에서 SetDestination 호출에 딜레이
-    private IEnumerator SetDestinationToTarget()
+    private IEnumerator ChaseTargetCo()
     {
-        agent.SetDestination(target.position);
-        yield return chaseInterval;
+        while (target != null)
+        {
+            agent.SetDestination(target.position);
+            yield return chaseInterval;
+        }
+        chaseCoroutine = null;
+    }
+
+    private void ReturnToPool()
+    {
+        PoolManager.Instance.ReturnPool(this);
     }
 }
