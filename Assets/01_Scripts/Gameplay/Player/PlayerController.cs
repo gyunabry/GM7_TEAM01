@@ -23,8 +23,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerWeaponManager weaponManager;
 
     [Header("Tag")]
-    [SerializeField] private LayerMask enemyLayerName;
-    [SerializeField] private LayerMask enemyAttackLayerName;
+    [SerializeField] private string enemyTagName;
+    [SerializeField] private string enemyAttackTagName;
 
     [Header("Player Stat")]
     [SerializeField] private float maxHp = 100f;
@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Weapon")]
     [SerializeField] private List<PlayerWeaponSO> playerWeapon;
-
     private float nowHp = 100f;
     private bool invincible = false;
 
@@ -70,17 +69,16 @@ public class PlayerController : MonoBehaviour
         Vector2 move = moveia.ReadValue<Vector2>().normalized;
         rb.linearVelocity = move * (moveSpeed / 100) * baseSpeed * Time.deltaTime;
     }
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (invincible == true) return;
-        if (enemyLayerName == (enemyLayerName | (1 << collision.gameObject.layer)))
+        if (collision.collider.CompareTag(enemyTagName))
         {
-            Debug.Log("dd");
             co = StartCoroutine(OnEnemyAttack(collision));
         }
-        else if (enemyAttackLayerName == (enemyAttackLayerName | (1 << collision.gameObject.layer)))
+        else if (collision.collider.CompareTag(enemyAttackTagName))
         {
-
+            
         }
     }
 
@@ -111,8 +109,8 @@ public class PlayerController : MonoBehaviour
     IEnumerator OnEnemyAttack(Collision2D collision)
     {
         invincible = true;
-        EnemyAttack enemyAttack = collision.collider.GetComponent<EnemyAttack>();
-        //HP깍이는거 구현할 자리
+        EnemyAttackData enemyAttackData = collision.collider.GetComponent<EnemyAttackData>();
+        nowHp -= enemyAttackData.attackDamage;
         yield return new WaitForSecondsRealtime(invincibleTime);
         invincible = false;
         co = null;
