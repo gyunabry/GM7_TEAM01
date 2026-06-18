@@ -1,0 +1,31 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Pool;
+
+public class Arrow : MonoBehaviour
+{
+    [SerializeField] private float arrowSpeed;
+    private ObjectPool<Arrow> pool;
+    private Coroutine co;
+    private PlayerWeaponSO playerWeapon;
+    private void Awake()
+    {
+        playerWeapon = GetComponentInParent<PlayerWeaponSO>();
+    }
+    public void SetPool(ObjectPool<Arrow> pool)
+    {
+        this.pool = pool;
+    }
+
+    void Update()
+    {
+        transform.Translate(Vector2.up * arrowSpeed * Time.deltaTime);
+        co = StartCoroutine(ReleaseTime());
+    }
+    IEnumerator ReleaseTime()
+    {
+        yield return new WaitForSecondsRealtime(5.0f);
+        pool.Release(this);
+        co = null;
+    }
+}
