@@ -8,10 +8,14 @@ public class Arrow : MonoBehaviour
     private ObjectPool<Arrow> pool;
     private Coroutine co;
     private PlayerWeaponSO playerWeapon;
+    private PlayerController playerController;
+
     private void Awake()
     {
-        playerWeapon = GetComponentInParent<PlayerWeaponSO>();
+        playerController = FindAnyObjectByType<PlayerController>();
+        playerWeapon = playerController.GetWeapon();
     }
+    
     public void SetPool(ObjectPool<Arrow> pool)
     {
         this.pool = pool;
@@ -19,7 +23,8 @@ public class Arrow : MonoBehaviour
 
     void Update()
     {
-        transform.Translate(Vector2.up * arrowSpeed * Time.deltaTime);
+        Vector2 dir = new Vector2(1f, 1f);
+        transform.Translate(dir * arrowSpeed * Time.deltaTime);
         co = StartCoroutine(ReleaseTime());
     }
     IEnumerator ReleaseTime()
@@ -27,5 +32,19 @@ public class Arrow : MonoBehaviour
         yield return new WaitForSecondsRealtime(5.0f);
         pool.Release(this);
         co = null;
+    }
+   
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            Debug.Log("적 타격");
+            IDamageable go = collision.gameObject.GetComponent<IDamageable>(); //IDamageable 로 안되면 바꾸기
+            if (go != null)
+            {
+                go.TakeDamage(playerWeapon.weaponDamage);
+                pool.Release(this);
+            }
+        }
     }
 }

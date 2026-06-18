@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
 {
     private PlayerWeaponSO playerWeapon;
     private PlayerController playerController;
+    private ArrowPooling arrowPooling;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject weaponSprite;
     private Coroutine co;
@@ -23,11 +24,12 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake() //무기 생성 부분 UI완성시 바꿀것
     {
+        arrowPooling = FindFirstObjectByType<ArrowPooling>();
         playerController = GetComponentInParent<PlayerController>();
         playerWeapon = playerController.GetWeapon();
         Vector3 srPosition = transform.position;
         srPosition.x += 0.3f;
-        
+        GetPlayerStat();
         GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         sr.sprite = playerWeapon.weaponIcon;
@@ -36,12 +38,15 @@ public class PlayerAttack : MonoBehaviour
     }
     void Update()
     {
-        playerStat = playerController.PlayerStat();
         if (isCo == false)
         {
             isCo = true;
             co = StartCoroutine(Weapon());
         }
+    }
+    public void GetPlayerStat()
+    {
+        playerStat = playerController.PlayerStat();
     }
     IEnumerator Weapon()
     {
@@ -77,7 +82,7 @@ public class PlayerAttack : MonoBehaviour
         {
             isAttackCo = true;
             Vector2 nowTrans = transform.localPosition;
-            Vector2 direction = other.transform.position - transform.position.normalized;
+            Vector2 direction = other.transform.position - transform.position;
             Vector2 targetPosition = (Vector2)other.transform.position - (direction *0.3f);
             transform.position = targetPosition;
             yield return new WaitForSecondsRealtime(0.2f);
@@ -85,13 +90,18 @@ public class PlayerAttack : MonoBehaviour
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
             isAttackCo = false;
             attackco = null;
-
-            
         }
         else if(playerWeapon.weaponType.ToString() == "Bow")
         {
             isAttackCo = true;
-
+            Vector2 direction = other.transform.position - transform.position;
+            float rotz = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg -90f;
+            Arrow arrow = arrowPooling.ArrowPool();
+            arrow.transform.position = transform.position;
+            arrow.transform.Rotate(0f, 0f, rotz + 45f);
+            yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
+            isAttackCo = false;
+            attackco = null;
         }
     }
 }
