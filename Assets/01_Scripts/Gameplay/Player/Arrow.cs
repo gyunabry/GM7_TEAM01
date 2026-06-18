@@ -8,6 +8,7 @@ public class Arrow : MonoBehaviour
     private PlayerAttack playerAttack;
     private PlayerWeaponSO playerWeapon;
 <<<<<<< HEAD
+<<<<<<< HEAD
     private PlayerController playerController;
 
 
@@ -16,6 +17,8 @@ public class Arrow : MonoBehaviour
         Vector2 dir = new Vector2(1f, 1f);
         transform.Translate(dir * arrowSpeed * Time.deltaTime);
 =======
+=======
+>>>>>>> parent of c78d4e96 (feat: bow & stat)
     private void Awake()
     {
         playerWeapon = GetComponentInParent<PlayerWeaponSO>();
@@ -42,6 +45,7 @@ public class Arrow : MonoBehaviour
         // 활성화 4초 이후 풀로 반환
         Invoke(nameof(ReturnToPool), 4f);
     }
+<<<<<<< HEAD
     private void ReturnToPool()
     {
         CancelInvoke(nameof(ReturnToPool));
@@ -59,6 +63,8 @@ public class Arrow : MonoBehaviour
             }
         }
     }
+=======
+>>>>>>> parent of c78d4e96 (feat: bow & stat)
 =======
 >>>>>>> parent of c78d4e96 (feat: bow & stat)
 }

@@ -94,6 +94,7 @@ public class PlayerAttack : MonoBehaviour
         {
             isAttackCo = true;
 <<<<<<< HEAD
+<<<<<<< HEAD
             Vector2 direction = (other.transform.position - transform.position).normalized;
             SpawnProjectile(direction);
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
@@ -113,6 +114,9 @@ public class PlayerAttack : MonoBehaviour
         if (rb != null)
         {
             rb.linearVelocity = direction * arrow.arrowSpeed;
+=======
+
+>>>>>>> parent of c78d4e96 (feat: bow & stat)
         }
     }
 }

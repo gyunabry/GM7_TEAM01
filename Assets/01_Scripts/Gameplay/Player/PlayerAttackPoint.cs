@@ -14,7 +14,10 @@ public class PlayerAttackPoint : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D collision)
     {
 <<<<<<< HEAD
+<<<<<<< HEAD
         if (playerWeapon.weaponType.ToString() == "Bow") return;    
+=======
+>>>>>>> parent of c78d4e96 (feat: bow & stat)
 =======
 >>>>>>> parent of c78d4e96 (feat: bow & stat)
         if (collision.CompareTag("Enemy"))
