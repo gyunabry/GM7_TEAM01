@@ -38,7 +38,6 @@ public class Arrow : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            Debug.Log("적 타격");
             IDamageable go = collision.gameObject.GetComponent<IDamageable>(); //IDamageable 로 안되면 바꾸기
             if (go != null)
             {

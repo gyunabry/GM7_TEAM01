@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private List<PlayerWeaponSO> playerWeapon;
     private float nowHp { get; set; } = 100f;
     private bool invincible { get; set; } = false;
-
+    private int ijk = 1; //임시 변수 (삭제할것)
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
@@ -131,11 +131,20 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
-        playerWeapon.Add(weaponManager.GetWeapon("Bow"));
-        Instantiate(arm, transform.position, Quaternion.identity, transform);
+        if(ijk % 2 == 0)
+        {
+            playerWeapon.Add(weaponManager.GetWeapon("Bow"));
+            ijk++;
+        }
+        else
+        {
+            playerWeapon.Add(weaponManager.GetWeapon("Sword"));
+            ijk++;
+        }
+            Instantiate(arm, transform.position, Quaternion.identity, transform);
 
         float radius = 1f;
-        int childNum = transform.childCount;
+        int childNum = transform.childCount - 1;
         if (childNum == 2) 
         {
             childNum++;
