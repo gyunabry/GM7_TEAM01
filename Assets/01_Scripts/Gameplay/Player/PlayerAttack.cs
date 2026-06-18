@@ -9,12 +9,13 @@ public class PlayerAttack : MonoBehaviour
 {
     private PlayerWeaponSO playerWeapon;
     private PlayerController playerController;
-    private ArrowPooling arrowPooling;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject weaponSprite;
+    [SerializeField] private GameObject arrowPrefab;
     private Coroutine co;
     private Coroutine attackco;
-    
+
+    public Collider2D colliderA = null;
 
     private Dictionary<string, float> playerStat;
 
@@ -24,7 +25,6 @@ public class PlayerAttack : MonoBehaviour
 
     private void Awake() //무기 생성 부분 UI완성시 바꿀것
     {
-        arrowPooling = FindFirstObjectByType<ArrowPooling>();
         playerController = GetComponentInParent<PlayerController>();
         playerWeapon = playerController.GetWeapon();
         Vector3 srPosition = transform.position;
@@ -54,12 +54,12 @@ public class PlayerAttack : MonoBehaviour
         {
             while (true)
             {
-                Collider2D collider = Physics2D.OverlapCircle(transform.position, playerWeapon.weaponRange + (playerStat["range"] / 100), enemyLayer);
-                if (collider != null) {
-                    transform.rotation = Quaternion.Euler(0, 0, LookEnemy(collider));
+                colliderA = Physics2D.OverlapCircle(transform.position, playerWeapon.weaponRange + (playerStat["range"] / 100), enemyLayer);
+                if (colliderA != null) {
+                    transform.rotation = Quaternion.Euler(0, 0, LookEnemy(colliderA));
                     if (isAttackCo == false)
                     {
-                        attackco = StartCoroutine(Attack(collider));
+                        attackco = StartCoroutine(Attack(colliderA));
                     }
                     break;
                 }
@@ -94,14 +94,22 @@ public class PlayerAttack : MonoBehaviour
         else if(playerWeapon.weaponType.ToString() == "Bow")
         {
             isAttackCo = true;
-            Vector2 direction = other.transform.position - transform.position;
-            float rotz = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg -90f;
-            Arrow arrow = arrowPooling.ArrowPool();
-            arrow.transform.position = transform.position;
-            arrow.transform.Rotate(0f, 0f, rotz + 45f);
+            Vector2 direction = (other.transform.position - transform.position).normalized;
+            SpawnProjectile(direction);
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
             isAttackCo = false;
             attackco = null;
+        }
+    }
+    private void SpawnProjectile(Vector2 direction)
+    {
+        Arrow arrow = PoolManager.Instance.GetPool(playerWeapon.arrow);
+        // 투사체의 현재 위치를 몬스터의 위치로 설정
+        arrow.transform.position = transform.position;
+        Rigidbody2D rb = arrow.GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.linearVelocity = direction * arrow.arrowSpeed;
         }
     }
 }

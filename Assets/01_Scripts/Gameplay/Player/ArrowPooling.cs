@@ -28,7 +28,6 @@ public class ArrowPooling : MonoBehaviour
     private Arrow CreatePool()
     {
         Arrow arrow = Instantiate(arrowPrefab);
-        arrow.SetPool(pool);
         return arrow;
     }
     private void EnablePool(Arrow obj)

@@ -13,7 +13,7 @@ public class PlayerAttackPoint : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if (playerWeapon.weaponType.ToString() == "Bow") return;
+        if (playerWeapon.weaponType.ToString() == "Bow") return;    
         if (collision.CompareTag("Enemy"))
         {
             IDamageable go = collision.gameObject.GetComponent<IDamageable>(); //IDamageable 로 안되면 바꾸기

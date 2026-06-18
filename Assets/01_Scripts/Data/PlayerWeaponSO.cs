@@ -19,5 +19,5 @@ public class PlayerWeaponSO : ScriptableObject
     public float weaponAttackSpeed;
     public float weaponRange;
     public float weaponCri;
-
+    public Arrow arrow;
 }
