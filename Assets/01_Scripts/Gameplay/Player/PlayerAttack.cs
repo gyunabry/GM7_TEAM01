@@ -12,6 +12,7 @@ public class PlayerAttack : MonoBehaviour
     private ArrowPooling arrowPooling;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private GameObject weaponSprite;
+    private BoxCollider2D childBox;
     private Coroutine co;
     private Coroutine attackco;
     
@@ -33,8 +34,11 @@ public class PlayerAttack : MonoBehaviour
         GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         sr.sprite = playerWeapon.weaponIcon;
-       
-
+    }
+    private void Start()
+    {
+        childBox = GetComponentInChildren<BoxCollider2D>();
+        
     }
     void Update()
     {
@@ -81,11 +85,13 @@ public class PlayerAttack : MonoBehaviour
         if(playerWeapon.weaponType.ToString() == "Sword")
         {
             isAttackCo = true;
+            childBox.enabled = true;
             Vector2 nowTrans = transform.localPosition;
             Vector2 direction = other.transform.position - transform.position;
-            Vector2 targetPosition = (Vector2)other.transform.position - (direction *0.3f);
+            Vector2 targetPosition = (Vector2)other.transform.position - (direction * 0.05f); 
             transform.position = targetPosition;
             yield return new WaitForSecondsRealtime(0.2f);
+            childBox.enabled = false;
             transform.localPosition = nowTrans;
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
             isAttackCo = false;
@@ -94,6 +100,7 @@ public class PlayerAttack : MonoBehaviour
         else if(playerWeapon.weaponType.ToString() == "Bow")
         {
             isAttackCo = true;
+            childBox.enabled = false;
             Vector2 direction = other.transform.position - transform.position;
             float rotz = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg -90f;
             Arrow arrow = arrowPooling.ArrowPool();

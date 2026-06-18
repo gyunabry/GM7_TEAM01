@@ -34,16 +34,5 @@ public class Arrow : MonoBehaviour
         co = null;
     }
    
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Enemy"))
-        {
-            IDamageable go = collision.gameObject.GetComponent<IDamageable>(); //IDamageable 로 안되면 바꾸기
-            if (go != null)
-            {
-                go.TakeDamage(playerWeapon.weaponDamage);
-                pool.Release(this);
-            }
-        }
-    }
+    
 }

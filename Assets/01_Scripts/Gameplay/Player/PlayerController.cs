@@ -47,9 +47,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float baseSpeed = 500f;
 
     [Header("Player Weapon")]
-    [SerializeField] private List<PlayerWeaponSO> playerWeapon;
+    private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> playerWeapon;
     private float nowHp { get; set; } = 100f;
     private bool invincible { get; set; } = false;
+    private PlayerWeaponSO.WeaponType reWeaponType;
     private int ijk = 1; //임시 변수 (삭제할것)
     private void Awake()
     {
@@ -92,9 +93,20 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public PlayerWeaponSO GetWeapon()
     {
-        if (playerWeapon == null) return null;
-        int a = playerWeapon.Count;
-        return playerWeapon[a - 1];
+        PlayerWeaponSO pws;
+        PlayerWeaponSO.WeaponType type = 
+        if(playerWeapon.TryGetValue(reWeaponType, out pws))
+        {
+            return pws;
+        }
+        else
+        {
+            return null;
+        }
+        
+
+        
+        
     }
     public void TakeDamage(float damage)
     {
@@ -129,16 +141,22 @@ public class PlayerController : MonoBehaviour, IDamageable
         invincible = false;
         co = null;
     }
+    public void OnWeaponTypeName(PlayerWeaponSO.WeaponType typeName)
+    {
+        reWeaponType = typeName;
+        PlayerWeaponSO pws;
+        
+    }
     public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
         if(ijk % 2 == 0)
         {
-            playerWeapon.Add(weaponManager.GetWeapon("Bow"));
+            playerWeapon.Add(weaponManager.GetWeaponType(reWeaponType), weaponManager.GetWeapon(reWeaponType));
             ijk++;
         }
         else
         {
-            playerWeapon.Add(weaponManager.GetWeapon("Sword"));
+            
             ijk++;
         }
             Instantiate(arm, transform.position, Quaternion.identity, transform);
@@ -153,14 +171,14 @@ public class PlayerController : MonoBehaviour, IDamageable
                 if (i == 1) {
                     i++;
                     float angle2 = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
-                    GameObject child2 = transform.GetChild(i-1).gameObject;
+                    GameObject child2 = transform.GetChild(i).gameObject;
                     float x2 = Mathf.Cos(angle2);
                     float y2 = Mathf.Sin(angle2);
                     child2.transform.position = transform.position + new Vector3(x2, y2, 0) * radius;
                     break;
                 }
                 float angle = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
-                GameObject child = transform.GetChild(i).gameObject;
+                GameObject child = transform.GetChild(i+1).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
@@ -172,7 +190,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             for (int i = 0; i < childNum; i++)
             {
                 float angle = Mathf.PI * 1.75f + i * (Mathf.PI * 2f) / childNum;
-                GameObject child = transform.GetChild(i).gameObject;
+                GameObject child = transform.GetChild(i+1).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
@@ -183,7 +201,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             for (int i = 0; i < childNum; i++)
             {
                 float angle = Mathf.PI * 1.7f + i * (Mathf.PI * 2f) / childNum;
-                GameObject child = transform.GetChild(i).gameObject;
+                GameObject child = transform.GetChild(i+1).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
@@ -194,7 +212,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             for (int i = 0; i < childNum; i++)
             {
                 float angle = Mathf.PI * 1.67f + i * (Mathf.PI * 2f) / childNum;
-                GameObject child = transform.GetChild(i).gameObject;
+                GameObject child = transform.GetChild(i+1).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
@@ -205,7 +223,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             for (int i = 0; i < childNum; i++)
             {
                 float angle = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
-                GameObject child = transform.GetChild(i).gameObject;
+                GameObject child = transform.GetChild(i+1).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
