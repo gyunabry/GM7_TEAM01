@@ -56,9 +56,14 @@ public class EnemyController : MonoBehaviour, IDamageable
         DetectTarget();
 
         // 타겟을 찾았다면 추적 코루틴 실행
-        if (target != null && chaseCoroutine == null)
+        if (target != null)
         {
-            chaseCoroutine = StartCoroutine(ChaseTargetCo());
+            FaceToTarget();
+
+            if (chaseCoroutine == null)
+            {
+                chaseCoroutine = StartCoroutine(ChaseTargetCo());
+            }
         }
     }
 
@@ -97,6 +102,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         while (target != null)
         {
             agent.SetDestination(target.position);
+            
             yield return chaseInterval;
         }
         chaseCoroutine = null;
@@ -124,5 +130,22 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void ReturnToPool()
     {
         PoolManager.Instance.ReturnPool(this);
+    }
+
+    private void FaceToTarget()
+    {
+        if (target == null) return;
+
+        // 플레이어 방향 벡터 계산
+        Vector2 direction = (target.position - transform.position).normalized;
+
+        // 방향을 각도로 변환
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // 해당 각도를 향하는 쿼터니언 값 저장
+        Quaternion targetRotation = Quaternion.Euler(0, 0, angle);
+
+        // 부드러운 회전 적용
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 360f);
     }
 }

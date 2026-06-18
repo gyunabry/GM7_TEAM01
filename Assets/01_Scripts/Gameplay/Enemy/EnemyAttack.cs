@@ -61,6 +61,7 @@ public class EnemyAttack : MonoBehaviour
     #region 공격타입 코루틴
     private IEnumerator MeleeAttackCo()
     {
+        
         yield return null;
     }
 
@@ -70,7 +71,7 @@ public class EnemyAttack : MonoBehaviour
         agent.isStopped = true;
         Vector3 lastPosition = enemyController.target.position; // 대쉬 직전 타겟 위치 저장
         Vector3 dashDirection = (lastPosition - transform.position).normalized;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.5f);
 
         // 대쉬 실행
         float dashSpeed = 10f;
@@ -93,15 +94,22 @@ public class EnemyAttack : MonoBehaviour
     {
         agent.isStopped = true; // 원거리 공격 시 추적 일시정지
 
+        yield return new WaitForSeconds(1f); // 발사 전 딜레이
+
         switch (attackData.bulletPattern)
         {
             case BulletPattern.Straight:
                 FireStraight();
                 break;
+            case BulletPattern.Cone:
+                FireCone(); 
+                break;
             case BulletPattern.Circle:
                 FireCircle();
                 break;
-                // TODO: 원뿔, 궤도형 공격 추가 구현
+            case BulletPattern.Orbit:
+                FireOrbit();
+                break;
         }
 
         yield return new WaitForSeconds(0.5f); // 발사 후 딜레이
@@ -117,6 +125,20 @@ public class EnemyAttack : MonoBehaviour
         // 타겟 방향으로 발사
         Vector2 direction = (enemyController.target.position - transform.position).normalized;
         SpawnProjectile(direction);
+    }
+
+    private void FireCone()
+    {
+        float angleRange = attackData.spreadAngle; // 데이터 상 발사각
+        float startAngle = -angleRange * 0.5f; // 시작 각도
+        float angleStep = angleRange / (attackData.projectileCount - 1); // 투사체 간 간격
+        
+        for (int i = 0; i < attackData.projectileCount; i++)
+        {
+            float angle = startAngle + angleStep * i;
+            Vector2 direction = Quaternion.Euler(0, 0, angle) * transform.right;
+            SpawnProjectile(direction);
+        }
     }
 
     private void FireCircle()
@@ -136,6 +158,12 @@ public class EnemyAttack : MonoBehaviour
             SpawnProjectile(projectileMoveDirection);
             angle += angleStep;
         }
+    }
+
+    // 보스 전용 패턴
+    private void FireOrbit()
+    {
+        
     }
 
     private void SpawnProjectile(Vector2 direction)
