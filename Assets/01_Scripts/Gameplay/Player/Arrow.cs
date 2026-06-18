@@ -7,13 +7,11 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float arrowSpeed;
     private ObjectPool<Arrow> pool;
     private Coroutine co;
-    private PlayerWeaponSO playerWeapon;
-    private PlayerController playerController;
+    
 
     private void Awake()
     {
-        playerController = FindAnyObjectByType<PlayerController>();
-        playerWeapon = playerController.GetWeapon();
+        
     }
     
     public void SetPool(ObjectPool<Arrow> pool)

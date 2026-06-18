@@ -22,10 +22,6 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("WeaponManager")]
     [SerializeField] PlayerWeaponManager weaponManager;
 
-    [Header("Tag")]
-    [SerializeField] private string enemyTagName;
-    [SerializeField] private string enemyAttackTagName;
-
     [Header("Player Stat")]
     [SerializeField] private float maxHp = 100f;
     [SerializeField] private float hpRegen = 0f;
@@ -47,11 +43,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float baseSpeed = 500f;
 
     [Header("Player Weapon")]
-    private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> playerWeapon;
+    private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> playerWeapon = new Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO>();
     private float nowHp { get; set; } = 100f;
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
-    private int ijk = 1; //임시 변수 (삭제할것)
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
@@ -94,7 +89,6 @@ public class PlayerController : MonoBehaviour, IDamageable
     public PlayerWeaponSO GetWeapon()
     {
         PlayerWeaponSO pws;
-        PlayerWeaponSO.WeaponType type = 
         if(playerWeapon.TryGetValue(reWeaponType, out pws))
         {
             return pws;
@@ -103,16 +97,28 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             return null;
         }
-        
-
-        
-        
+    }
+    public PlayerWeaponSO GetWeaponStat(PlayerWeaponSO.WeaponType type)
+    {
+        PlayerWeaponSO pws;
+        if(playerWeapon.TryGetValue(type, out pws)){
+            return pws;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    public PlayerWeaponSO.WeaponType OnWeaponTypeName(PlayerWeaponSO.WeaponType typeName)
+    {
+        return typeName;
     }
     public void TakeDamage(float damage)
     {
         if (invincible == true) return;
         co = StartCoroutine(OnEnemyAttack(damage));
     }
+    //플레이어 스탯 수치 가져오기
     public float GetMaxHp()
     {
         return this.maxHp;
@@ -133,6 +139,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return this.gold;
     }
+    //끝
     IEnumerator OnEnemyAttack(float damage)
     {
         invincible = true;
@@ -141,26 +148,26 @@ public class PlayerController : MonoBehaviour, IDamageable
         invincible = false;
         co = null;
     }
-    public void OnWeaponTypeName(PlayerWeaponSO.WeaponType typeName)
-    {
-        reWeaponType = typeName;
-        PlayerWeaponSO pws;
-        
-    }
+    
     public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
-        if(ijk % 2 == 0)
+        if(playerWeapon.Count == 0)
         {
-            playerWeapon.Add(weaponManager.GetWeaponType(reWeaponType), weaponManager.GetWeapon(reWeaponType));
-            ijk++;
+            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Sword);
+        }
+        else if (playerWeapon.Count == 1)
+        {
+            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Bow);
         }
         else
         {
-            
-            ijk++;
+            return;
         }
-            Instantiate(arm, transform.position, Quaternion.identity, transform);
-
+            PlayerWeaponSO.WeaponType imWeaponType = weaponManager.GetWeaponType(reWeaponType);
+        PlayerWeaponSO imWeapon = weaponManager.GetWeapon(reWeaponType);
+        playerWeapon.Add(imWeaponType, imWeapon);
+        
+        Instantiate(arm, transform.position, Quaternion.identity, transform);
         float radius = 1f;
         int childNum = transform.childCount - 1;
         if (childNum == 2) 

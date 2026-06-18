@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UIElements;
 
 public class PlayerAttack : MonoBehaviour
@@ -11,35 +14,59 @@ public class PlayerAttack : MonoBehaviour
     private PlayerController playerController;
     private ArrowPooling arrowPooling;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private GameObject weaponSprite;
+    private GameObject weaponSprite;
     private BoxCollider2D childBox;
+    private Transform parentTrans;
     private Coroutine co;
     private Coroutine attackco;
-    
-
+    private PlayerWeaponSO.WeaponType weaponType;
     private Dictionary<string, float> playerStat;
+
+    private AssetBundle assetBundle;
+    private GameObject instant;
 
     private bool isCo = false;
     private bool isAttackCo = false;
+    private string weaponName;
    
 
     private void Awake() //무기 생성 부분 UI완성시 바꿀것
     {
         arrowPooling = FindFirstObjectByType<ArrowPooling>();
         playerController = GetComponentInParent<PlayerController>();
-        playerWeapon = playerController.GetWeapon();
-        Vector3 srPosition = transform.position;
-        srPosition.x += 0.3f;
+        parentTrans = GetComponentInParent<Transform>();
         GetPlayerStat();
-        GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
-        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-        sr.sprite = playerWeapon.weaponIcon;
+    }
+    public void OnPrefabLoaded(AsyncOperationHandle<GameObject> handle)
+    {
+        if(handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            instant = handle.Result;
+            instant.transform.Rotate(0f, 0f, -45f);
+            SpriteRenderer sr = instant.GetComponent<SpriteRenderer>();
+            sr.sprite = playerWeapon.weaponIcon;
+            instant.transform.SetParent(this.transform);
+            Vector3 srPosition = transform.position;
+            srPosition.x += 0.3f;
+            instant.transform.position = srPosition;
+            childBox = GetComponentInChildren<BoxCollider2D>();
+        }
+        else
+        {
+
+        }
     }
     private void Start()
     {
-        childBox = GetComponentInChildren<BoxCollider2D>();
+        playerWeapon = playerController.GetWeapon();
+        weaponType = playerWeapon.weaponType;
+        weaponName = weaponType.ToString();
+
+        Addressables.InstantiateAsync(weaponType.ToString()).Completed += OnPrefabLoaded;
         
     }
+    // GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
+
     void Update()
     {
         if (isCo == false)
@@ -48,12 +75,18 @@ public class PlayerAttack : MonoBehaviour
             co = StartCoroutine(Weapon());
         }
     }
+    public PlayerWeaponSO.WeaponType GetParentType()
+    {
+        return weaponType;
+    }
     public void GetPlayerStat()
     {
         playerStat = playerController.PlayerStat();
     }
     IEnumerator Weapon()
     {
+        yield return new WaitForSecondsRealtime(1.0f);
+
         while (true)
         {
             while (true)
@@ -106,6 +139,7 @@ public class PlayerAttack : MonoBehaviour
             Arrow arrow = arrowPooling.ArrowPool();
             arrow.transform.position = transform.position;
             arrow.transform.Rotate(0f, 0f, rotz + 45f);
+            Debug.Log("asd");
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
             isAttackCo = false;
             attackco = null;

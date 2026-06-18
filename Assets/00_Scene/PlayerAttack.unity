@@ -407,8 +407,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   arm: {fileID: 4761606410593759796, guid: f15112f939b32c249bdf1bc4367f979b, type: 3}
   weaponManager: {fileID: 1831831297}
-  enemyTagName: Water
-  enemyAttackTagName: 
   maxHp: 100
   hpRegen: 0
   hpAbs: 0
@@ -425,7 +423,6 @@ MonoBehaviour:
   reqExp: 50
   gold: 0
   baseSpeed: 500
-  playerWeapon: []
 --- !u!61 &1742055364
 BoxCollider2D:
   m_ObjectHideFlags: 0
