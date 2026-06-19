@@ -72,7 +72,6 @@ public class PlayerAttack : MonoBehaviour
         playerWeapon = playerController.GetWeapon();
         weaponType = playerWeapon.weaponType;
         weaponName = weaponType.ToString();
-        Debug.Log(weaponType.ToString());
         Addressables.InstantiateAsync(weaponType.ToString()).Completed += OnPrefabLoaded;
     }
     // GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
@@ -166,7 +165,7 @@ public class PlayerAttack : MonoBehaviour
     
     IEnumerator Attack(Collider2D other)
     {
-        if(playerWeapon.weaponType.ToString() == "Sword")
+        if(playerWeapon.weaponType.ToString() == "Sword" || playerWeapon.weaponType.ToString() == "Axe")
         {
             isAttackCo = true;
             childBox.enabled = true;
@@ -174,7 +173,7 @@ public class PlayerAttack : MonoBehaviour
             Vector2 direction = other.transform.position - transform.position;
             Vector2 targetPosition = (Vector2)other.transform.position - (direction * 0.05f); 
             transform.position = targetPosition;
-            yield return new WaitForSecondsRealtime(0.05f);
+            yield return new WaitForSecondsRealtime(0.1f);
             childBox.enabled = false;
             transform.localPosition = nowTrans;
             yield return new WaitForSecondsRealtime(nowAttackSpeed / ((playerStat["attackSpeed"]) / 100));
