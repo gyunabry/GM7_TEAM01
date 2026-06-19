@@ -53,18 +53,18 @@ public class InGameUIManager : MonoBehaviour
         }
         if (WaveManager.Instance != null)
         {
-            WaveManager.Instance.OnWaveStarted += OpenUIwithWaveStart;
+            WaveManager.Instance.OnWaveStarted += UpdateWaveUI;
             WaveManager.Instance.OnTimeChanged += UpdateTimerUI;
             // WaveManager.Instance.OnShopOpened += CloseUIwithWaveEnds;
         }
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnKillEnenmy += UpdateKillCount;
+            GameManager.Instance.OnKillEnemy += UpdateKillCount;
         }
 
         // 게임 첫 시작 시 UI 초기화
         UpdateKillCount(GameManager.Instance.GetKillCount());
-        OpenUIwithWaveStart(WaveManager.Instance.CurrentWave);
+        UpdateWaveUI(WaveManager.Instance.CurrentWave);
         UpdateTimerUI(WaveManager.Instance.WaveTime);
     }
 
@@ -78,13 +78,13 @@ public class InGameUIManager : MonoBehaviour
         }
         if (WaveManager.Instance != null)
         {
-            WaveManager.Instance.OnWaveStarted -= OpenUIwithWaveStart;
+            WaveManager.Instance.OnWaveStarted -= UpdateWaveUI;
             WaveManager.Instance.OnTimeChanged -= UpdateTimerUI;
             // WaveManager.Instance.OnShopOpened -= CloseUIwithWaveEnds;
         }
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnKillEnenmy -= UpdateKillCount;
+            GameManager.Instance.OnKillEnemy -= UpdateKillCount;
         }
     }
 

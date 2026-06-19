@@ -7,13 +7,13 @@ public enum SceneType
     Game
 }
 
-public static class SceneName
+public static class SceneNames
 {
     private static readonly Dictionary<SceneType, string> sceneTable
         = new Dictionary<SceneType, string>()
     {
         { SceneType.Title, "TitleScene"},
-        { SceneType.Game, "GameScene"},
+        { SceneType.Game, "PrototypeScene"}
     };
 
     public static string GetSceneName(SceneType type)

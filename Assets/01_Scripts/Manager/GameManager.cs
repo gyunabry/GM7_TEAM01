@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public int KillCount { get; private set; }
     public int Gold { get; private set; }
 
-    public event Action<int> OnKillEnenmy;
+    public event Action<int> OnKillEnemy;
     public event Action<int> OnGoldChanged;
 
     private void Awake()
@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     public void AddKillCount()
     {
         KillCount++;
-        OnKillEnenmy?.Invoke(KillCount);
+        OnKillEnemy?.Invoke(KillCount);
         Debug.Log($"킬 카운트++ {KillCount}");
     }
 
