@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f5a6322d1badf9f44ab5be088e10fcd3, type: 3}
-  m_Name: Bow
+  m_Name: Shield
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
-  weaponType: 1
-  weaponName: Bow
+  weaponType: 3
+  weaponName: Shield
   weaponId: 0
   weaponDes: 
-  weaponIcon: {fileID: -8362143969541133440, guid: 350d121f81e7ad74c9915cab1546ead4, type: 3}
+  weaponIcon: {fileID: -7812613556782386920, guid: e5062b766f247924ca8b77b50dbea671, type: 3}
   weaponDamage: 5
   weaponArmorPiercing: 0
-  weaponAttackSpeed: 1.4
-  weaponRange: 6
-  weaponCri: 10
+  weaponAttackSpeed: 3
+  weaponRange: 2
+  weaponCri: 0
   upgrades: []
   skill1: 0
   skill2: 0

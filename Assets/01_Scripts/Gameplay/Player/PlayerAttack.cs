@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -53,14 +54,27 @@ public class PlayerAttack : MonoBehaviour
         if(handle.Status == AsyncOperationStatus.Succeeded)
         {
             instant = handle.Result;
-            instant.transform.Rotate(0f, 0f, -45f);
-            SpriteRenderer sr = instant.GetComponent<SpriteRenderer>();
-            sr.sprite = playerWeapon.weaponIcon;
-            instant.transform.SetParent(this.transform);
-            Vector3 srPosition = transform.position;
-            srPosition.x += 0.3f;
-            instant.transform.position = srPosition;
-            childBox = GetComponentInChildren<BoxCollider2D>();
+            if(instant.name == "Shield(Clone)")
+            {
+                SpriteRenderer sr = instant.GetComponent<SpriteRenderer>();
+                sr.sprite = playerWeapon.weaponIcon;
+                instant.transform.SetParent(this.transform);
+                instant.transform.localScale = new Vector3(4f, 4f, 4f);
+                Vector3 srPosition = transform.position;
+                instant.transform.position = srPosition;
+                childBox = GetComponentInChildren<BoxCollider2D>();
+            }
+            else
+            {
+                instant.transform.Rotate(0f, 0f, -45f);
+                SpriteRenderer sr = instant.GetComponent<SpriteRenderer>();
+                sr.sprite = playerWeapon.weaponIcon;
+                instant.transform.SetParent(this.transform);
+                Vector3 srPosition = transform.position;
+                srPosition.x += 0.3f;
+                instant.transform.position = srPosition;
+                childBox = GetComponentInChildren<BoxCollider2D>();
+            }
         }
         else
         {
@@ -162,10 +176,14 @@ public class PlayerAttack : MonoBehaviour
         float rotz = Mathf.Atan2(newrot.y, newrot.x) * Mathf.Rad2Deg;
         return rotz;
     }
-    
+    public void AttackMotion(Vector2 target)
+    {
+        DG.Tweening.Sequence motion = DOTween.Sequence();
+        motion.Append(transform.DOMove(target, 0.2f));
+    }
     IEnumerator Attack(Collider2D other)
     {
-        if(playerWeapon.weaponType.ToString() == "Sword" || playerWeapon.weaponType.ToString() == "Axe")
+        if(playerWeapon.weaponType.ToString() == "Sword" || playerWeapon.weaponType.ToString() == "Axe" || playerWeapon.weaponType.ToString() == "Shield")
         {
             isAttackCo = true;
             childBox.enabled = true;
@@ -173,14 +191,14 @@ public class PlayerAttack : MonoBehaviour
             Vector2 direction = other.transform.position - transform.position;
             Vector2 targetPosition = (Vector2)other.transform.position - (direction * 0.05f); 
             transform.position = targetPosition;
-            yield return new WaitForSecondsRealtime(0.1f);
+            yield return new WaitForSecondsRealtime(0.15f);
             childBox.enabled = false;
             transform.localPosition = nowTrans;
             yield return new WaitForSecondsRealtime(nowAttackSpeed / ((playerStat["attackSpeed"]) / 100));
             isAttackCo = false;
             attackco = null;
         }
-        else if(playerWeapon.weaponType.ToString() == "Bow")
+        else if(playerWeapon.weaponType.ToString() == "Bow" || playerWeapon.weaponType.ToString() == "CrossBow")
         {
             isAttackCo = true;
             childBox.enabled = false;

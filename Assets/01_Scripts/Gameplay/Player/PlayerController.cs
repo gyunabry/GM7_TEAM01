@@ -118,6 +118,20 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (invincible == true) return;
         co = StartCoroutine(OnEnemyAttack(damage));
     }
+    IEnumerator OnEnemyAttack(float damage)
+    {
+        invincible = true;
+        nowHp -= damage;
+        if (nowHp < 0)
+        {
+            nowHp = 0;
+        }
+        //죽었을때 사용할 명령어
+        Debug.Log("맞았다!"); //임시 명령어
+        yield return new WaitForSecondsRealtime(invincibleTime);
+        invincible = false;
+        co = null;
+    }
     //경험치와 골드 수치 추가하는 메서드
     public void SetExp(float value)
     {
@@ -149,20 +163,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         return this.gold;
     }
     //끝
-    IEnumerator OnEnemyAttack(float damage)
-    {
-        invincible = true;
-        nowHp -= damage;
-        if (nowHp < 0) 
-        {
-            nowHp = 0;
-        }
-        //죽었을때 사용할 명령어
-        Debug.Log("죽었다!"); //임시 명령어
-        yield return new WaitForSecondsRealtime(invincibleTime);
-        invincible = false;
-        co = null;
-    }
+    
     
     public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
@@ -178,7 +179,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Axe);
         }
-
+        else if (playerWeapon.Count == 3)
+        {
+            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Shield);
+        }
+        else if (playerWeapon.Count == 4)
+        {
+            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.CrossBow);
+        }
 
         else
         {
@@ -189,13 +197,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             return;
         }
+        if (transform.childCount > 7) return;
         PlayerWeaponSO.WeaponType imWeaponType = weaponManager.GetWeaponType(reWeaponType);
         PlayerWeaponSO imWeapon = weaponManager.GetWeapon(reWeaponType);
         playerWeapon.Add(imWeaponType, imWeapon);
         
         Instantiate(arm, transform.position, Quaternion.identity, transform);
         float radius = 1f;
-        int childNum = transform.childCount - 1;
+        int childNum = transform.childCount - 2;
         if (childNum == 2) 
         {
             childNum++;
