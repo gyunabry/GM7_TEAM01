@@ -28,9 +28,11 @@ public class PlayerAttack : MonoBehaviour
     private bool isCo = false;
     private bool isAttackCo = false;
     private string weaponName;
+    private Collider2D[] enemyTamgi = new Collider2D[50];
+    private Collider2D enemyTrans;
    
 
-    private void Awake() //¹«±â »ı¼º ºÎºĞ UI¿Ï¼º½Ã ¹Ù²Ü°Í
+    private void Awake() //ë¬´ê¸° ìƒì„± ë¶€ë¶„ UIì™„ì„±ì‹œ ë°”ê¿€ê²ƒ
     {
         arrowPooling = FindFirstObjectByType<ArrowPooling>();
         playerController = GetComponentInParent<PlayerController>();
@@ -52,7 +54,7 @@ public class PlayerAttack : MonoBehaviour
         }
         else
         {
-            Debug.Log("¹«±â ÇÁ¸®ÆÕÀÌ ¾ø°Å³ª ÀÌ¸§ÀÌ ´Ù¸§");
+            Debug.Log("ë¬´ê¸° í”„ë¦¬íŒ¹ì´ ì—†ê±°ë‚˜ ì´ë¦„ì´ ë‹¤ë¦„");
         }
     }
     private void Start()
@@ -63,7 +65,7 @@ public class PlayerAttack : MonoBehaviour
         Addressables.InstantiateAsync(weaponType.ToString()).Completed += OnPrefabLoaded;
     }
     // GameObject go = Instantiate(weaponSprite, srPosition, Quaternion.Euler(0f, 0f, -45f), transform);
-
+    
     void Update()
     {
         if (isCo == false)
@@ -88,12 +90,12 @@ public class PlayerAttack : MonoBehaviour
         {
             while (true)
             {
-                Collider2D collider = Physics2D.OverlapCircle(transform.position, playerWeapon.weaponRange + (playerStat["range"] / 100), enemyLayer);
-                if (collider != null) {
-                    transform.rotation = Quaternion.Euler(0, 0, LookEnemy(collider));
+                enemyTrans = FindEnemy();
+                if (enemyTrans != null) {
+                    transform.rotation = Quaternion.Euler(0, 0, LookEnemy(enemyTrans));
                     if (isAttackCo == false)
                     {
-                        attackco = StartCoroutine(Attack(collider));
+                        attackco = StartCoroutine(Attack(enemyTrans));
                     }
                     break;
                 }
@@ -102,7 +104,23 @@ public class PlayerAttack : MonoBehaviour
             yield return null;
         }
     }
+    public Collider2D FindEnemy()
+    {
+        enemyTamgi = Physics2D.OverlapCircleAll(transform.position, playerWeapon.weaponRange + (playerStat["range"] / 100), enemyLayer);
+        Collider2D nearEnemy = null;
+        float minDis = Mathf.Infinity;
 
+        for (int i = 0; i < enemyTamgi.Length; i++)
+        {
+            float distance = Vector2.Distance(transform.position, enemyTamgi[i].transform.position);
+            if (distance < minDis)
+            {
+                minDis = distance;
+                nearEnemy = enemyTamgi[i];
+            }
+        }
+        return nearEnemy;
+    }
     public float LookEnemy(Collider2D collider)
     {
         Vector2 newrot = collider.transform.position - transform.position;
@@ -120,7 +138,7 @@ public class PlayerAttack : MonoBehaviour
             Vector2 direction = other.transform.position - transform.position;
             Vector2 targetPosition = (Vector2)other.transform.position - (direction * 0.05f); 
             transform.position = targetPosition;
-            yield return new WaitForSecondsRealtime(0.2f);
+            yield return new WaitForSecondsRealtime(0.05f);
             childBox.enabled = false;
             transform.localPosition = nowTrans;
             yield return new WaitForSecondsRealtime(playerWeapon.weaponAttackSpeed / ((playerStat["attackSpeed"]) / 100));
