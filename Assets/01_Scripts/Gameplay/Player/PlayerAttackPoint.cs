@@ -45,6 +45,7 @@ public class PlayerAttackPoint : MonoBehaviour
             {
             enemy.TakeDamage(damage);
             }
+            Debug.Log(damage);
         }
     }
 }

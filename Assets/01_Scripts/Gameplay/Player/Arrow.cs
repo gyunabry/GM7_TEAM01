@@ -7,6 +7,7 @@ public class Arrow : MonoBehaviour
     [SerializeField] private float arrowSpeed;
     private ObjectPool<Arrow> pool;
     private Coroutine co;
+    private Coroutine hitCo;
 
     
     public void SetPool(ObjectPool<Arrow> pool)
@@ -29,6 +30,17 @@ public class Arrow : MonoBehaviour
         pool.Release(this);
         co = null;
     }
-   
-    
+    IEnumerator DeleteTime()
+    {
+        yield return null;
+        pool.Release(this);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            hitCo = StartCoroutine(DeleteTime());
+        }
+    }
+
 }
