@@ -44,7 +44,7 @@ public class PlayerAttackPoint : MonoBehaviour
             collision.TryGetComponent<EnemyController>(out enemy);
             if(enemy != null)
             {
-            enemy.TakeDamage(damage);
+                enemy.TakeDamage(damage);
             }
         }
     }
