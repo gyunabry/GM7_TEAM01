@@ -75,7 +75,7 @@ public class PlayerAttackPoint : MonoBehaviour
             {
                 enemyGO.Add(collision.gameObject);
                 int critical = Random.Range(1, 101);
-                if(nowCri <= critical)
+                if(nowCri >= critical)
                 {
                     criHit = true;
                 }

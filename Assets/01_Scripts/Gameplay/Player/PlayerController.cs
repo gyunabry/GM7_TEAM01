@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void HpAbs()
     {
         int i = Random.Range(1, 101);
-        if(hpAbs <= i)
+        if(hpAbs >= i)
         {
             nowHp += 1;
         }
