@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     public void PlayerMove()
     {
         Vector2 move = moveia.ReadValue<Vector2>().normalized;
-        rb.linearVelocity = move * (moveSpeed / 100) * baseSpeed * Time.deltaTime;
+        rb.linearVelocity = move * (moveSpeed + 100 / 100) * baseSpeed * Time.deltaTime;
     }
 
     public Dictionary<string, float> PlayerStat()
@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     IEnumerator OnEnemyAttack(float damage)
     {
         invincible = true;
-        nowHp -= damage;
+        nowHp -= damage * (100 / 100 + armor);
         if (nowHp < 0)
         {
             nowHp = 0;
