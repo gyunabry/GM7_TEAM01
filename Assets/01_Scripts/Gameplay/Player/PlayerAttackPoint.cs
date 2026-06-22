@@ -93,6 +93,7 @@ public class PlayerAttackPoint : MonoBehaviour
                 if (enemy != null)
                 {
                     enemy.TakeDamage(nowDamage);
+                    playerController.HpAbs();
                 }
                 criHit = false;
             }

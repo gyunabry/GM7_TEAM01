@@ -47,11 +47,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     private float nowHp { get; set; } = 100f;
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
+    private Coroutine coHpRegen;
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
         jumpia = InputSystem.actions.FindAction("Jump");
         rb = GetComponent<Rigidbody2D>();
+    }
+    private void Start()
+    {
+        coHpRegen = StartCoroutine(HpRegen());
     }
 
     void Update()
@@ -163,7 +168,25 @@ public class PlayerController : MonoBehaviour, IDamageable
         return this.gold;
     }
     //끝
-    
+    IEnumerator HpRegen()
+    {
+        if(hpRegen != 0)
+        {
+            yield return new WaitForSeconds(300 / (hpRegen + 100));
+        }
+        else
+        {
+            yield return new WaitForSeconds(1f);
+        }
+    }
+    public void HpAbs()
+    {
+        int i = Random.Range(1, 101);
+        if(hpAbs <= i)
+        {
+            nowHp += 1;
+        }
+    }
     
     public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
