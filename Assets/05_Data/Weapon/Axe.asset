@@ -15,7 +15,8 @@ MonoBehaviour:
   weaponType: 4
   weaponName: Axe
   weaponId: 0
-  weaponDes: 
+  weaponDes: "\uAC15\uB825\uD55C \uD55C\uBC29\uC774 \uD2B9\uAE30\uC778 \uADFC\uAC70\uB9AC
+    \uBB34\uAE30"
   weaponIcon: {fileID: -2508016695669320440, guid: 050be8d41f10e4f41bd9f8d419060008, type: 3}
   weaponDamage: 20
   weaponArmorPiercing: 10

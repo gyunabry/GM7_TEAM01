@@ -15,7 +15,8 @@ MonoBehaviour:
   weaponType: 1
   weaponName: Bow
   weaponId: 0
-  weaponDes: 
+  weaponDes: "\uBB34\uB09C\uD558\uACE0 \uC88B\uC740 \uC131\uB2A5\uC758 \uC6D0\uAC70\uB9AC
+    \uBB34\uAE30"
   weaponIcon: {fileID: -8362143969541133440, guid: 350d121f81e7ad74c9915cab1546ead4, type: 3}
   weaponDamage: 5
   weaponArmorPiercing: 0

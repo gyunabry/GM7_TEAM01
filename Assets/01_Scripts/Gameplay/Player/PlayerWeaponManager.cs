@@ -26,4 +26,8 @@ public class PlayerWeaponManager : MonoBehaviour
         }
         return PlayerWeaponSO.WeaponType.Null;
     }
+    public PlayerWeaponSO[] GetWeaponList()
+    {
+        return playerWeapon;
+    }
 }

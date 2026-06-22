@@ -42,6 +42,7 @@ public class PlayerAttack : MonoBehaviour
     private float nowSize;
     private Sprite nowSprite;
     private int ijk = 0;
+    private bool upgrade = false;
 
     private void Awake() //무기 생성 부분 UI완성시 바꿀것
     {
@@ -55,7 +56,7 @@ public class PlayerAttack : MonoBehaviour
     }
     public void OnPrefabLoaded(AsyncOperationHandle<GameObject> handle)
     {
-        if(handle.Status == AsyncOperationStatus.Succeeded)
+        if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             instant = handle.Result;
             if(instant.name == "Shield(Clone)")
@@ -88,7 +89,7 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Start()
     {
-        playerWeapon = playerController.GetWeapon(); 
+        playerWeapon = playerController.GetWeapon();
         weaponType = playerWeapon.weaponType;
         weaponName = weaponType.ToString();
         Addressables.InstantiateAsync(weaponType.ToString()).Completed += OnPrefabLoaded;
@@ -98,8 +99,6 @@ public class PlayerAttack : MonoBehaviour
     
     void Update()
     {
-        
-        
         if (isCo == false)
         {
             isCo = true;
@@ -121,7 +120,7 @@ public class PlayerAttack : MonoBehaviour
     }
     public void SetWeaponStat(int i)
     {
-        if (playerWeapon.upgrades.Count == 0)
+        if (upgrade == false)
         {
             nowDamage = playerWeapon.weaponDamage;
             nowArmorPiercing = playerWeapon.weaponArmorPiercing;
@@ -173,7 +172,7 @@ public class PlayerAttack : MonoBehaviour
     }
     IEnumerator Weapon()
     {
-        GetUpgrade(0);
+        SetWeaponStat(0);
         yield return new WaitForSecondsRealtime(1.0f);
         sr.sprite = nowSprite;
 

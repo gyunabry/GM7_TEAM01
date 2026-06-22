@@ -15,7 +15,8 @@ MonoBehaviour:
   weaponType: 3
   weaponName: Shield
   weaponId: 0
-  weaponDes: 
+  weaponDes: "\uD22C\uC0AC\uCCB4\uB97C \uB9C9\uC744 \uC218 \uC788\uB294(\uBBF8\uAD6C\uD604)
+    \uBB34\uAE30"
   weaponIcon: {fileID: -7812613556782386920, guid: e5062b766f247924ca8b77b50dbea671, type: 3}
   weaponDamage: 5
   weaponArmorPiercing: 0
