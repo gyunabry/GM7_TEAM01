@@ -170,13 +170,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     //³¡
     IEnumerator HpRegen()
     {
-        if(hpRegen != 0)
+        while (true)
         {
-            yield return new WaitForSeconds(300 / (hpRegen + 100));
-        }
-        else
-        {
-            yield return new WaitForSeconds(1f);
+            if(hpRegen != 0)
+            {
+                yield return new WaitForSeconds(300 / (hpRegen + 100));
+            }
+            else
+            {
+                yield return new WaitForSeconds(1f);
+            }
         }
     }
     public void HpAbs()
