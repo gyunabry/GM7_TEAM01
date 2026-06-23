@@ -48,13 +48,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
     private Coroutine coHpRegen;
-<<<<<<< Updated upstream
-=======
     private Dictionary<PlayerWeaponSO.WeaponType, GameObject> saveArm = new Dictionary<PlayerWeaponSO.WeaponType, GameObject>();
 
     Vector2 move;
 
->>>>>>> Stashed changes
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
@@ -67,15 +64,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     void Update()
     {
-<<<<<<< Updated upstream
-        PlayerMove();
-        if (jumpia.WasPressedThisFrame())
-        {
-            goButton.SetActive(true);
-        }
-=======
         move = moveia.ReadValue<Vector2>().normalized;
->>>>>>> Stashed changes
     }
 
     private void FixedUpdate()
