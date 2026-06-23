@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Hierarchy;
@@ -48,6 +49,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
     private Coroutine coHpRegen;
+    private Dictionary<PlayerWeaponSO.WeaponType, GameObject> saveArm = new Dictionary<PlayerWeaponSO.WeaponType, GameObject>();
+    [SerializeField] private GameObject goButton;
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
@@ -64,7 +67,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         PlayerMove();
         if (jumpia.WasPressedThisFrame())
         {
-            OnWeaponArm();
+            goButton.SetActive(true);
         }
     }
     public void PlayerMove()
@@ -90,6 +93,10 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         return playerStat;
          
+    }
+    public Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> GetWeaponList()
+    {
+        return playerWeapon;
     }
     public PlayerWeaponSO GetWeapon()
     {
@@ -167,6 +174,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return this.gold;
     }
+    public Dictionary<PlayerWeaponSO.WeaponType, GameObject> GetArm()
+    {
+        return saveArm;
+    }
     //끝
     IEnumerator HpRegen()
     {
@@ -191,33 +202,13 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
     }
     
-    public void OnWeaponArm() //이곳 무기 획득 UI완성시 최우선으로 바꿀것
+    public void OnWeaponArm(PlayerWeaponSO.WeaponType weaponType) //이곳 무기 획득 UI완성시 최우선으로 바꿀것
     {
-        if(playerWeapon.Count == 0)
-        {
-            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Bow);
-        }
-        else if (playerWeapon.Count == 1)
-        {
-            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Sword);
-        }
-        else if(playerWeapon.Count == 2)
-        {
-            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Axe);
-        }
-        else if (playerWeapon.Count == 3)
-        {
-            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.Shield);
-        }
-        else if (playerWeapon.Count == 4)
-        {
-            reWeaponType = OnWeaponTypeName(PlayerWeaponSO.WeaponType.CrossBow);
-        }
-
-        else
-        {
-            return;
-        }
+        
+        
+        reWeaponType = OnWeaponTypeName(weaponType);
+        
+        
         PlayerWeaponSO pws;
         if(playerWeapon.TryGetValue(reWeaponType, out pws))
         {
@@ -226,9 +217,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (transform.childCount > 7) return;
         PlayerWeaponSO.WeaponType imWeaponType = weaponManager.GetWeaponType(reWeaponType);
         PlayerWeaponSO imWeapon = weaponManager.GetWeapon(reWeaponType);
-        playerWeapon.Add(imWeaponType, imWeapon);
-        
-        Instantiate(arm, transform.position, Quaternion.identity, transform);
+        playerWeapon.TryAdd(imWeaponType, imWeapon);
+
+        saveArm.Add(imWeaponType, Instantiate(arm, transform.position, Quaternion.identity, transform));
         float radius = 1f;
         int childNum = transform.childCount - 2;
         if (childNum == 2) 
