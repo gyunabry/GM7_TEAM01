@@ -12,7 +12,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour, IDamageable
 {
     private InputAction moveia;
-    private InputAction jumpia;
     private Rigidbody2D rb;
     private Coroutine co;
 
@@ -40,7 +39,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float gold = 0;
 
     [Header("Player default")]
-    [SerializeField] private float baseSpeed = 500f;
+    [SerializeField] private float baseSpeed = 5f;
 
     [Header("Player Weapon")]
     private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> playerWeapon = new Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO>();
@@ -48,10 +47,16 @@ public class PlayerController : MonoBehaviour, IDamageable
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
     private Coroutine coHpRegen;
+<<<<<<< Updated upstream
+=======
+    private Dictionary<PlayerWeaponSO.WeaponType, GameObject> saveArm = new Dictionary<PlayerWeaponSO.WeaponType, GameObject>();
+
+    Vector2 move;
+
+>>>>>>> Stashed changes
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
-        jumpia = InputSystem.actions.FindAction("Jump");
         rb = GetComponent<Rigidbody2D>();
     }
     private void Start()
@@ -61,16 +66,25 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     void Update()
     {
+<<<<<<< Updated upstream
         PlayerMove();
         if (jumpia.WasPressedThisFrame())
         {
             OnWeaponArm();
         }
+=======
+        move = moveia.ReadValue<Vector2>().normalized;
+>>>>>>> Stashed changes
     }
+
+    private void FixedUpdate()
+    {
+        PlayerMove();
+    }
+
     public void PlayerMove()
     {
-        Vector2 move = moveia.ReadValue<Vector2>().normalized;
-        rb.linearVelocity = move * (moveSpeed + 100 / 100) * baseSpeed * Time.deltaTime;
+        rb.linearVelocity = move * ((moveSpeed + 100f) / 100f) * baseSpeed;
     }
 
     public Dictionary<string, float> PlayerStat()
