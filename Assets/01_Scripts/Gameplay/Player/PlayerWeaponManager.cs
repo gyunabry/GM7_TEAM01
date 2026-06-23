@@ -3,6 +3,13 @@ using UnityEngine;
 public class PlayerWeaponManager : MonoBehaviour
 {
     public PlayerWeaponSO[] playerWeapon;
+    private void Awake()
+    {
+        foreach (PlayerWeaponSO pW in playerWeapon)
+        {
+            pW.ResetStatUpgrade();
+        }
+    }
 
     public PlayerWeaponSO GetWeapon(PlayerWeaponSO.WeaponType type)
     {

@@ -32,6 +32,7 @@ MonoBehaviour:
     upgradeRange: 2
     upgradeCri: 0
     upgradeSize: 6
+    upgradeDes: "\uB113\uC740 \uBC94\uC704\uAC00 \uD2B9\uC9D5\uC778 \uC9C4\uD654"
     upgradeSprite: {fileID: -8601833956312487032, guid: 74c7a773443c45145a3ecaf0b33003c8, type: 3}
   - upgradeName: "\uB2E8\uAC80"
     upgradeDamage: -1
@@ -40,7 +41,16 @@ MonoBehaviour:
     upgradeRange: -1
     upgradeCri: 5
     upgradeSize: 2
+    upgradeDes: "\uBE60\uB978 \uACF5\uACA9\uC18D\uB3C4\uAC00 \uD2B9\uC9D5\uC778 \uC9C4\uD654"
     upgradeSprite: {fileID: -8070790144581709556, guid: 55c02a3d1fbcac549802c0a671ded235, type: 3}
+  statUpValue:
+    upgradeStatDamage: 2
+    upgradeStatArmorPiercing: 2
+    upgradeStatAttackSpeed: -0.1
+    upgradeStatRange: 0.6
+    upgradeStatCri: 10
+    upgradeStatSize: 0.6
+  upgradeCount: 0
   skill1: 0
   skill2: 0
   skill3: 0

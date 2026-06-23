@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private bool invincible { get; set; } = false;
     private PlayerWeaponSO.WeaponType reWeaponType;
     private Coroutine coHpRegen;
+    private Dictionary<PlayerWeaponSO.WeaponType, GameObject> saveArm = new Dictionary<PlayerWeaponSO.WeaponType, GameObject>();
     [SerializeField] private GameObject goButton;
     private void Awake()
     {
@@ -173,6 +174,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return this.gold;
     }
+    public Dictionary<PlayerWeaponSO.WeaponType, GameObject> GetArm()
+    {
+        return saveArm;
+    }
     //³¡
     IEnumerator HpRegen()
     {
@@ -213,8 +218,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         PlayerWeaponSO.WeaponType imWeaponType = weaponManager.GetWeaponType(reWeaponType);
         PlayerWeaponSO imWeapon = weaponManager.GetWeapon(reWeaponType);
         playerWeapon.TryAdd(imWeaponType, imWeapon);
-        
-        Instantiate(arm, transform.position, Quaternion.identity, transform);
+
+        saveArm.Add(imWeaponType, Instantiate(arm, transform.position, Quaternion.identity, transform));
         float radius = 1f;
         int childNum = transform.childCount - 2;
         if (childNum == 2) 
