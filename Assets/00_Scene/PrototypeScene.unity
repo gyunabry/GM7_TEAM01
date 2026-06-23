@@ -889,6 +889,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9028493759842842497, guid: 9697934c58c58c94abcf4537881894e1, type: 3}
+      propertyPath: m_GeometryType
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1386,8 +1390,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d74e3dcb92c50c343bb790b82319d163, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InGameUIManager
-  playerDeadEvent: {fileID: 0}
-  player: {fileID: 0}
+  playerDeadEvent: {fileID: 11400000, guid: e5686fe0bbf931243872e0132e23455d, type: 2}
+  player: {fileID: 1955140366}
   hpSlider: {fileID: 1499540733}
   hpText: {fileID: 1499540732}
   expSlider: {fileID: 1499540731}
@@ -1396,6 +1400,17 @@ MonoBehaviour:
   waveCountText: {fileID: 1499540728}
   waveTimerText: {fileID: 1499540727}
   killCountText: {fileID: 818325570}
+--- !u!114 &1955140366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1493961109511499000, guid: 858f913c5bdfb3b449b818f493811db3, type: 3}
+  m_PrefabInstance: {fileID: 122328894}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae859e8da0c52348ac3fe690a77ba91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
 --- !u!1 &2003865618
 GameObject:
   m_ObjectHideFlags: 0
@@ -1493,7 +1508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6708040166377376321, guid: 27d559e640de03f4e89b7cf5ab48fa36, type: 3}
       propertyPath: m_UseGeometry
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6708040166377376321, guid: 27d559e640de03f4e89b7cf5ab48fa36, type: 3}
       propertyPath: m_CollectObjects
