@@ -1,14 +1,10 @@
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.Hierarchy;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-    [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D))]
     [RequireComponent(typeof(BoxCollider2D))]
 
 public class PlayerController : MonoBehaviour, IDamageable
@@ -144,9 +140,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         if (nowHp < 0)
         {
             nowHp = 0;
-            OnHpChanged?.Invoke(nowHp, maxHp);
+            onPlayerDead.RaiseEvent();
         }
-        onPlayerDead.RaiseEvent();
 
         HitText hitText = PoolManager.Instance.GetPool<HitText>();
         hitText.ShowDamage(damage, transform.position, false, true);
@@ -216,7 +211,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
     }
     
-    public void OnWeaponArm(PlayerWeaponSO.WeaponType weaponType) //이곳 무기 획득 UI완성시 최우선으로 바꿀것
+    public void OnWeaponArm(PlayerWeaponSO.WeaponType weaponType)
     {
         reWeaponType = OnWeaponTypeName(weaponType);
 
@@ -244,14 +239,18 @@ public class PlayerController : MonoBehaviour, IDamageable
                     GameObject child2 = transform.GetChild(i+1).gameObject;
                     float x2 = Mathf.Cos(angle2);
                     float y2 = Mathf.Sin(angle2);
+                    PlayerAttack paChild2 = child2.GetComponent<PlayerAttack>();
                     child2.transform.position = transform.position + new Vector3(x2, y2, 0) * radius;
+                    paChild2.ResetWeaponPosi();
                     break;
                 }
                 float angle = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
                 GameObject child = transform.GetChild(i+2).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+                paChild.ResetWeaponPosi();
             }
             childNum--;
         }
@@ -263,7 +262,9 @@ public class PlayerController : MonoBehaviour, IDamageable
                 GameObject child = transform.GetChild(i+2).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+                paChild.ResetWeaponPosi();
             }
         }
         else if (childNum == 5)
@@ -274,7 +275,9 @@ public class PlayerController : MonoBehaviour, IDamageable
                 GameObject child = transform.GetChild(i+2).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+                paChild.ResetWeaponPosi();
             }
         }
         else if (childNum == 6)
@@ -285,7 +288,9 @@ public class PlayerController : MonoBehaviour, IDamageable
                 GameObject child = transform.GetChild(i+2).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+                paChild.ResetWeaponPosi();
             }
         }
         else
@@ -296,6 +301,86 @@ public class PlayerController : MonoBehaviour, IDamageable
                 GameObject child = transform.GetChild(i+2).gameObject;
                 float x = Mathf.Cos(angle);
                 float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
+                child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+                paChild.ResetWeaponPosi();
+            }
+        }
+    }
+    public void SetWeaponArm()
+    {
+        float radius = 1f;
+        int childNum = transform.childCount - 2;
+        if (childNum == 2)
+        {
+            childNum++;
+            for (int i = 0; i < childNum; i++)
+            {
+                if (i == 1)
+                {
+                    i++;
+                    float angle2 = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
+                    GameObject child2 = transform.GetChild(i + 1).gameObject;
+                    float x2 = Mathf.Cos(angle2);
+                    float y2 = Mathf.Sin(angle2);
+                    PlayerAttack paChild2 = child2.GetComponent<PlayerAttack>();
+                    child2.transform.position = transform.position + new Vector3(x2, y2, 0) * radius;
+                    break;
+                }
+                float angle = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
+                GameObject child = transform.GetChild(i + 2).gameObject;
+                float x = Mathf.Cos(angle);
+                float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
+                child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+            }
+            childNum--;
+        }
+        else if (childNum == 4)
+        {
+            for (int i = 0; i < childNum; i++)
+            {
+                float angle = Mathf.PI * 1.75f + i * (Mathf.PI * 2f) / childNum;
+                GameObject child = transform.GetChild(i + 2).gameObject;
+                float x = Mathf.Cos(angle);
+                float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
+                child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+            }
+        }
+        else if (childNum == 5)
+        {
+            for (int i = 0; i < childNum; i++)
+            {
+                float angle = Mathf.PI * 1.7f + i * (Mathf.PI * 2f) / childNum;
+                GameObject child = transform.GetChild(i + 2).gameObject;
+                float x = Mathf.Cos(angle);
+                float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
+                child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+            }
+        }
+        else if (childNum == 6)
+        {
+            for (int i = 0; i < childNum; i++)
+            {
+                float angle = Mathf.PI * 1.67f + i * (Mathf.PI * 2f) / childNum;
+                GameObject child = transform.GetChild(i + 2).gameObject;
+                float x = Mathf.Cos(angle);
+                float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
+                child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < childNum; i++)
+            {
+                float angle = Mathf.PI * 1.83f + i * (Mathf.PI * 2f) / childNum;
+                GameObject child = transform.GetChild(i + 2).gameObject;
+                float x = Mathf.Cos(angle);
+                float y = Mathf.Sin(angle);
+                PlayerAttack paChild = child.GetComponent<PlayerAttack>();
                 child.transform.position = transform.position + new Vector3(x, y, 0) * radius;
             }
         }

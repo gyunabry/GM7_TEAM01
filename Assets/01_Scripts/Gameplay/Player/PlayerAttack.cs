@@ -42,12 +42,17 @@ public class PlayerAttack : MonoBehaviour
     private float nowSize;
     private Sprite nowSprite;
     private bool upgrade = false;
+    private bool setArm = false;
 
-    private void Awake() //무기 생성 부분 UI완성시 바꿀것
+    private void Awake()
     {
         arrowPooling = FindFirstObjectByType<ArrowPooling>();
         playerController = GetComponentInParent<PlayerController>();
         GetPlayerStat();
+    }
+    public void ResetWeaponPosi()
+    {
+        setArm = true;
     }
     public float GetDamage()
     {
@@ -228,8 +233,8 @@ public class PlayerAttack : MonoBehaviour
     }
     public void AttackSwingMotion(Transform targetPosi)
     {
-        DG.Tweening.Sequence motion = DOTween.Sequence();
         Vector2 nowTrans = transform.localPosition;
+        DG.Tweening.Sequence motion = DOTween.Sequence();
         Vector2 direction = (Vector2)targetPosi.position - (Vector2)parentTrans.transform.position;
         Vector2 basePosi = direction.normalized;
         Vector2 rightDir = new Vector2(-basePosi.y, basePosi.x);
@@ -254,6 +259,12 @@ public class PlayerAttack : MonoBehaviour
         motion.Append(transform.DOLocalRotateQuaternion(rightRotate, 0f));
         motion.Append(transform.DOMove(rightPosi, 0.1f));
         motion.Append(transform.DOLocalMove(nowTrans, 0.05f));
+        if(setArm == true)
+        {
+            motion.Kill();
+            playerController.SetWeaponArm();
+            setArm = false;
+        }
     }
     IEnumerator Attack(Collider2D other)
     {

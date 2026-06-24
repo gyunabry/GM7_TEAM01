@@ -222,7 +222,7 @@ public class LevelUp : MonoBehaviour
             }
             if (i == 0)
             {
-                go[i].transform.localPosition = new Vector3(-500f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(-100f, 0f, 0f);
             }
             else if (i == 1)
             {
@@ -230,7 +230,7 @@ public class LevelUp : MonoBehaviour
             }
             else if (i == 2)
             {
-                go[i].transform.localPosition = new Vector3(500f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(100f, 0f, 0f);
             }
             go[i].gameObject.SetActive(true);
         }
