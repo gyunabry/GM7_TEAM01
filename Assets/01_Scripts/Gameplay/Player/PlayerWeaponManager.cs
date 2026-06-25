@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
+using System.IO;
+using UnityEngine.UIElements;
 
 public class PlayerWeaponManager : MonoBehaviour
 {
@@ -15,48 +17,41 @@ public class PlayerWeaponManager : MonoBehaviour
     private List<PlayerWeaponSO.WeaponType> unlockType = new List<PlayerWeaponSO.WeaponType>();
     private int unlockList = 0;
     GameManager gameManager;
-    WeaponUnlockData wud;
+    WeaponUnlock wu;
     private void Awake()
     {
         unlockList = 0;
         gameManager = FindAnyObjectByType<GameManager>();
-        wud = new WeaponUnlockData();
+        wu = FindAnyObjectByType<WeaponUnlock>();
         foreach (KeyValuePair<PlayerWeaponSO.WeaponType, PlayerWeaponSO> pW in playerWeapon)
         {
             pW.Value.ResetStatUpgrade();
         }
-        UnlockData unlockData = new UnlockData();
-        wud.LoadWeaponUnlockData();
-        foreach(PlayerWeaponSO pws in unlockData.unlockWeaponData)
-        {
-
-        }
     }
     private void Update()
     {
-        if(unlockCount.Count <= unlockList)
+        if (unlockCount.Count <= unlockList)
         {
             return;
         }
         else
         {
-            if (unlockWeapon.TryGetValue(unlockType[unlockList], out var unlockWeaponGet))
+            Debug.Log(wu.GetUnlock(unlockType[unlockList]));
+            if (wu.GetUnlock(unlockType[unlockList]))
             {
-
-            }
-            if (gameManager.KillCount >= unlockCount[unlockList])
-            {
-
                 if (unlockWeapon.TryGetValue(unlockType[unlockList], out var nowUnlockWeapon))
                 {
                     playerWeapon.TryAdd(unlockType[unlockList], nowUnlockWeapon);
-                    UnlockData unlockData = new UnlockData();
-                    unlockData.unlockWeaponData.Add(nowUnlockWeapon);
-                    unlockData.unlockWeaponData[unlockList].unlocking = true;
                     unlockList++;
-                    unlockData.killCount = gameManager.KillCount;
-                    
-                    wud.SaveWeaponUnlockData();
+                }
+            }
+            else if (gameManager.KillCount >= unlockCount[unlockList])
+            {
+                if (unlockWeapon.TryGetValue(unlockType[unlockList], out var nowUnlockWeapon))
+                {
+                    playerWeapon.TryAdd(unlockType[unlockList], nowUnlockWeapon);
+                    wu.SaveUnlock(unlockType[unlockList], true);
+                    unlockList++;
                 }
             }
         }
