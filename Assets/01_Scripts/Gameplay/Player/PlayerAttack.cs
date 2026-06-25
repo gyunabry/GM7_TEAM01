@@ -131,7 +131,7 @@ public class PlayerAttack : MonoBehaviour
             nowAttackSpeed = playerWeapon.weaponAttackSpeed + playerWeapon.GetStatUpgradeAttackSpeed();
             nowRange = playerWeapon.weaponRange + playerWeapon.GetStatUpgradeRange();
             nowCri = playerWeapon.weaponCri + playerWeapon.GetStatUpgradeCri();
-            nowSize = playerWeapon.weaponSize + playerWeapon.GetStatUpgradeSize();
+            nowSize = (playerWeapon.weaponSize + playerWeapon.GetStatUpgradeSize()) / 2;
             nowSprite = playerWeapon.weaponIcon;
         }
         else
@@ -141,7 +141,7 @@ public class PlayerAttack : MonoBehaviour
             nowAttackSpeed = playerWeapon.weaponAttackSpeed + playerWeapon.GetUpgradeAttackSpeed(playerWeapon.upgradeNum) + playerWeapon.GetStatUpgradeAttackSpeed();
             nowRange = playerWeapon.weaponRange + playerWeapon.GetUpgradeRange(playerWeapon.upgradeNum) + playerWeapon.GetStatUpgradeRange();
             nowCri = playerWeapon.weaponCri + playerWeapon.GetUpgradeCri(playerWeapon.upgradeNum) + playerWeapon.GetStatUpgradeCri();
-            nowSize = playerWeapon.GetUpgradeSize(playerWeapon.upgradeNum) + playerWeapon.GetStatUpgradeSize();
+            nowSize = (playerWeapon.GetUpgradeSize(playerWeapon.upgradeNum) + playerWeapon.GetStatUpgradeSize()) / 2;
             nowSprite = playerWeapon.GetUpgradeSprite(playerWeapon.upgradeNum);
         }
         nowDamage = nowDamage * ((playerStat["damage"] + 100f) / 100f);
@@ -260,7 +260,12 @@ public class PlayerAttack : MonoBehaviour
     }
     IEnumerator Attack(Collider2D other)
     {
-        if (playerWeapon.weaponType.ToString() == "Sword" || playerWeapon.weaponType.ToString() == "Axe" || playerWeapon.weaponType.ToString() == "Shield")
+        if (playerWeapon.weaponType.ToString() == "Sword" 
+            || playerWeapon.weaponType.ToString() == "Axe" 
+            || playerWeapon.weaponType.ToString() == "Shield" 
+            || playerWeapon.weaponType.ToString() == "Spear" 
+            || playerWeapon.weaponType.ToString() == "Katana"
+            || playerWeapon.weaponType.ToString() == "Hammer")
         {
             isAttackCo = true;
             nowAttack = true;

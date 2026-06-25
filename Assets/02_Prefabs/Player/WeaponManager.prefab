@@ -45,8 +45,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponManager
   playerWeapon:
-  - {fileID: 11400000, guid: 5899794f4b505e0488a879076aecd623, type: 2}
-  - {fileID: 11400000, guid: 6a762b6405597df4bb77f298887e7b67, type: 2}
-  - {fileID: 11400000, guid: 5d342a0fb2cd9bf409c05660e4f47914, type: 2}
-  - {fileID: 11400000, guid: f3b44339d23603e4cbe189205272b49f, type: 2}
-  - {fileID: 11400000, guid: bf2788991f6b18e4d953e3d385d16065, type: 2}
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 11400000, guid: 5899794f4b505e0488a879076aecd623, type: 2}
+    - Key: 1
+      Value: {fileID: 11400000, guid: 6a762b6405597df4bb77f298887e7b67, type: 2}
+    - Key: 4
+      Value: {fileID: 11400000, guid: 5d342a0fb2cd9bf409c05660e4f47914, type: 2}
+  unlockWeapon:
+    _serializedList:
+    - Key: 2
+      Value: {fileID: 11400000, guid: bf2788991f6b18e4d953e3d385d16065, type: 2}
+    - Key: 3
+      Value: {fileID: 11400000, guid: f3b44339d23603e4cbe189205272b49f, type: 2}
+    - Key: 7
+      Value: {fileID: 11400000, guid: 4dce3f2c7433ec342accaa36a722c431, type: 2}
+    - Key: 6
+      Value: {fileID: 11400000, guid: 038c013c418f1194bb35dffbc81066c4, type: 2}
+    - Key: 5
+      Value: {fileID: 11400000, guid: e5599dbc931c77940a1c9e6acb91fd23, type: 2}
+  unlockCount: 0500000014000000280000003c00000050000000
+  unlockType: 0200000003000000070000000500000006000000
