@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         return typeName;
     }
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, bool isCrit = false)
     {
         if (Invincible == true) return;
         co = StartCoroutine(OnEnemyAttack(damage));
