@@ -260,7 +260,12 @@ public class PlayerAttack : MonoBehaviour
     }
     IEnumerator Attack(Collider2D other)
     {
-        if (playerWeapon.weaponType.ToString() == "Sword" || playerWeapon.weaponType.ToString() == "Axe" || playerWeapon.weaponType.ToString() == "Shield")
+        if (playerWeapon.weaponType.ToString() == "Sword" 
+            || playerWeapon.weaponType.ToString() == "Axe" 
+            || playerWeapon.weaponType.ToString() == "Shield" 
+            || playerWeapon.weaponType.ToString() == "Spear" 
+            || playerWeapon.weaponType.ToString() == "Katana"
+            || playerWeapon.weaponType.ToString() == "Hammer")
         {
             isAttackCo = true;
             nowAttack = true;

@@ -11,6 +11,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour, IDamageable
 {
     private InputAction moveia;
+    private InputAction jumpia;
     private Rigidbody2D rb;
     private Coroutine co;
 
@@ -42,8 +43,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Header("Player Weapon")]
     private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> playerWeapon = new Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO>();
-    private float nowHp { get; set; } = 100f;
-    private bool invincible { get; set; } = false;
+    private float NowHp { get; set; } = 100f;
+    private bool Invincible { get; set; } = false;
 
     private PlayerWeaponSO.WeaponType reWeaponType;
     private Coroutine coHpRegen;
@@ -57,6 +58,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Awake()
     {
         moveia = InputSystem.actions.FindAction("Move");
+        jumpia = InputSystem.actions.FindAction("Jump");
         rb = GetComponent<Rigidbody2D>();
     }
     private void Start()
@@ -67,6 +69,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     void Update()
     {
         move = moveia.ReadValue<Vector2>().normalized;
+        if (jumpia.WasPressedThisFrame())
+        {
+            WeaponUnlockData wud = new WeaponUnlockData();
+            wud.SaveWeaponUnlockData();
+        }
     }
 
     private void FixedUpdate()
@@ -130,17 +137,17 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void TakeDamage(float damage)
     {
-        if (invincible == true) return;
+        if (Invincible == true) return;
         co = StartCoroutine(OnEnemyAttack(damage));
     }
     IEnumerator OnEnemyAttack(float damage)
     {
-        invincible = true;
-        nowHp -= damage * (100 / 100 + armor);
-        OnHpChanged?.Invoke(nowHp, maxHp);
-        if (nowHp < 0)
+        Invincible = true;
+        NowHp -= damage * (100 / 100 + armor);
+        OnHpChanged?.Invoke(NowHp, maxHp);
+        if (NowHp < 0)
         {
-            nowHp = 0;
+            NowHp = 0;
             onPlayerDead.RaiseEvent();
         }
 
@@ -148,7 +155,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         hitText.ShowDamage(damage, transform.position, false, true);
 
         yield return new WaitForSecondsRealtime(invincibleTime);
-        invincible = false;
+        Invincible = false;
         co = null;
     }
     //경험치와 골드 수치 추가하는 메서드
@@ -167,7 +174,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public float GetNowHp()
     {
-        return this.nowHp;
+        return this.NowHp;
     }
     public float GetNowExp()
     {
@@ -198,7 +205,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             {
                 yield return new WaitForSeconds(1f);
             }
-            OnHpChanged?.Invoke(nowHp, maxHp);
+            OnHpChanged?.Invoke(NowHp, maxHp);
         }
     }
 
@@ -207,8 +214,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         int i = UnityEngine.Random.Range(1, 101);
         if(hpAbs >= i)
         {
-            nowHp += 1;
-            OnHpChanged?.Invoke(nowHp, maxHp);
+            NowHp += 1;
+            OnHpChanged?.Invoke(NowHp, maxHp);
         }
     }
     
