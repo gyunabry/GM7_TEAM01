@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class LevelUp : MonoBehaviour
     private int[] ranUp = new int[3];
     private string iconName;
     private string iconNameAvo;
+    
     private void OnEnable()
     {
         equWeaponList = playerController.GetWeaponList();
@@ -70,7 +72,7 @@ public class LevelUp : MonoBehaviour
                 }
                 else
                 {
-                    if (40 <= upRan)
+                    if (40 <= upRan || playerController.transform.childCount >= 8)
                     {
                         continue;
                     }
@@ -146,9 +148,17 @@ public class LevelUp : MonoBehaviour
                     }
                 }
                 ranAvo[i] = Random.Range(0, weaponList[ran[i]].upgrades.Count);
-                
                 TextMeshProUGUI text = go[i].GetComponentInChildren<TextMeshProUGUI>();
-                if(weaponList[ran[i]].upgradeCount == 8) // 무기 진화 텍스트
+                TextMeshProUGUI[] upText = go[i].GetComponentsInChildren<TextMeshProUGUI>();
+                if (weaponList[ran[i]].upgradeCount != 0)
+                {
+                    upText[1].text = $"강화 횟수 : {weaponList[ran[i]].upgradeCount}";
+                }
+                else if(weaponList[ran[i]].upgradeCount == 0)
+                {
+                    upText[1].text = "";
+                }
+                if (weaponList[ran[i]].upgradeCount == 8) // 무기 진화 텍스트
                 {
                     iconNameAvo = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeSprite.ToString().Replace("_0 (UnityEngine.Sprite)", "");
                     text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes}";
@@ -219,10 +229,13 @@ public class LevelUp : MonoBehaviour
                 }
                 TextMeshProUGUI text = go[i].GetComponentInChildren<TextMeshProUGUI>();
                 text.text = weaponDes[i] + "";
+                TextMeshProUGUI[] upText = go[i].GetComponentsInChildren<TextMeshProUGUI>();
+                upText[1].text = "";
+                
             }
             if (i == 0)
             {
-                go[i].transform.localPosition = new Vector3(-100f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(-500f, 0f, 0f);
             }
             else if (i == 1)
             {
@@ -230,7 +243,7 @@ public class LevelUp : MonoBehaviour
             }
             else if (i == 2)
             {
-                go[i].transform.localPosition = new Vector3(100f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(500f, 0f, 0f);
             }
             go[i].gameObject.SetActive(true);
         }

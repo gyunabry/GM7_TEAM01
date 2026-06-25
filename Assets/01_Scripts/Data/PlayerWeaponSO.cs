@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Weapon", menuName ="scriptableObject/WeaponData")]
 public class PlayerWeaponSO : ScriptableObject
 {
-    public enum WeaponType {Null = -1, Sword, Bow, CrossBow, Shield, Axe, Whip, Spear, Halberd, Hammer}
+    public enum WeaponType {Null = -1, Sword, Bow, CrossBow, Shield, Axe, Spear, Katana, Hammer}
 
     [Header("info")]
     public WeaponType weaponType;
@@ -36,11 +36,8 @@ public class PlayerWeaponSO : ScriptableObject
     public bool skill3;
     public bool skill4;
 
-    [Header("weaponRoute")]
-    public bool route1;
-    public bool route2;
-    public bool route3;
-    public bool route4;
+    [Header("weaponUnlock")]
+    public bool unlocking;
 
     
     public float GetUpgradeDamage(int i)
