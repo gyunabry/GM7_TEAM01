@@ -75,10 +75,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     void Update()
     {
         move = moveia.ReadValue<Vector2>().normalized;
-        if (jumpia.WasPressedThisFrame())
-        {
-            weaponUnlock.transform.gameObject.SetActive(true);
-        }
+        //if (jumpia.WasPressedThisFrame())
+        //{
+        //    weaponUnlock.transform.gameObject.SetActive(true);
+        //}
     }
 
     private void FixedUpdate()
