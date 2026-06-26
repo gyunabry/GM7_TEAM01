@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using UnityEditor.Rendering;
-
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -32,7 +30,6 @@ public class EnemySpawner : MonoBehaviour
             Coroutine co = StartCoroutine(SpawnRoutine(currentinfo,waveData.waveDuration));
             activeSpawnCoroutines.Add(co);
         }
-       
     }
 
     private IEnumerator SpawnRoutine(SpawnInfo info, float duration)
@@ -70,7 +67,6 @@ public class EnemySpawner : MonoBehaviour
 
             elapsed += info.spawnInterval;
         }
-        
     }
         
     private void StopAllSpawnCoroutines()
@@ -85,8 +81,6 @@ public class EnemySpawner : MonoBehaviour
     public void ClearAllEnemies()
     {
         StopAllSpawnCoroutines();
-
-        
     }
 
     private void OnDrawGizmos()

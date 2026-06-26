@@ -516,6 +516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   playerDeadEvent: {fileID: 11400000, guid: e5686fe0bbf931243872e0132e23455d, type: 2}
+  BossDeadEvent: {fileID: 11400000, guid: c162d4fcae319a44db351bf06b0327be, type: 2}
   levelUpButton: {fileID: 133909477}
 --- !u!1001 &513757831
 PrefabInstance:
@@ -1054,6 +1055,10 @@ PrefabInstance:
       value: WaveManager
       objectReference: {fileID: 0}
     - target: {fileID: 4663351556205782450, guid: f1c510303bee05949990a18db564fb56, type: 3}
+      propertyPath: bossEncounterEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e7f9f939ba348742a3e18c087aedb60, type: 2}
+    - target: {fileID: 4663351556205782450, guid: f1c510303bee05949990a18db564fb56, type: 3}
       propertyPath: stageWaves.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1536,6 +1541,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3763311326711094573, guid: 4152a16c4161d544a9a87f97c9fd5806, type: 3}
+      propertyPath: m_Name
+      value: GameOverText
+      objectReference: {fileID: 0}
     - target: {fileID: 3858972715082651770, guid: 4152a16c4161d544a9a87f97c9fd5806, type: 3}
       propertyPath: m_Alpha
       value: 0
@@ -1865,6 +1874,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1654602664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7845367007743482207, guid: 4152a16c4161d544a9a87f97c9fd5806, type: 3}
+  m_PrefabInstance: {fileID: 1499540726}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!114 &1864580342 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2145695118458198217, guid: 4152a16c4161d544a9a87f97c9fd5806, type: 3}
@@ -2202,6 +2222,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 948505161}
     - target: {fileID: 4812882232494134356, guid: 192c16e7ec9f6544db3ee6c8ef786dbe, type: 3}
+      propertyPath: gameoverText
+      value: 
+      objectReference: {fileID: 1654602664}
+    - target: {fileID: 4812882232494134356, guid: 192c16e7ec9f6544db3ee6c8ef786dbe, type: 3}
       propertyPath: optionButton
       value: 
       objectReference: {fileID: 1864580342}
@@ -2209,6 +2233,10 @@ PrefabInstance:
       propertyPath: resumeButton
       value: 
       objectReference: {fileID: 556915491}
+    - target: {fileID: 4812882232494134356, guid: 192c16e7ec9f6544db3ee6c8ef786dbe, type: 3}
+      propertyPath: bossDeadEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: c162d4fcae319a44db351bf06b0327be, type: 2}
     - target: {fileID: 4812882232494134356, guid: 192c16e7ec9f6544db3ee6c8ef786dbe, type: 3}
       propertyPath: goTitleButton
       value: 
@@ -2333,13 +2361,13 @@ SceneRoots:
   - {fileID: 973003062}
   - {fileID: 272274579}
   - {fileID: 442802237}
-  - {fileID: 4639636123689041750}
   - {fileID: 2090132453}
   - {fileID: 760844998}
   - {fileID: 513757831}
   - {fileID: 1376428865}
   - {fileID: 1354424334}
   - {fileID: 2038655036}
+  - {fileID: 4639636123689041750}
   - {fileID: 3288979876055002996}
   - {fileID: 758721166}
   - {fileID: 891627547}
