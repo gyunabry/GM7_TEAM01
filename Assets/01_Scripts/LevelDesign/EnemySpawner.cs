@@ -34,6 +34,7 @@ public class EnemySpawner : MonoBehaviour
         }
        
     }
+
     private IEnumerator SpawnRoutine(SpawnInfo info, float duration)
     {
         float countMultiplier = WaveManager.Instance.SpawnCountMultiplier;
@@ -79,6 +80,13 @@ public class EnemySpawner : MonoBehaviour
             if(co!=null) StopCoroutine(co);
         }
         activeSpawnCoroutines.Clear();
+    }
+
+    public void ClearAllEnemies()
+    {
+        StopAllSpawnCoroutines();
+
+        
     }
 
     private void OnDrawGizmos()

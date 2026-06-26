@@ -447,8 +447,30 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1082961109484340099, guid: 88fe6f371fcddd946984319b93bb877a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 405603935}
   m_SourcePrefab: {fileID: 100100000, guid: 88fe6f371fcddd946984319b93bb877a, type: 3}
+--- !u!1 &405603934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1082961109484340099, guid: 88fe6f371fcddd946984319b93bb877a, type: 3}
+  m_PrefabInstance: {fileID: 405603933}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &405603935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 405603934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cb68c2c22674564ca289be4080e1abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossSpawner
+  BossEncounterEvent: {fileID: 11400000, guid: 6e7f9f939ba348742a3e18c087aedb60, type: 2}
+  bossPrefab: {fileID: 4246351091821930707, guid: 1118882eee9596b4cbd88c359c11a265, type: 3}
 --- !u!1 &442802236
 GameObject:
   m_ObjectHideFlags: 0
