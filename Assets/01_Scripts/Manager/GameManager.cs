@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
 
     public void StageClear()
     {
-        // 스테이지 클리어
+        PauseGame();
     }
 
     public void PauseGame()

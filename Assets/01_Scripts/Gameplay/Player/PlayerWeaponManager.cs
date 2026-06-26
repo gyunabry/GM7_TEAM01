@@ -38,7 +38,7 @@ public class PlayerWeaponManager : MonoBehaviour
         }
         else
         {
-            Debug.Log(wu.GetUnlock(unlockType[unlockList]));
+            // Debug.Log(wu.GetUnlock(unlockType[unlockList]));
             if (wu.GetUnlock(unlockType[unlockList]))
             {
                 if (unlockWeapon.TryGetValue(unlockType[unlockList], out var nowUnlockWeapon))
