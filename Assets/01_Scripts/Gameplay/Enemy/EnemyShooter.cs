@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -10,7 +11,29 @@ public class EnemyShooter : MonoBehaviour
     public struct PendingAOE
     {
         public float executeTime;
+        public Vector2 position;
+        public EnemyAttackData data;
+        public WarningMarker marker;
+    }
 
+    private List<PendingAOE> pendingAOEs = new List<PendingAOE>();
+
+    // [추가됨] 대기 중인 AOE 공격을 처리하는 Update 루프
+    private void Update()
+    {
+        if (pendingAOEs.Count == 0) return;
+
+        float currentTime = Time.time;
+
+        // 리스트에서 요소가 삭제되므로 역순으로 순회
+        for (int i = pendingAOEs.Count - 1; i >= 0; i--)
+        {
+            if (currentTime >= pendingAOEs[i].executeTime)
+            {
+                ExecuteAOE(pendingAOEs[i]);
+                pendingAOEs.RemoveAt(i);
+            }
+        }
     }
 
     public void Fire(EnemyAttackData attackData, Transform target)
@@ -143,20 +166,37 @@ public class EnemyShooter : MonoBehaviour
             warning.transform.position = spawnPos;
 
             // 람다식으로 WarningMarker 내의 onComplete 발생 시 SpawnProjectileAt 메서드가 실행되도록 넘겨줌
-            warning.InitWarningMarker(attackData.warningDuration, () =>
+            warning.PlayWarningEffect(attackData.warningDuration);
+
+            // 대기열에 스폰 작업 추가
+            pendingAOEs.Add(new PendingAOE
             {
-                SpawnProjectileAt(attackData, spawnPos);
+                executeTime = Time.time + attackData.warningDuration,
+                position = spawnPos,
+                data = attackData,
+                marker = warning
             });
 
             yield return null;
         }
     }
 
+    private void ExecuteAOE(PendingAOE task)
+    {
+        // 경고표시 반환
+        if (task.marker != null)
+        {
+            PoolManager.Instance.ReturnPool(task.marker);
+        }
+
+        SpawnProjectileAt(task.data, task.position);
+    }
+
     private void SpawnProjectile(EnemyAttackData attackData, Vector2 direction)
     {
         EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
-        bullet.InitBullet(attackData.attackDamage);
         bullet.AoeLifetime = 4f;
+        bullet.InitBullet(attackData.attackDamage);
 
         // 투사체의 현재 위치를 몬스터의 위치로 설정
         bullet.transform.position = transform.position;
@@ -171,8 +211,8 @@ public class EnemyShooter : MonoBehaviour
     {
         // 총알을 풀에서 꺼내고 잠깐의 공격을 구현하기 위해 0.5초로 지속시간 설정
         EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
-        bullet.InitBullet(attackData.attackDamage);
         bullet.AoeLifetime = 0.5f;
+        bullet.InitBullet(attackData.attackDamage);
 
         bullet.transform.position = spawnPosition;
 

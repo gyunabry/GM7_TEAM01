@@ -10,6 +10,7 @@ public class PlayerAttackPoint : MonoBehaviour
     private PlayerController playerController;
     private PlayerWeaponSO.WeaponType weaponType;
     private PlayerWeaponSO weaponStat;
+    private VFXManager vfxm;
 
     private float nowDamage;
     private float nowArmorPiercing;
@@ -34,7 +35,7 @@ public class PlayerAttackPoint : MonoBehaviour
         box = GetComponent<BoxCollider2D>();
         circle = GetComponent<CircleCollider2D>();
         arrow = GetComponent<Arrow>();
-        
+        vfxm = FindAnyObjectByType<VFXManager>();
     }
     private void Start()
     {
@@ -58,7 +59,6 @@ public class PlayerAttackPoint : MonoBehaviour
                 enemyGO.Clear();
             }
         }
-        
     }
     public void SetWeaponType()
     {
@@ -66,7 +66,11 @@ public class PlayerAttackPoint : MonoBehaviour
         {
             weaponType = playerAttack.GetParentType();
         }
-        weaponStat = playerController.GetWeaponStat(weaponType);
+        else
+        {
+            weaponType = PlayerWeaponSO.WeaponType.Null;
+        }
+            weaponStat = playerController.GetWeaponStat(weaponType);
         nowDamage = playerAttack.GetUpgradeDamage();
         nowArmorPiercing = playerAttack.GetUpgradeArmorPiercing();
         nowAttackSpeed = playerAttack.GetUpgradeAttackSpeed();
@@ -119,6 +123,7 @@ public class PlayerAttackPoint : MonoBehaviour
                         enemy.TakeDamage(nowDamage);
                         playerController.HpAbs();
                     }
+                    vfxm.SpawnEffect(enemy.transform, weaponType);
                 }
                 criHit = false;
             }
@@ -161,6 +166,7 @@ public class PlayerAttackPoint : MonoBehaviour
                         enemy.TakeDamage(nowDamage);
                         playerController.HpAbs();
                     }
+                    vfxm.SpawnEffect(enemy.transform, weaponType);
                 }
                 criHit = false;
             }

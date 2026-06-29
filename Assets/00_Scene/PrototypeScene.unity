@@ -119,6 +119,99 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &22880359
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2952147466012190667, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_Name
+      value: VFXManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.16167
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.13516
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4579146603373804677, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[0].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[1].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[2].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[3].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[4].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[5].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[6].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[7].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    - target: {fileID: 7280672000139235401, guid: 8173728651690514e94a521e824365a7, type: 3}
+      propertyPath: vfxList.Array.data[8].hitAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8173728651690514e94a521e824365a7, type: 3}
 --- !u!1001 &133909476
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1015,6 +1108,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1493961109511499000, guid: 858f913c5bdfb3b449b818f493811db3, type: 3}
+      propertyPath: ori
+      value: 
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+    - target: {fileID: 1493961109511499000, guid: 858f913c5bdfb3b449b818f493811db3, type: 3}
+      propertyPath: red
+      value: 
+      objectReference: {fileID: 2100000, guid: e5e7bc3c89bf5dc4f9927af03f0b39fa, type: 2}
+    - target: {fileID: 1493961109511499000, guid: 858f913c5bdfb3b449b818f493811db3, type: 3}
+      propertyPath: white
+      value: 
+      objectReference: {fileID: 2100000, guid: 1695fca954a58ea42b83a724cb49f22a, type: 2}
+    - target: {fileID: 1493961109511499000, guid: 858f913c5bdfb3b449b818f493811db3, type: 3}
       propertyPath: weaponManager
       value: 
       objectReference: {fileID: 872488056}
@@ -1281,6 +1386,10 @@ PrefabInstance:
       propertyPath: warningPrefab
       value: 
       objectReference: {fileID: 5796480262704675772, guid: 21e0a8c8ccda21746aa3fb94374257ea, type: 3}
+    - target: {fileID: 6695134758001766246, guid: 326c7e4db981e3a4dbe4693d8e19958a, type: 3}
+      propertyPath: attackVfxPrefab
+      value: 
+      objectReference: {fileID: 3075276769813256605, guid: 5a3cffdd6dceee642826f28621d820aa, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1971,6 +2080,7 @@ SceneRoots:
   - {fileID: 4639636123689041750}
   - {fileID: 3288979876055002996}
   - {fileID: 758721166}
+  - {fileID: 22880359}
   - {fileID: 891627547}
   - {fileID: 1688107050}
   - {fileID: 133909476}

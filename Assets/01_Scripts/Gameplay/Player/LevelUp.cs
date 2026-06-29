@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -26,9 +27,31 @@ public class LevelUp : MonoBehaviour
     private int[] ranUp = new int[3];
     private string iconName;
     private string iconNameAvo;
+    private bool stop = false;
     
     private void OnEnable()
     {
+        if(stop == false)
+        {
+            co = StartCoroutine(Stop());
+            stop = true;
+        }
+        else
+        {
+            equWeaponList = playerController.GetWeaponList();
+            weaponList = playerWeapon.GetWeaponList();
+            if (transform.childCount == 3)
+            {
+                go[0].gameObject.SetActive(false);
+                go[1].gameObject.SetActive(false);
+                go[2].gameObject.SetActive(false);
+            }
+            GetImageTask();
+        }
+    }
+    IEnumerator Stop()
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
         equWeaponList = playerController.GetWeaponList();
         weaponList = playerWeapon.GetWeaponList();
         if (transform.childCount == 3)
@@ -287,7 +310,7 @@ public class LevelUp : MonoBehaviour
         if (imsiList.TryGetValue(weaponList[ran[jk]].weaponType, out var arm))
         {
             weaponStat = arm.GetComponent<PlayerAttack>();
-            weaponStat.SetWeaponStat(0);
+            weaponStat.SetWeaponStat();
         }
         i = 0;
         dho = 0;
