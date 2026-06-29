@@ -1,3 +1,6 @@
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -8,34 +11,32 @@ public class VFXManager : MonoBehaviour
     Animator anima;
     AudioSource audio;
     [SerializeField] VFXAdd vfxPrefab;
-    [SerializeField] Sprite HitEffect;
-    [SerializeField] Sprite ArrowHitEffect;
+    [SerializeField] private List<VFXClass> vfxList = new List<VFXClass>();
 
-    [SerializeField] AnimatorController HitAnima;
-    [SerializeField] AnimatorController ArrowHitAnima;
-
-    [SerializeField] AudioClip HitAudio;
-    [SerializeField] AudioClip ArrowHitAudio;
-
-    public void SpawnEffect(Transform trans, bool arrow)
+    public void SpawnEffect(Transform trans, PlayerWeaponSO.WeaponType type)
     {
         VFXAdd effect = PoolManager.Instance.GetPool(vfxPrefab);
         sprite = effect.GetComponent<SpriteRenderer>();
         anima = effect.GetComponent<Animator>();
         audio = effect.GetComponent<AudioSource>();
-        if (arrow == true)
+        foreach(VFXClass vfx in vfxList)
         {
-            sprite.sprite = ArrowHitEffect;
-            anima.runtimeAnimatorController = ArrowHitAnima;
-            audio.clip = ArrowHitAudio;
-        }
-        else
-        {
-            sprite.sprite = HitEffect;
-            anima.runtimeAnimatorController = HitAnima;
-            audio.clip = HitAudio;
+            if(type == vfx.hitType)
+            {
+                sprite.sprite = vfx.hitSprite;
+                anima.runtimeAnimatorController = vfx.hitAnima;
+                audio.clip = vfx.hitAudio;
+            }
         }
         effect.transform.position = trans.position;
         audio.Play();
     }
+}
+[Serializable]
+public class VFXClass
+{
+    public Sprite hitSprite;
+    public AnimatorController hitAnima;
+    public AudioClip hitAudio;
+    public PlayerWeaponSO.WeaponType hitType;
 }

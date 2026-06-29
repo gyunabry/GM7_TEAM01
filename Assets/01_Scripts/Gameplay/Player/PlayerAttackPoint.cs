@@ -66,7 +66,11 @@ public class PlayerAttackPoint : MonoBehaviour
         {
             weaponType = playerAttack.GetParentType();
         }
-        weaponStat = playerController.GetWeaponStat(weaponType);
+        else
+        {
+            weaponType = PlayerWeaponSO.WeaponType.Null;
+        }
+            weaponStat = playerController.GetWeaponStat(weaponType);
         nowDamage = playerAttack.GetUpgradeDamage();
         nowArmorPiercing = playerAttack.GetUpgradeArmorPiercing();
         nowAttackSpeed = playerAttack.GetUpgradeAttackSpeed();
@@ -119,7 +123,7 @@ public class PlayerAttackPoint : MonoBehaviour
                         enemy.TakeDamage(nowDamage);
                         playerController.HpAbs();
                     }
-                    vfxm.SpawnEffect(enemy.transform, false);
+                    vfxm.SpawnEffect(enemy.transform, weaponType);
                 }
                 criHit = false;
             }
@@ -162,7 +166,7 @@ public class PlayerAttackPoint : MonoBehaviour
                         enemy.TakeDamage(nowDamage);
                         playerController.HpAbs();
                     }
-                    vfxm.SpawnEffect(enemy.transform, false);
+                    vfxm.SpawnEffect(enemy.transform, weaponType);
                 }
                 criHit = false;
             }

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections;
+using UnityEngine.EventSystems;
 
 public class DifficultySelectUI : MonoBehaviour, ICardPanel
 {
@@ -9,7 +11,10 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
     [SerializeField] private CanvasGroup panelCavasGroup;
     [Header("난이도 선택")]
     [SerializeField] private SelectMapCardUI[] difficultyCards;
-   
+
+    [SerializeField] private GameObject selectButton;
+
+    Coroutine co;
 
     private bool isOpen;
     private bool isSelected;
@@ -29,6 +34,19 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
     {
         if (isOpen) return;
         CloseInstant();
+    }
+    private void OnEnable()
+    {
+        co = StartCoroutine(FirstSelectCard());
+    }
+    IEnumerator FirstSelectCard()
+    {
+        yield return null;
+        if(EventSystem.current != null && selectButton != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(selectButton);
+        }
     }
 
     public void Open()

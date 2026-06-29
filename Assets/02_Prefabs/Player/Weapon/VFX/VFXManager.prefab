@@ -45,9 +45,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VFXManager
   vfxPrefab: {fileID: 3075276769813256605, guid: 5a3cffdd6dceee642826f28621d820aa, type: 3}
-  HitEffect: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
-  ArrowHitEffect: {fileID: 1148204689, guid: 8c031b874eaf0eb419bb3cfb6c565232, type: 3}
-  HitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
-  ArrowHitAnima: {fileID: 9100000, guid: 51787b93d8dc8ac4b9f5222dbb01c037, type: 2}
-  HitAudio: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
-  ArrowHitAudio: {fileID: 8300000, guid: 7d3daa08eba005240adaf8bfea21218a, type: 3}
+  vfxList:
+  - hitSprite: {fileID: 1148204689, guid: 8c031b874eaf0eb419bb3cfb6c565232, type: 3}
+    hitAnima: {fileID: 9100000, guid: 51787b93d8dc8ac4b9f5222dbb01c037, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: -1
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 0
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 1
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 2
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 3
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 4
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 5
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 6
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 7
+  - hitSprite: {fileID: 1413385990, guid: 463f650d87ec8eb44b7f90ec6b8ae3c3, type: 3}
+    hitAnima: {fileID: 9100000, guid: 6588bb7d223be2741894584bf4e5fc1a, type: 2}
+    hitAudio: {fileID: 0}
+    hitType: 8

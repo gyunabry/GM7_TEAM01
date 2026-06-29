@@ -1,8 +1,10 @@
 ﻿using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, ISelectHandler, IDeselectHandler, ISubmitHandler
 {
     [Header("카드 투명도")]
     [SerializeField] private CanvasGroup canvasGroup;
@@ -23,9 +25,12 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private bool isClickable = false;
     private ICardPanel targetPanel;
 
+    private Image[] childUi;
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
+        childUi = GetComponentsInChildren<Image>();
         originalPosition = rectTransform.anchoredPosition;
         originalScale = transform.localScale;
         //targetPanel = GetComponentInParent<ICardPanel>();
@@ -39,6 +44,7 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void HideInstant()
     {
+        childUi[1].gameObject.SetActive(false);
         isClickable = false;
         transform.DOKill();
         if (canvasGroup != null)
@@ -65,7 +71,7 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
             canvasGroup.interactable = true;
             canvasGroup.alpha = 1.0f;
         }
-        Sequence sequence = DOTween.Sequence();
+        DG.Tweening.Sequence sequence = DOTween.Sequence();
         if (rectTransform != null) sequence.Join(rectTransform.DOAnchorPos(originalPosition, 0.35f).SetEase(Ease.OutCubic));
         sequence.Join(transform.DOScale(originalScale, 0.35f).SetEase(Ease.OutBack));
     }
@@ -83,7 +89,7 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         isClickable = false;
         transform.DOKill();
         if (canvasGroup != null) canvasGroup.DOKill();
-        Sequence sequence = DOTween.Sequence();
+        DG.Tweening.Sequence sequence = DOTween.Sequence();
         if (canvasGroup != null) sequence.Join(canvasGroup.DOFade(0.0f, 0.2f));
         sequence.Join(transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack));
         return sequence;
@@ -92,6 +98,7 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (isClickable == false) return;
+        childUi[1].gameObject.SetActive(true);
         transform.DOKill();
         transform.DOScale(originalScale * hoveScale, 0.15f).SetEase(Ease.OutQuad);
     }
@@ -99,17 +106,36 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerExit(PointerEventData eventData)
     {
         if (isClickable == false) return;
+        childUi[1].gameObject.SetActive(false);
         transform.DOKill();
         transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
     }
 
-    
     public void OnPointerClick(PointerEventData eventData)
     {
         if (isClickable == false) return;
-
-       
-
+        if (targetPanel != null)
+        {
+            targetPanel.SelectCard(this);
+        }
+    }
+    public void OnSelect(BaseEventData eventData)
+    {
+        if (isClickable == false) return;
+        childUi[1].gameObject.SetActive(true);
+        transform.DOKill();
+        transform.DOScale(originalScale * hoveScale, 0.15f).SetEase(Ease.OutQuad);
+    }
+    public void OnDeselect(BaseEventData eventData)
+    {
+        if (isClickable == false) return;
+        childUi[1].gameObject.SetActive(false);
+        transform.DOKill();
+        transform.DOScale(originalScale, 0.15f).SetEase(Ease.OutQuad);
+    }
+    public void OnSubmit(BaseEventData eventData)
+    {
+        if (isClickable == false) return;
         if (targetPanel != null)
         {
             targetPanel.SelectCard(this);

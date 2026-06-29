@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     [Header("prefabs")]
     [SerializeField] GameObject arm;
+    [SerializeField] Material ori;
+    [SerializeField] Material white;
 
     [Header("WeaponManager")]
     [SerializeField] PlayerWeaponManager weaponManager;
@@ -54,7 +57,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private VoidEventChannel onPlayerDead;
     private LevelUp weaponUnlock;
     private Animator Ani;
-    SpriteRenderer sp;
+    SpriteRenderer sr;
 
     Vector2 move;
 
@@ -69,7 +72,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Start()
     {
         coHpRegen = StartCoroutine(HpRegen());
-        sp = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -92,12 +95,12 @@ public class PlayerController : MonoBehaviour, IDamageable
         
         if (move.x > 0.5f)
         {
-            sp.flipX = true;
+            sr.flipX = true;
 
         }
         else if(move.x < -0.5f)
         {
-            sp.flipX = false;
+            sr.flipX = false;
 
         }
         if (Mathf.Abs(move.x) > 0.5f)
@@ -171,6 +174,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     IEnumerator OnEnemyAttack(float damage)
     {
         Invincible = true;
+        sr.material = white;
+        yield return new WaitForSeconds(0.1f);
+        sr.material = ori;
         NowHp -= damage * (100 / 100 + armor);
         OnHpChanged?.Invoke(NowHp, maxHp);
         if (NowHp < 0)
@@ -182,7 +188,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         HitText hitText = PoolManager.Instance.GetPool<HitText>();
         hitText.ShowDamage(damage, transform.position, false, true);
 
-        yield return new WaitForSecondsRealtime(invincibleTime);
+        yield return new WaitForSeconds(invincibleTime - 0.1f);
         Invincible = false;
         co = null;
     }
