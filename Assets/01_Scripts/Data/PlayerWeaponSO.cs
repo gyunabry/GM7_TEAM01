@@ -6,9 +6,11 @@ using UnityEngine;
 public class PlayerWeaponSO : ScriptableObject
 {
     public enum WeaponType {Null = -1, Sword, Bow, CrossBow, Shield, Axe, Spear, Katana, Hammer, TwinBlade}
+    public enum WeaponMotionType {Null = -1, Swing, Sting, Hammer, Katana, Rotate}
 
     [Header("info")]
     public WeaponType weaponType;
+    public WeaponMotionType motionType;
     public string weaponName;
     public int weaponId;
     [TextArea]

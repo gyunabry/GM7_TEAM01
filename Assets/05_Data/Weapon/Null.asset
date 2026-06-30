@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Null
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: -1
+  motionType: -1
   weaponName: Null
   weaponId: 0
   weaponDes: 
@@ -22,3 +23,15 @@ MonoBehaviour:
   weaponAttackSpeed: 0
   weaponRange: 0
   weaponCri: 0
+  weaponSize: 0
+  upgrades: []
+  statUpValue:
+    upgradeStatDamage: 0
+    upgradeStatArmorPiercing: 0
+    upgradeStatAttackSpeed: 0
+    upgradeStatRange: 0
+    upgradeStatCri: 0
+    upgradeStatSize: 0
+  upgradeNum: 0
+  upgradeCount: 0
+  unlocking: 0

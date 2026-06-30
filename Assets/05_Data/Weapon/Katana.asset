@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Katana
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: 6
-  weaponName: Katana
+  motionType: 3
+  weaponName: "\uB3C4"
   weaponId: 0
   weaponDes: "\uD06C\uB9AC\uD2F0\uCEEC\uC5D0 \uBAA8\uB4E0\uAC78 \uAC74 \uADFC\uC811\uBB34\uAE30"
   weaponIcon: {fileID: -5335853548581968422, guid: e98b595a44a0609428493462fc34e97e, type: 3}
@@ -52,9 +53,5 @@ MonoBehaviour:
     upgradeStatCri: 15
     upgradeStatSize: 2
   upgradeNum: 0
-  upgradeCount: 2
-  skill1: 0
-  skill2: 0
-  skill3: 0
-  skill4: 0
+  upgradeCount: 0
   unlocking: 0

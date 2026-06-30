@@ -412,9 +412,7 @@ public class PlayerAttack : MonoBehaviour
     }
     IEnumerator Attack(Collider2D other)
     {
-        if (playerWeapon.weaponType.ToString() == "Sword" 
-            || playerWeapon.weaponType.ToString() == "Axe" 
-            || playerWeapon.weaponType.ToString() == "Shield")
+        if (playerWeapon.motionType.ToString() == "Swing")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -427,7 +425,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Hammer")
+        else if (playerWeapon.motionType.ToString() == "Hammer")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -441,7 +439,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if(playerWeapon.weaponType.ToString() == "Katana")
+        else if(playerWeapon.motionType.ToString() == "Katana")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -454,7 +452,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "TwinBlade")
+        else if (playerWeapon.motionType.ToString() == "Rotate")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -467,7 +465,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Spear")
+        else if (playerWeapon.motionType.ToString() == "Sting")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -480,7 +478,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Bow" || playerWeapon.weaponType.ToString() == "CrossBow")
+        else if (playerWeapon.motionType.ToString() == "Null")
         {
             isAttackCo = true;
             childBox.enabled = false;

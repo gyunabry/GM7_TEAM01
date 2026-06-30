@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: 5
-  weaponName: Spear
+  motionType: 1
+  weaponName: "\uCC3D"
   weaponId: 0
   weaponDes: "\uC911\uAC70\uB9AC\uC758 \uC801\uC744 \uC0C1\uB300\uD558\uAE30\uC5D0
     \uC801\uD569\uD55C \uBB34\uAE30"
@@ -53,8 +54,4 @@ MonoBehaviour:
     upgradeStatSize: 2
   upgradeNum: 0
   upgradeCount: 0
-  skill1: 0
-  skill2: 0
-  skill3: 0
-  skill4: 0
   unlocking: 0
