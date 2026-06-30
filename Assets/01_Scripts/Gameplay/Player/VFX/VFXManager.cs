@@ -1,9 +1,6 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class VFXManager : MonoBehaviour
 {
@@ -36,7 +33,7 @@ public class VFXManager : MonoBehaviour
 public class VFXClass
 {
     public Sprite hitSprite;
-    public AnimatorController hitAnima;
+    public RuntimeAnimatorController hitAnima;
     public AudioClip hitAudio;
     public PlayerWeaponSO.WeaponType hitType;
 }

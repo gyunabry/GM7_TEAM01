@@ -526,6 +526,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: SelectCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1899454938026728906, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2859965396977943674, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5893839867499952935, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
       propertyPath: m_Pivot.x
       value: 0

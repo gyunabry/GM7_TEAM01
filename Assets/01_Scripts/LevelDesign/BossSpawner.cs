@@ -8,6 +8,9 @@ public class BossSpawner : MonoBehaviour
     [Header("보스 프리팹")]
     [SerializeField] private GameObject bossPrefab;
 
+    [Header("보스 스폰 위치")]
+    [SerializeField] private Transform bossSpawnPoint;
+
     private void Start()
     {
         BossEncounterEvent.OnEventRaised += OnBossEncounter;
@@ -25,7 +28,7 @@ public class BossSpawner : MonoBehaviour
 
         if (bossPrefab == null) return;
 
-        BossController currentBoss = Instantiate(bossPrefab, Vector2.zero, Quaternion.identity).GetComponent<BossController>();
+        BossController currentBoss = Instantiate(bossPrefab, bossSpawnPoint.position, Quaternion.identity).GetComponent<BossController>();
         string bossName = currentBoss.GetComponent<BossData>().bossName;
         InGameUIManager.Instance.SetBossName(bossName);
         Debug.Log($"{bossName} 인게임 UI에 전달");

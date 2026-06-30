@@ -74,40 +74,60 @@ public class EnemySpawner : MonoBehaviour
     private IEnumerator SpawnRoutine(SpawnInfo info, float duration)
     {
         float countMultiplier = WaveManager.Instance.SpawnCountMultiplier;
-        float hpMultiplier = WaveManager.Instance.EnemyHpMultiplier;
-        float speedMultiplier = WaveManager.Instance.EnemyMoveSpeedMultiplier;
+        //float hpMultiplier = WaveManager.Instance.EnemyHpMultiplier;
+        //float speedMultiplier = WaveManager.Instance.EnemyMoveSpeedMultiplier;
 
         float elapsed = 0f;
+        float spawnStack = 0f; // 스폰할 몬스터 개수를 누적하는 변수
 
         while (elapsed < duration)
         {
-            float progress = elapsed / duration;
-            float curveValue = 1f;
-            if(info.spawnDensityCurve != null && info.spawnDensityCurve.keys.Length>0)
+            float intervalTime = info.spawnInterval;
+            // 웨이브 남은 시간이 지정된 인터벌보다 작다면 남은 시간만큼만 진행
+            if (elapsed + intervalTime > duration)
             {
-                curveValue = info.spawnDensityCurve.Evaluate(progress);
+                intervalTime = duration - elapsed;
             }
 
-            int finalSpawnCount = Mathf.RoundToInt(info.spawnCount * countMultiplier * curveValue);
+            elapsed += intervalTime;
 
-            for(int i = 0;i< finalSpawnCount;i++)
+            // 현재 시점의 애니메이션 커브 값 평가
+            float curveValue = 0f;
+            if (info.spawnDensityCurve != null && info.spawnDensityCurve.keys.Length > 0)
             {
-                float randomX = Random.Range(minX, maxX);
-                float randomY = Random.Range(minY, maxY);
-                Vector2 randomSpawnPos = new Vector2(randomX, randomY);
+                curveValue = info.spawnDensityCurve.Evaluate(elapsed);
+            }
 
-                // 스폰 위치에 미리 표식으로 경고 표시
-                WarningMarker warningMarker = PoolManager.Instance.GetPool(markerPrefab);
-                warningMarker.transform.position = randomSpawnPos;
+            // (커브 배율 * 초당 스폰 수 * 난이도 배율 * 흘러간 인터벌)을 누적
+            spawnStack += curveValue * info.spawnCount * countMultiplier * intervalTime;
 
-                // 대기열에 스폰 작업 등록
-                pendingSpawns.Add(new PendingSpawn
+            // 스택에서 정수 마리수 추출
+            int finalSpawnCount = Mathf.RoundToInt(spawnStack);
+
+            if (finalSpawnCount > 0)
+            {
+                // 스폰을 실행한 값만큼 스택에서 차감
+                spawnStack -= finalSpawnCount;
+
+                for (int i = 0; i < finalSpawnCount; i++)
                 {
-                    executeTime = Time.time + warningDuration,
-                    position = randomSpawnPos,
-                    enemyData = info.enemyData,
-                    marker = warningMarker
-                });
+                    float randomX = Random.Range(minX, maxX);
+                    float randomY = Random.Range(minY, maxY);
+                    Vector2 randomSpawnPos = new Vector2(randomX, randomY);
+
+                    // 스폰 위치에 미리 표식으로 경고 표시
+                    WarningMarker warningMarker = PoolManager.Instance.GetPool(markerPrefab);
+                    warningMarker.transform.position = randomSpawnPos;
+
+                    // 대기열에 스폰 작업 등록
+                    pendingSpawns.Add(new PendingSpawn
+                    {
+                        executeTime = Time.time + warningDuration,
+                        position = randomSpawnPos,
+                        enemyData = info.enemyData,
+                        marker = warningMarker
+                    });
+                }
             }
             yield return new WaitForSeconds(info.spawnInterval);
             elapsed += info.spawnInterval;

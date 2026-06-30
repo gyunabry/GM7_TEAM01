@@ -1,5 +1,4 @@
 using Unity.Cinemachine;
-using Unity.Cinemachine.Editor;
 using UnityEngine;
 
 [RequireComponent(typeof(CinemachineImpulseSource))]
