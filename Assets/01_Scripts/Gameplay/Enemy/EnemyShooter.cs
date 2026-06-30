@@ -142,7 +142,6 @@ public class EnemyShooter : MonoBehaviour
                 float dirY = Mathf.Sin(angle * Mathf.Deg2Rad);
 
                 Vector2 randomDir = new Vector2(dirX, dirY).normalized;
-                Debug.Log(randomDir);
 
                 SpawnProjectile(attackData, randomDir);
 

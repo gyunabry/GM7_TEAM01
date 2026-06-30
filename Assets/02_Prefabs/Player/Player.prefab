@@ -184,6 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   arm: {fileID: 4761606410593759796, guid: f15112f939b32c249bdf1bc4367f979b, type: 3}
+  ori: {fileID: 0}
+  white: {fileID: 0}
   weaponManager: {fileID: 0}
   maxHp: 100
   hpRegen: 0
@@ -250,6 +252,10 @@ PrefabInstance:
     - target: {fileID: 2690998777039603188, guid: 30c93cb815cf07d43ac37d90c123e31a, type: 3}
       propertyPath: m_Name
       value: PickUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2690998777039603188, guid: 30c93cb815cf07d43ac37d90c123e31a, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6528317093423290428, guid: 30c93cb815cf07d43ac37d90c123e31a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -352,6 +358,10 @@ PrefabInstance:
     - target: {fileID: 3468120296120225573, guid: ea1ec1bbfb1cd9140a321a286f3c7d37, type: 3}
       propertyPath: m_Name
       value: PickUpRange
+      objectReference: {fileID: 0}
+    - target: {fileID: 3468120296120225573, guid: ea1ec1bbfb1cd9140a321a286f3c7d37, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

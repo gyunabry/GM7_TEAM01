@@ -7,11 +7,22 @@ public class Meal : DropItemBase, ICollectable
     private Transform pullTarget;
     private float currentPullSpeed;
 
-    private void Update()
+    private Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
     {
         if (isPulled && pullTarget != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, pullTarget.position, currentPullSpeed * Time.deltaTime);
+            Vector2 nextPos = Vector2.MoveTowards(
+                rb.position,
+                pullTarget.position,
+                currentPullSpeed * Time.fixedDeltaTime
+            );
         }
     }
 
@@ -33,7 +44,16 @@ public class Meal : DropItemBase, ICollectable
     public override DropItemBase SpawnFromPool(Vector3 position)
     {
         DropItemBase spawnedItem = PoolManager.Instance.GetPool(this);
-        spawnedItem.transform.position = position;
+
+        if (spawnedItem.TryGetComponent<Rigidbody2D>(out Rigidbody2D spawnedRB))
+        {
+            spawnedRB.position = position;
+            spawnedRB.linearVelocity = Vector2.zero;
+        }
+        else
+        {
+            spawnedItem.transform.position = position;
+        }
 
         return spawnedItem;
     }
