@@ -18,6 +18,7 @@ MonoBehaviour:
   armor: 2
   moveSpeed: 2
   enemyPattern:
-  - {fileID: 11400000, guid: 6be4f95d409e5764e9b9d922a620a682, type: 2}
+  - {fileID: 11400000, guid: 9018baa0a6ec97d41994a52743ddcf2c, type: 2}
   dropItem:
   - {fileID: 8961237026755449203, guid: 81ff6f6a284f27641989548480a12787, type: 3}
+  runtimeAnimator: {fileID: 22100000, guid: 5f29d13064544194db757ce14dce8421, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2004_GiantBoneGolem
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 2004
-  enemyName: "\uAC70\uB300 \uBF08 \uACE8\uB818"
+  enemyName: "\uD574\uACE8 \uCC54\uD53C\uC5B8"
   maxHp: 350
   armor: 5
   moveSpeed: 1
@@ -21,3 +21,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a6f35b26a7aee14a847d81a7637e843, type: 2}
   dropItem:
   - {fileID: 8961237026755449203, guid: 81ff6f6a284f27641989548480a12787, type: 3}
+  runtimeAnimator: {fileID: 22100000, guid: 34d7f72db9e14354e8eac4a28cfa5301, type: 2}

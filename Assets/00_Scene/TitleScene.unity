@@ -544,7 +544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1899454938026728906, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4774436912595384432, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
       propertyPath: m_fontAsset
@@ -637,6 +637,18 @@ PrefabInstance:
     - target: {fileID: 5893839867499952935, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6577411701759463853, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6863012090118583708, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7925475044015071615, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8216500569457162193, guid: fd5ae01c005576d45b561bc65cfa8955, type: 3}
       propertyPath: stageData

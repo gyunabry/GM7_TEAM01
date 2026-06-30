@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 1003_Abomination
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 1003
-  enemyName: "\uD749\uBB3C"
+  enemyName: "\uB3CC\uC5F0\uBCC0\uC774 \uC880\uBE44"
   maxHp: 250
   armor: 3
   moveSpeed: 1.5
@@ -21,3 +21,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ee69e06baf0a3dd48904ef02631bc802, type: 2}
   dropItem:
   - {fileID: 8961237026755449203, guid: 81ff6f6a284f27641989548480a12787, type: 3}
+  runtimeAnimator: {fileID: 22100000, guid: fceb54c6394d95e489c6290818d65d44, type: 2}
