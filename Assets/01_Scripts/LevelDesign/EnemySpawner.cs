@@ -98,7 +98,7 @@ public class EnemySpawner : MonoBehaviour
                 curveValue = info.spawnDensityCurve.Evaluate(elapsed);
             }
 
-            // 커브 배율 * 초당 스폰 수 * 난이도 배율 * 흘러간 인터벌을 누적
+            // (커브 배율 * 초당 스폰 수 * 난이도 배율 * 흘러간 인터벌)을 누적
             spawnStack += curveValue * info.spawnCount * countMultiplier * intervalTime;
 
             // 스택에서 정수 마리수 추출

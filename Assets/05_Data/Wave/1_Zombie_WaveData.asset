@@ -16,8 +16,8 @@ MonoBehaviour:
   waveDuration: 1200
   spawnList:
   - enemyData: {fileID: 11400000, guid: 40e773b237e8d3b41987d788b6638399, type: 2}
-    spawnCount: 20
-    spawnInterval: 0.5
+    spawnCount: 15
+    spawnInterval: 1
     spawnDelay: 0
     spawnDensityCurve:
       serializedVersion: 2
@@ -71,7 +71,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - enemyData: {fileID: 11400000, guid: c9e30f2a387b73b4c900a38f6baf378a, type: 2}
-    spawnCount: 5
+    spawnCount: 4
     spawnInterval: 2
     spawnDelay: 0
     spawnDensityCurve:
@@ -135,7 +135,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - enemyData: {fileID: 11400000, guid: 695081c9c6128744b9484c02e48a278d, type: 2}
-    spawnCount: 5
+    spawnCount: 4
     spawnInterval: 3
     spawnDelay: 0
     spawnDensityCurve:
@@ -208,7 +208,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - enemyData: {fileID: 11400000, guid: 46ab0c854af28ec4b8a16bed5091499f, type: 2}
-    spawnCount: 2
+    spawnCount: 1
     spawnInterval: 4
     spawnDelay: 0
     spawnDensityCurve:

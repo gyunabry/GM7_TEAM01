@@ -10,6 +10,7 @@ public class EnemyAttack : MonoBehaviour
     private EnemyController enemyController;
     private NavMeshAgent agent;
     private EnemyShooter enemyShooter;
+    private Rigidbody2D rb;
 
     private float attackTimer;  // 공격 쿨타임 타이머
     private bool isAttacking;   // 중복 공격을 막기 위한 bool 값
@@ -17,11 +18,17 @@ public class EnemyAttack : MonoBehaviour
     // 현재 실행 중인 단일 공격 데이터
     private EnemyAttackData currentAttackData;
 
+    // 공격 딜레이
+    private WaitForSeconds attackDelay = new WaitForSeconds(1f);
+    private WaitForSeconds dashDelay = new WaitForSeconds(0.5f);
+    private WaitForSeconds rangeDalay = new WaitForSeconds(1f);
+
     private void Awake()
     {
         enemyController = GetComponent<EnemyController>();
         agent = GetComponent<NavMeshAgent>();
         enemyShooter = GetComponent<EnemyShooter>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -91,7 +98,7 @@ public class EnemyAttack : MonoBehaviour
         CollisionHandler(collision.gameObject);
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnCollisionEnterStay2D(Collision2D collision)
     {
         CollisionHandler(collision.gameObject);
     }
@@ -117,7 +124,7 @@ public class EnemyAttack : MonoBehaviour
     private IEnumerator MeleeAttackCo()
     {
         // 코루틴이 바로 종료되어 공격을 하지 못 하는 현상 방지
-        yield return new WaitForSeconds(1f);
+        yield return attackDelay;
     }
 
     private IEnumerator DashAttackCo(EnemyAttackData data)
@@ -126,7 +133,7 @@ public class EnemyAttack : MonoBehaviour
         agent.isStopped = true;
         Vector3 lastPosition = enemyController.target.position; // 대쉬 직전 타겟 위치 저장
         Vector3 dashDirection = (lastPosition - transform.position).normalized;
-        yield return new WaitForSeconds(0.5f);
+        yield return dashDelay;
 
         // 대쉬 실행
         float dashSpeed = data.dashSpeed;
@@ -136,10 +143,15 @@ public class EnemyAttack : MonoBehaviour
 
         while (time < dashDuration)
         {
-            transform.position += dashDirection * dashSpeed * Time.deltaTime;
-            time += Time.deltaTime;
-            yield return null;
+            Vector2 nextPos = rb.position + (Vector2)dashDirection * dashSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(nextPos);
+
+            time += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
+
+        // 에이전트와 실제 위치 동기화
+        agent.Warp(rb.position);
 
         // 추적 재개
         agent.isStopped = false;
@@ -148,11 +160,11 @@ public class EnemyAttack : MonoBehaviour
     private IEnumerator RangeAttackCo(EnemyAttackData data)
     {
         agent.isStopped = true; // 원거리 공격 시 추적 일시정지
-        yield return new WaitForSeconds(1f); // 발사 전 딜레이
+        yield return rangeDalay; // 발사 전 딜레이
 
         enemyShooter.Fire(data, enemyController.target);
 
-        yield return new WaitForSeconds(0.5f); // 발사 후 딜레이
+        yield return dashDelay; // 발사 후 딜레이
         agent.isStopped = false;
     }
     #endregion

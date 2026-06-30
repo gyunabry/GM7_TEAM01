@@ -1670,6 +1670,14 @@ PrefabInstance:
       value: PoolPreLoader
       objectReference: {fileID: 0}
     - target: {fileID: 6695134758001766246, guid: 326c7e4db981e3a4dbe4693d8e19958a, type: 3}
+      propertyPath: expCount
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 6695134758001766246, guid: 326c7e4db981e3a4dbe4693d8e19958a, type: 3}
+      propertyPath: enemyCount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6695134758001766246, guid: 326c7e4db981e3a4dbe4693d8e19958a, type: 3}
       propertyPath: hitTextPrefab
       value: 
       objectReference: {fileID: 1517395231047227752, guid: cae27d2859ee4734c872f598a08b537f, type: 3}
@@ -1681,6 +1689,10 @@ PrefabInstance:
       propertyPath: attackVfxPrefab
       value: 
       objectReference: {fileID: 3075276769813256605, guid: 5a3cffdd6dceee642826f28621d820aa, type: 3}
+    - target: {fileID: 6695134758001766246, guid: 326c7e4db981e3a4dbe4693d8e19958a, type: 3}
+      propertyPath: enemyBulletCount
+      value: 100
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

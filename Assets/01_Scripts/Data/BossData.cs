@@ -22,6 +22,7 @@ public class BossData : ScriptableObject
     [Header("기본 스탯")]
     public float maxHp;
     public float moveSpeed;
+    public float damage = 10f;
 
     [Header("페이즈 구성")]
     public List<BossPhaseInfo> phases;

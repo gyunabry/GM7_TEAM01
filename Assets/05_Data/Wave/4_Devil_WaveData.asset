@@ -16,8 +16,8 @@ MonoBehaviour:
   waveDuration: 1200
   spawnList:
   - enemyData: {fileID: 11400000, guid: 66ef89ada445ac744b2662de77486319, type: 2}
-    spawnCount: 25
-    spawnInterval: 0.4
+    spawnCount: 20
+    spawnInterval: 1
     spawnDelay: 0
     spawnDensityCurve:
       serializedVersion: 2

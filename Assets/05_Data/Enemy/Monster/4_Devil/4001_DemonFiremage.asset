@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4001_DemonFiremage
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 4001
-  enemyName: "\uC0C8\uB07C \uBE44\uB8E1"
+  enemyName: "\uC545\uB9C8 \uD654\uC5FC\uC220\uC0AC"
   maxHp: 150
   armor: 2
   moveSpeed: 3.5

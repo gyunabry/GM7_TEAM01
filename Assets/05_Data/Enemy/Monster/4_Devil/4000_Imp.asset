@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4000_Imp
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 4000
-  enemyName: "\uD654\uC5FC \uB3C4\uB9C8\uBC40"
+  enemyName: "\uC784\uD504"
   maxHp: 80
   armor: 1
   moveSpeed: 2

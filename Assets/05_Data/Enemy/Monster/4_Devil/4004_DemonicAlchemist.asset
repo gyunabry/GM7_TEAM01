@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4004_DemonicAlchemist
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 4004
-  enemyName: "\uC7AC\uC559\uC758 \uACE0\uB8E1"
+  enemyName: "\uC545\uB9C8 \uC5F0\uAE08\uC220\uC0AC"
   maxHp: 2000
   armor: 8
   moveSpeed: 1.5

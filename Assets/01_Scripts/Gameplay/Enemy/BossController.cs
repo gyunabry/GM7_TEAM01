@@ -373,4 +373,22 @@ public class BossController : MonoBehaviour, IDamageable
         bool isMoving = agent.velocity.sqrMagnitude > 0.001f;
         animationController.PlayMove(isMoving);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        CollisionHandler(collision.gameObject);
+    }
+
+    private void OnCollisionEnterStay2D(Collision2D collision)
+    {
+        CollisionHandler(collision.gameObject);
+    }
+
+    private void CollisionHandler(GameObject targetObj)
+    {
+        if (targetObj.gameObject.TryGetComponent<PlayerController>(out PlayerController player))
+        {
+            player.TakeDamage(bossData.damage);
+        }
+    }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 0002_Gunner
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   id: 0002
-  enemyName: "\uC18C\uCD1D\uC218"
+  enemyName: "\uAD81\uC218"
   maxHp: 35
   armor: 0
   moveSpeed: 2
