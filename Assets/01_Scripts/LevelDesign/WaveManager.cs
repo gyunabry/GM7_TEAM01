@@ -44,7 +44,7 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        if(GameSceneData.SelectedStage != null && GameSceneData.SelectedStage.waveDataList != null)
+        if (GameSceneData.SelectedStage != null && GameSceneData.SelectedStage.waveDataList != null)
         {
             this.stageWaves = GameSceneData.SelectedStage.waveDataList;
         }
