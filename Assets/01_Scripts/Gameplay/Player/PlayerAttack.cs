@@ -29,7 +29,7 @@ public class PlayerAttack : MonoBehaviour
     private bool isAttackCo = false;
     private bool nowAttack = false;
     private string weaponName;
-    private Collider2D[] enemyTamgi = new Collider2D[50];
+    private List<Collider2D> enemyTamgi = new List<Collider2D>();
     private Collider2D enemyTrans;
     private float nowDamage;
     private float nowArmorPiercing;
@@ -233,13 +233,18 @@ public class PlayerAttack : MonoBehaviour
     }
     public Collider2D FindEnemy()
     {
-        enemyTamgi = Physics2D.OverlapCircleAll(transform.position, nowRange + (playerStat["range"] / 100), enemyLayer);
+        enemyTamgi.Clear();
+        ContactFilter2D fill = new ContactFilter2D();
+        fill.SetLayerMask(enemyLayer);
+        fill.useLayerMask = true;
+        int enemyCount = Physics2D.OverlapCircle(transform.position, nowRange + (playerStat["range"] / 100), fill, enemyTamgi);
         Collider2D nearEnemy = null;
         float minDis = Mathf.Infinity;
-
-        for (int i = 0; i < enemyTamgi.Length; i++)
+        Vector2 playerPosi = transform.position;
+        for (int i = 0; i < enemyCount; i++)
         {
-            float distance = Vector2.Distance(transform.position, enemyTamgi[i].transform.position);
+            Vector2 enemyPosi = enemyTamgi[i].transform.position;
+            float distance = (playerPosi - enemyPosi).sqrMagnitude;
             if (distance < minDis)
             {
                 minDis = distance;
