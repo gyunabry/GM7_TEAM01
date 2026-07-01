@@ -63,10 +63,6 @@ public class InGameUIManager : MonoBehaviour
         {
             player.OnHpChanged += UpdateHpUI;
         }
-        if (bossEncounterEvent != null)
-        {
-            bossEncounterEvent.OnEventRaised += ShowBossUI;
-        }
         if (bossDamagedEvent != null)
         {
             bossDamagedEvent.OnEventRaised += UpdateBossHp;
@@ -98,10 +94,6 @@ public class InGameUIManager : MonoBehaviour
         {
             player.OnHpChanged -= UpdateHpUI;
         }
-        if (bossEncounterEvent != null)
-        {
-            bossEncounterEvent.OnEventRaised -= ShowBossUI;
-        }
         if (bossDamagedEvent != null)
         {
             bossDamagedEvent.OnEventRaised -= UpdateBossHp;
@@ -118,6 +110,7 @@ public class InGameUIManager : MonoBehaviour
         }
     }
 
+    #region 플레이어 상태
     private void UpdateHpUI(float currentHp, float maxHp)
     {
         if(hpFill != null && maxHp > 0)
@@ -167,17 +160,14 @@ public class InGameUIManager : MonoBehaviour
             expText.text =$"{Mathf.RoundToInt(currentExp)}/{Mathf.RoundToInt(maxExp)}";
         }
     }
+    #endregion
 
     #region 보스 관련
-    private void ShowBossUI()
-    {
-        CanvasGroupController.EnableCG(bossUI);
-        bossUI.DOFade(1f, fadeInDuration).SetUpdate(true);
-    }
-
     // 보스 초기화 시 호출해 이름 설정
     public void SetBossInfo(string bossName, float currentHp, float maxHp)
     {
+        ShowBossUI();
+
         if (bossNameText != null)
         {
             bossNameText.text = bossName;
@@ -187,6 +177,12 @@ public class InGameUIManager : MonoBehaviour
         {
             bossHpFill.fillAmount = currentHp / maxHp;
         }
+    }
+
+    private void ShowBossUI()
+    {
+        CanvasGroupController.EnableCG(bossUI);
+        bossUI.DOFade(1f, fadeInDuration).SetUpdate(true);
     }
 
     private void UpdateBossHp(float currentHp, float maxHp)

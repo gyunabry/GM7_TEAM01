@@ -20,7 +20,7 @@ public class CameraTrasition : MonoBehaviour
     [Header("연출 시간 설정")]
     [SerializeField] private float preSpawnFocusDuration = 2f;
     [SerializeField] private float postSpawnGraceDuration = 2f;
-    [SerializeField] private float deathFocusDuration = 3f;
+    [SerializeField] private float deathFocusDuration = 4f;
 
     private Coroutine spawnRoutine;
     private Coroutine deathRoutine;
@@ -124,12 +124,26 @@ public class CameraTrasition : MonoBehaviour
             playerCamera.Priority = 10;
         }
 
-        yield return new WaitForSeconds(deathFocusDuration);
+        // 느려진 시간이 점점 원상복구 되도록 연출
+        float elapsed = 0f;
+        while (elapsed < deathFocusDuration)
+        {
+            float scaleValue = Mathf.Lerp(0.3f, 1.0f, elapsed / deathFocusDuration);
+            Time.timeScale = scaleValue;
+            if (scaleValue >= 0.99f)
+            {
+                break;
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // yield return new WaitForSeconds(deathFocusDuration);
 
         bossCamera.Priority = 0;
 
         bossClearEvent?.RaiseEvent();
-        GameManager.Instance.ResumeGame();
+        GameManager.Instance.PauseGame();
         deathRoutine = null;
     }
 }
