@@ -8,7 +8,8 @@ public class Arrow : MonoBehaviour
     private ObjectPool<Arrow> pool;
     private Coroutine co;
     private Coroutine hitCo;
-
+    private int pier;
+    private int maxPier;
 
     public void SetPool(ObjectPool<Arrow> pool)
     {
@@ -27,24 +28,44 @@ public class Arrow : MonoBehaviour
         yield return null;
         gameObject.transform.SetParent(null);
         yield return new WaitForSecondsRealtime(5.0f);
+        pier = 0;
         pool.Release(this);
         co = null;
     }
     IEnumerator DeleteTime()
     {
         yield return null;
+        pier = 0;
         pool.Release(this);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            hitCo = StartCoroutine(DeleteTime());
+            if(pier > maxPier)
+            {
+                hitCo = StartCoroutine(DeleteTime());
+            }
+            else
+            {
+                pier++;
+            }
         }
         if (collision.gameObject.CompareTag("Boss"))
         {
-            hitCo = StartCoroutine(DeleteTime());
+            if(pier > maxPier)
+            {
+                hitCo = StartCoroutine(DeleteTime());
+            }
+            else
+            {
+                pier++;
+            }
         }
+    }
+    public void GetMaxPiercing(int max)
+    {
+        maxPier = max;
     }
 
 }

@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
 
     // ·¹º§
     private int level;
-    private int[] requireExp = { 0, 25, 50, 75, 100, 125, 150, 175, 200 };
+    private int[] requireExp = new int[100];
     private int currentExp;
 
     public int Level => level;
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
         currentExp = 0;
         KillCount = 0;
         Gold = 0;
+        SetNeedExp();
     }
 
     private void OnEnable()
@@ -64,6 +65,40 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetNeedExp()
+    {
+        for (int i = 0; i < requireExp.Length; i++) 
+        { 
+            if(i == 0)
+            {
+                requireExp[i] = 0;
+            }
+            else if(i == 1)
+            {
+                requireExp[i] = 25;
+            }
+            else if (i <= 20)
+            {
+                requireExp[i] = 25 + (i - 1) * 25;
+            }
+            else if (i <= 40)
+            {
+                requireExp[i] = 900 + (i - 20) * 36;
+            }
+            else if (i <= 60)
+            {
+                requireExp[i] = 2000 + (i - 40) * 47;
+            }
+            else if (i <= 80)
+            {
+                requireExp[i] = 3500 + (i - 60) * 58;
+            }
+            else if (i <= 100)
+            {
+                requireExp[i] = 6000 + (i - 80) * 69;
+            }
+        }
+    }
     public void AddKillCount()
     {
         KillCount++;

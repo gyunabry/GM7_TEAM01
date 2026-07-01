@@ -11,6 +11,10 @@ public class LevelUp : MonoBehaviour
     [SerializeField] private PlayerWeaponManager playerWeapon;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Button button;
+    [Header("무기 진화에 필요한 업그레이드 횟수")]
+    [SerializeField] private int needUpCount;
+    [Header("최대 공속 강화 횟수")]
+    [SerializeField] private int maxAttackSpeedUpgrade;
 
     private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> equWeaponList = new Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO>();
     private PlayerWeaponSO[] weaponList;
@@ -130,13 +134,13 @@ public class LevelUp : MonoBehaviour
                     {
                         ranUp[i] = 3;
                     }
-                    if (ranUp[i] == 2 && weaponList[ran[i]].GetStatUpgradeAttackSpeed() <= 0.2f)
+                    if (ranUp[i] == 2 && weaponList[ran[i]].weaponAttackSpeedUpgradeCount > maxAttackSpeedUpgrade)
                     {
                         continue;
                     }
                     break;
                 }
-                if (weaponList[ran[i]].upgradeCount == 8) //무기 진화 메서드
+                if (weaponList[ran[i]].upgradeCount == needUpCount) //무기 진화 메서드
                 {
                     if (i == 0)
                     {
@@ -177,12 +181,13 @@ public class LevelUp : MonoBehaviour
                 {
                     text.text = "";
                 }
-                if (weaponList[ran[i]].upgradeCount == 8) // 무기 진화 텍스트
+                if (weaponList[ran[i]].upgradeCount == needUpCount) // 무기 진화 텍스트
                 {
                     iconNameAvo = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeSprite.ToString().Replace("_0 (UnityEngine.Sprite)", "");
-                    text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes}";
+                    text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeName}";
+                    upText[1].text = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes;
                     Image[] childImageAvo = go[i].GetComponentsInChildren<Image>();
-                    weaponImage[i] = childImageAvo[1];
+                    weaponImage[i] = childImageAvo[3];
                     Sprite spriteAvo = await Addressables.LoadAssetAsync<Sprite>(iconNameAvo).Task;
                     weaponImage[dho].sprite = spriteAvo;
                     dho++;
@@ -300,6 +305,7 @@ public class LevelUp : MonoBehaviour
         else if (ranUp[jk] == 2)
         {
             weaponList[ran[jk]].AddStatUpgradeAttackSpeed(weaponList[ran[jk]].GetUpValueAttackSpeed());
+            weaponList[ran[jk]].weaponAttackSpeedUpgradeCount++;
         }
         else if (ranUp[jk] == 3)
         {

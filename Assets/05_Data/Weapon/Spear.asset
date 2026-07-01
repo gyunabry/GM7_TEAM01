@@ -13,33 +13,36 @@ MonoBehaviour:
   m_Name: Spear
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: 5
-  weaponName: Spear
+  motionType: 1
+  weaponName: "\uCC3D"
   weaponId: 0
   weaponDes: "\uC911\uAC70\uB9AC\uC758 \uC801\uC744 \uC0C1\uB300\uD558\uAE30\uC5D0
     \uC801\uD569\uD55C \uBB34\uAE30"
   weaponIcon: {fileID: 2618635765060545242, guid: 3f03cf4faf8d7234db7ffe5a77303fb4, type: 3}
   weaponDamage: 20
   weaponArmorPiercing: 10
-  weaponAttackSpeed: 1.1
+  weaponAttackSpeed: 0.9
   weaponRange: 5
-  weaponCri: 10
+  weaponCri: 20
   weaponSize: 10
+  weaponPiercing: 0
+  weaponAttackSpeedUpgradeCount: 0
   upgrades:
   - upgradeName: "\uC0BC\uC9C0\uCC3D"
-    upgradeDamage: 20
+    upgradeDamage: 35
     upgradeArmorPiercing: 20
     upgradeAttackSpeed: 0
     upgradeRange: 0
-    upgradeCri: 20
+    upgradeCri: 30
     upgradeSize: 10
     upgradeDes: "\uCC3D\uC758 \uC7A5\uC810\uC744 \uADF9\uB300\uD654\uD55C \uC9C4\uD654"
     upgradeSprite: {fileID: -4120681316829262950, guid: ddfac5a375dbb2244aa5363be69028b7, type: 3}
   - upgradeName: "\uB2E8\uCC3D"
-    upgradeDamage: 10
+    upgradeDamage: 20
     upgradeArmorPiercing: 0
-    upgradeAttackSpeed: -0.5
+    upgradeAttackSpeed: -0.3
     upgradeRange: -1
-    upgradeCri: 40
+    upgradeCri: 0
     upgradeSize: 8
     upgradeDes: "\uCC3D\uC758 \uAE38\uC774\uB97C \uC904\uC5EC \uB354\uC6B1 \uBE60\uB974\uAC8C
       \uACF5\uACA9\uD560 \uC218 \uC788\uAC8C\uD55C \uC9C4\uD654"
@@ -53,8 +56,4 @@ MonoBehaviour:
     upgradeStatSize: 2
   upgradeNum: 0
   upgradeCount: 0
-  skill1: 0
-  skill2: 0
-  skill3: 0
-  skill4: 0
   unlocking: 0

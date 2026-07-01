@@ -13,33 +13,36 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: 4
-  weaponName: Axe
+  motionType: 0
+  weaponName: "\uB3C4\uB07C"
   weaponId: 0
   weaponDes: "\uAC15\uB825\uD55C \uD55C\uBC29\uC774 \uD2B9\uAE30\uC778 \uADFC\uAC70\uB9AC
     \uBB34\uAE30"
   weaponIcon: {fileID: -2508016695669320440, guid: 050be8d41f10e4f41bd9f8d419060008, type: 3}
   weaponDamage: 40
   weaponArmorPiercing: 10
-  weaponAttackSpeed: 2.1
+  weaponAttackSpeed: 1.7
   weaponRange: 4
   weaponCri: 10
   weaponSize: 12
+  weaponPiercing: 0
+  weaponAttackSpeedUpgradeCount: 0
   upgrades:
   - upgradeName: "\uBC30\uD2C0\uC561\uC2A4"
-    upgradeDamage: 10
+    upgradeDamage: 15
     upgradeArmorPiercing: 0
-    upgradeAttackSpeed: -1.2
+    upgradeAttackSpeed: -1
     upgradeRange: 0
-    upgradeCri: 0
+    upgradeCri: 10
     upgradeSize: 12
     upgradeDes: "\uBE60\uB978 \uACF5\uACA9\uC18D\uB3C4\uAC00 \uD2B9\uC9D5\uC778 \uC9C4\uD654"
     upgradeSprite: {fileID: -4912735078408090665, guid: 10afc8434f7fb5549b589cbc09daaa05, type: 3}
   - upgradeName: "\uCC98\uD615\uB3C4\uB07C"
-    upgradeDamage: 20
+    upgradeDamage: 40
     upgradeArmorPiercing: 50
     upgradeAttackSpeed: 0
     upgradeRange: 4
-    upgradeCri: 50
+    upgradeCri: 20
     upgradeSize: 16
     upgradeDes: "\uB354\uC6B1 \uAC15\uB825\uD55C \uD55C\uBC29\uC774 \uD2B9\uC9D5\uC778
       \uC9C4\uD654"
@@ -47,14 +50,10 @@ MonoBehaviour:
   statUpValue:
     upgradeStatDamage: 15
     upgradeStatArmorPiercing: 5
-    upgradeStatAttackSpeed: -0.1
+    upgradeStatAttackSpeed: -0.12
     upgradeStatRange: 0.5
     upgradeStatCri: 10
     upgradeStatSize: 2
   upgradeNum: 1
   upgradeCount: 0
-  skill1: 0
-  skill2: 0
-  skill3: 0
-  skill4: 0
   unlocking: 0

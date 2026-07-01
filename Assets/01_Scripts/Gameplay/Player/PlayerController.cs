@@ -234,6 +234,7 @@ public class PlayerController : MonoBehaviour, IDamageable
             if(hpRegen != 0)
             {
                 yield return new WaitForSeconds(300 / (hpRegen + 100));
+                NowHp++;
             }
             else
             {

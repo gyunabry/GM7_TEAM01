@@ -29,7 +29,7 @@ public class PlayerAttack : MonoBehaviour
     private bool isAttackCo = false;
     private bool nowAttack = false;
     private string weaponName;
-    private Collider2D[] enemyTamgi = new Collider2D[50];
+    private List<Collider2D> enemyTamgi = new List<Collider2D>();
     private Collider2D enemyTrans;
     private float nowDamage;
     private float nowArmorPiercing;
@@ -233,13 +233,18 @@ public class PlayerAttack : MonoBehaviour
     }
     public Collider2D FindEnemy()
     {
-        enemyTamgi = Physics2D.OverlapCircleAll(transform.position, nowRange + (playerStat["range"] / 100), enemyLayer);
+        enemyTamgi.Clear();
+        ContactFilter2D fill = new ContactFilter2D();
+        fill.SetLayerMask(enemyLayer);
+        fill.useLayerMask = true;
+        int enemyCount = Physics2D.OverlapCircle(transform.position, nowRange + (playerStat["range"] / 100), fill, enemyTamgi);
         Collider2D nearEnemy = null;
         float minDis = Mathf.Infinity;
-
-        for (int i = 0; i < enemyTamgi.Length; i++)
+        Vector2 playerPosi = transform.position;
+        for (int i = 0; i < enemyCount; i++)
         {
-            float distance = Vector2.Distance(transform.position, enemyTamgi[i].transform.position);
+            Vector2 enemyPosi = enemyTamgi[i].transform.position;
+            float distance = (playerPosi - enemyPosi).sqrMagnitude;
             if (distance < minDis)
             {
                 minDis = distance;
@@ -382,11 +387,11 @@ public class PlayerAttack : MonoBehaviour
         angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         if (angle < 0f) angle += 360f;
         float startAngle = angle;
-        float endAngle = angle + 360f;
+        float endAngle = angle + 380f;
 
-        motion.Join(transform.DORotate(new Vector3(0f, 0f, 1080f), 0.6f, RotateMode.FastBeyond360).SetEase(Ease.Linear));
+        motion.Join(transform.DORotate(new Vector3(0f, 0f, 1080f), 0.8f, RotateMode.FastBeyond360).SetEase(Ease.Linear));
         motion.Join(
-            DOTween.To(() => startAngle, x => startAngle = x, endAngle, 0.6f).SetEase(Ease.Linear).OnUpdate(() =>
+            DOTween.To(() => startAngle, x => startAngle = x, endAngle, 0.8f).SetEase(Ease.Linear).OnUpdate(() =>
             {
                 float rad = startAngle * Mathf.Deg2Rad;
                 Vector3 next = playerController.transform.position + new Vector3(Mathf.Cos(rad) * radius, Mathf.Sin(rad) * radius, 0);
@@ -412,9 +417,7 @@ public class PlayerAttack : MonoBehaviour
     }
     IEnumerator Attack(Collider2D other)
     {
-        if (playerWeapon.weaponType.ToString() == "Sword" 
-            || playerWeapon.weaponType.ToString() == "Axe" 
-            || playerWeapon.weaponType.ToString() == "Shield")
+        if (playerWeapon.motionType.ToString() == "Swing")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -427,21 +430,21 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Hammer")
+        else if (playerWeapon.motionType.ToString() == "Hammer")
         {
             isAttackCo = true;
             nowAttack = true;
             AttackHammerMotion(other.transform);
-            yield return new WaitForSecondsRealtime(0.3f);
+            yield return new WaitForSecondsRealtime(0.35f);
             childCircle.enabled = true;
-            yield return new WaitForSecondsRealtime(0.1f);
+            yield return new WaitForSecondsRealtime(0.05f);
             childCircle.enabled = false;
             nowAttack = false;
             yield return new WaitForSecondsRealtime(nowAttackSpeed);
             isAttackCo = false;
             attackco = null;
         }
-        else if(playerWeapon.weaponType.ToString() == "Katana")
+        else if(playerWeapon.motionType.ToString() == "Katana")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -454,20 +457,20 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "TwinBlade")
+        else if (playerWeapon.motionType.ToString() == "Rotate")
         {
             isAttackCo = true;
             nowAttack = true;
             childBox.enabled = true;
             AttackRotateMotion(other.transform);
-            yield return new WaitForSecondsRealtime(0.6f);
+            yield return new WaitForSecondsRealtime(0.8f);
             childBox.enabled = false;
             nowAttack = false;
             yield return new WaitForSecondsRealtime(nowAttackSpeed);
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Spear")
+        else if (playerWeapon.motionType.ToString() == "Sting")
         {
             isAttackCo = true;
             nowAttack = true;
@@ -480,7 +483,7 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = false;
             attackco = null;
         }
-        else if (playerWeapon.weaponType.ToString() == "Bow" || playerWeapon.weaponType.ToString() == "CrossBow")
+        else if (playerWeapon.motionType.ToString() == "Null")
         {
             isAttackCo = true;
             childBox.enabled = false;
@@ -491,6 +494,7 @@ public class PlayerAttack : MonoBehaviour
             arrow.transform.position = transform.position;
             arrow.transform.Rotate(0f, 0f, rotz + 45f);
             arrow.transform.localScale = new Vector3(nowSize / 2, nowSize / 2, nowSize / 2);
+            arrow.GetMaxPiercing(playerWeapon.weaponPiercing);
             yield return new WaitForSecondsRealtime(nowAttackSpeed);
             isAttackCo = false;
             attackco = null;
