@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWeaponSO
   weaponType: 4
+  motionType: 0
   weaponName: "\uB3C4\uB07C"
   weaponId: 0
   weaponDes: "\uAC15\uB825\uD55C \uD55C\uBC29\uC774 \uD2B9\uAE30\uC778 \uADFC\uAC70\uB9AC
@@ -20,10 +21,12 @@ MonoBehaviour:
   weaponIcon: {fileID: -2508016695669320440, guid: 050be8d41f10e4f41bd9f8d419060008, type: 3}
   weaponDamage: 40
   weaponArmorPiercing: 10
-  weaponAttackSpeed: 2.1
+  weaponAttackSpeed: 1.7
   weaponRange: 4
   weaponCri: 10
   weaponSize: 12
+  weaponPiercing: 0
+  weaponAttackSpeedUpgradeCount: 1
   upgrades:
   - upgradeName: "\uBC30\uD2C0\uC561\uC2A4"
     upgradeDamage: 10
@@ -47,10 +50,10 @@ MonoBehaviour:
   statUpValue:
     upgradeStatDamage: 15
     upgradeStatArmorPiercing: 5
-    upgradeStatAttackSpeed: -0.1
+    upgradeStatAttackSpeed: -0.12
     upgradeStatRange: 0.5
     upgradeStatCri: 10
     upgradeStatSize: 2
   upgradeNum: 1
-  upgradeCount: 0
+  upgradeCount: 3
   unlocking: 0

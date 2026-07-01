@@ -430,9 +430,9 @@ public class PlayerAttack : MonoBehaviour
             isAttackCo = true;
             nowAttack = true;
             AttackHammerMotion(other.transform);
-            yield return new WaitForSecondsRealtime(0.3f);
+            yield return new WaitForSecondsRealtime(0.35f);
             childCircle.enabled = true;
-            yield return new WaitForSecondsRealtime(0.1f);
+            yield return new WaitForSecondsRealtime(0.05f);
             childCircle.enabled = false;
             nowAttack = false;
             yield return new WaitForSecondsRealtime(nowAttackSpeed);

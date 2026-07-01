@@ -21,11 +21,12 @@ MonoBehaviour:
   weaponIcon: {fileID: -2653693364168859081, guid: 00af9d98d4f8db54b80c0e3d48ea9eae, type: 3}
   weaponDamage: 50
   weaponArmorPiercing: 15
-  weaponAttackSpeed: 2.5
+  weaponAttackSpeed: 2
   weaponRange: 6
   weaponCri: 10
   weaponSize: 10
   weaponPiercing: 4
+  weaponAttackSpeedUpgradeCount: 0
   upgrades:
   - upgradeName: "\uC5F0\uC0AC \uD06C\uB85C\uC2A4 \uBCF4\uC6B0"
     upgradeDamage: 0
@@ -48,7 +49,7 @@ MonoBehaviour:
   statUpValue:
     upgradeStatDamage: 15
     upgradeStatArmorPiercing: 5
-    upgradeStatAttackSpeed: -0.1
+    upgradeStatAttackSpeed: -0.15
     upgradeStatRange: 1
     upgradeStatCri: 10
     upgradeStatSize: 2

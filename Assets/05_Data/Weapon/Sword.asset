@@ -21,10 +21,12 @@ MonoBehaviour:
   weaponIcon: {fileID: 3060291918595649585, guid: 06d25675c742ec243b68f648bd316fb9, type: 3}
   weaponDamage: 25
   weaponArmorPiercing: 0
-  weaponAttackSpeed: 1.1
+  weaponAttackSpeed: 0.9
   weaponRange: 3
   weaponCri: 0
   weaponSize: 10
+  weaponPiercing: 0
+  weaponAttackSpeedUpgradeCount: 0
   upgrades:
   - upgradeName: "\uB300\uAC80"
     upgradeDamage: 30

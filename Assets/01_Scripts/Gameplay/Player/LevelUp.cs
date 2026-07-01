@@ -181,12 +181,13 @@ public class LevelUp : MonoBehaviour
                 {
                     text.text = "";
                 }
-                if (weaponList[ran[i]].upgradeCount == 8) // 무기 진화 텍스트
+                if (weaponList[ran[i]].upgradeCount == needUpCount) // 무기 진화 텍스트
                 {
                     iconNameAvo = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeSprite.ToString().Replace("_0 (UnityEngine.Sprite)", "");
-                    text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes}";
+                    text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeName}";
+                    upText[1].text = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes;
                     Image[] childImageAvo = go[i].GetComponentsInChildren<Image>();
-                    weaponImage[i] = childImageAvo[1];
+                    weaponImage[i] = childImageAvo[3];
                     Sprite spriteAvo = await Addressables.LoadAssetAsync<Sprite>(iconNameAvo).Task;
                     weaponImage[dho].sprite = spriteAvo;
                     dho++;
