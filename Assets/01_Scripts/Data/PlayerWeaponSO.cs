@@ -25,6 +25,7 @@ public class PlayerWeaponSO : ScriptableObject
     public float weaponCri;
     public float weaponSize;
     public int weaponPiercing;
+    public int weaponAttackSpeedUpgradeCount;
 
     [Header("UpgradeList")]
     public List<WeaponStat> upgrades;
@@ -126,6 +127,7 @@ public class PlayerWeaponSO : ScriptableObject
         statUpgrades.nowUpgradeCri = 0;
         statUpgrades.nowUpgradeSize = 0;
         upgradeCount = 0;
+        weaponAttackSpeedUpgradeCount = 0;
     }
     //업그레이드 수치 가져오기
     public float GetUpValueDamage()

@@ -13,6 +13,8 @@ public class LevelUp : MonoBehaviour
     [SerializeField] private Button button;
     [Header("무기 진화에 필요한 업그레이드 횟수")]
     [SerializeField] private int needUpCount;
+    [Header("최대 공속 강화 횟수")]
+    [SerializeField] private int maxAttackSpeedUpgrade;
 
     private Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO> equWeaponList = new Dictionary<PlayerWeaponSO.WeaponType, PlayerWeaponSO>();
     private PlayerWeaponSO[] weaponList;
@@ -132,7 +134,7 @@ public class LevelUp : MonoBehaviour
                     {
                         ranUp[i] = 3;
                     }
-                    if (ranUp[i] == 2 && weaponList[ran[i]].GetStatUpgradeAttackSpeed() <= 0.2f)
+                    if (ranUp[i] == 2 && weaponList[ran[i]].weaponAttackSpeedUpgradeCount > maxAttackSpeedUpgrade)
                     {
                         continue;
                     }
@@ -302,6 +304,7 @@ public class LevelUp : MonoBehaviour
         else if (ranUp[jk] == 2)
         {
             weaponList[ran[jk]].AddStatUpgradeAttackSpeed(weaponList[ran[jk]].GetUpValueAttackSpeed());
+            weaponList[ran[jk]].weaponAttackSpeedUpgradeCount++;
         }
         else if (ranUp[jk] == 3)
         {

@@ -11,7 +11,13 @@ public class Arrow : MonoBehaviour
     private Coroutine hitCo;
 
     private Rigidbody2D rb;
+    private int Pier = 0;
+    private int MaxPier = 3;
 
+    public void GetMaxPiercing(int value)
+    {
+        MaxPier = value;
+    }
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -53,11 +59,27 @@ public class Arrow : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            hitCo = StartCoroutine(DeleteTime());
+            if(Pier > MaxPier)
+            {
+                hitCo = StartCoroutine(DeleteTime());
+                Pier = 0;
+            }
+            else
+            {
+                Pier++;
+            }
         }
         if (collision.gameObject.CompareTag("Boss"))
         {
-            hitCo = StartCoroutine(DeleteTime());
+            if (Pier > MaxPier)
+            {
+                hitCo = StartCoroutine(DeleteTime());
+                Pier = 0;
+            }
+            else
+            {
+                Pier++;
+            }
         }
     }
 
