@@ -19,6 +19,9 @@ public class BossData : ScriptableObject
     public string bossId;
     public string bossName;
 
+    [Header("애니메이션 설정")]
+    public RuntimeAnimatorController runtimeAnimator;
+
     [Header("기본 스탯")]
     public float maxHp;
     public float moveSpeed;

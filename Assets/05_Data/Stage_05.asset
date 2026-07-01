@@ -16,3 +16,4 @@ MonoBehaviour:
   mapPrefab: {fileID: 190273827542114194, guid: 156006a5ce607424e9ae12b6b3459910, type: 3}
   waveDataList:
   - {fileID: 11400000, guid: 762a19b81bce14d449be17ec35e09dfc, type: 2}
+  bossData: {fileID: 11400000, guid: c7077cd27e8d0e64a92c92e0dd566dca, type: 2}

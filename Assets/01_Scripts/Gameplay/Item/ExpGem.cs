@@ -7,22 +7,11 @@ public class ExpGem : DropItemBase, ICollectable
     private Transform pullTarget;
     private float currentPullSpeed;
 
-    private Rigidbody2D rb;
-
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void FixedUpdate()
+    private void Update()
     {
         if (isPulled && pullTarget != null)
         {
-            Vector2 nextPos = Vector2.MoveTowards(
-                rb.position,
-                pullTarget.position,
-                currentPullSpeed * Time.fixedDeltaTime
-            );
+            transform.position = Vector3.MoveTowards(transform.position, pullTarget.position, currentPullSpeed * Time.deltaTime);
         }
     }
 
@@ -45,16 +34,7 @@ public class ExpGem : DropItemBase, ICollectable
     public override DropItemBase SpawnFromPool(Vector3 position)
     {
         DropItemBase spawnedItem = PoolManager.Instance.GetPool(this);
-
-        if (spawnedItem.TryGetComponent<Rigidbody2D>(out Rigidbody2D spawnedRB))
-        {
-            spawnedRB.position = position;
-            spawnedRB.linearVelocity = Vector2.zero;
-        }
-        else
-        {
-            spawnedItem.transform.position = position;
-        }
+        spawnedItem.transform.position = position;
 
         return spawnedItem;
     }
