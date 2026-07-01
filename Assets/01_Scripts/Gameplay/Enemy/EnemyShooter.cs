@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /*
 - 몬스터의 탄막 공격 종류를 정의하는 스크립트
+- 투사체의 방향, 속도, 위치, 수명, 타겟만 지정
+- 실제 충돌 판정은 EnemyBullet이 직접 처리
 */
 
 public class EnemyShooter : MonoBehaviour
@@ -14,6 +17,7 @@ public class EnemyShooter : MonoBehaviour
         public Vector2 position;
         public EnemyAttackData data;
         public WarningMarker marker;
+        public Transform target;
     }
 
     private List<PendingAOE> pendingAOEs = new List<PendingAOE>();
@@ -49,10 +53,10 @@ public class EnemyShooter : MonoBehaviour
                 FireCone(attackData, target);
                 break;
             case BulletPattern.Circle:
-                FireCircle(attackData);
+                FireCircle(attackData, target);
                 break;
             case BulletPattern.Orbit:
-                FireOrbit(attackData);
+                FireOrbit(attackData, target);
                 break;
             case BulletPattern.Burst:
                 StartCoroutine(FireBurst(attackData, target));
@@ -63,6 +67,9 @@ public class EnemyShooter : MonoBehaviour
             case BulletPattern.AOE:
                 StartCoroutine(FireAOE(attackData, target));
                 break;
+            case BulletPattern.Homing:
+                StartCoroutine(FireHoming(attackData, target));
+                break;
         }
     }
 
@@ -70,56 +77,67 @@ public class EnemyShooter : MonoBehaviour
     {
         // 타겟 방향으로 발사
         Vector2 direction = (target.position - transform.position).normalized;
-        SpawnProjectile(attackData, direction);
+        SpawnProjectile(attackData, direction, target);
     }
 
     private void FireCone(EnemyAttackData attackData, Transform target)
     {
+        Vector2 targetDir = target.position - transform.position;
+        float baseAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+
         float angleRange = attackData.spreadAngle; // 데이터 상 발사각
-        float startAngle = -angleRange * 0.5f; // 시작 각도
-        float angleStep = angleRange / (attackData.projectileCount - 1); // 투사체 간 간격
+        float startAngle = baseAngle - angleRange * 0.5f; // 시작 각도
+
+        // 투사체 간 간격
+        float angleStep = attackData.projectileCount > 1
+            ? angleRange / (attackData.projectileCount - 1)
+            : 0f;
 
         for (int i = 0; i < attackData.projectileCount; i++)
         {
             float angle = startAngle + angleStep * i;
-            Vector2 direction = Quaternion.Euler(0, 0, angle) * transform.right;
-            SpawnProjectile(attackData, direction);
+
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+
+            SpawnProjectile(attackData, direction, target);
         }
     }
 
-    private void FireCircle(EnemyAttackData attackData)
+    private void FireCircle(EnemyAttackData attackData, Transform target)
     {
+        if (attackData.projectileCount <= 0) return;
+
         // 360도를 투사체 개수만큼 나누어 전방위로 발사
         float angleStep = 360f / attackData.projectileCount;
-        float angle = 0f;
 
         for (int i = 0; i < attackData.projectileCount; i++)
         {
-            float projectileDirXPosition = transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180);
-            float projectileDirYPosition = transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180);
+            float angle = angleStep * i;
 
-            Vector2 projectileVector = new Vector2(projectileDirXPosition, projectileDirYPosition);
-            Vector2 projectileMoveDirection = (projectileVector - (Vector2)transform.position).normalized;
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
 
-            SpawnProjectile(attackData, projectileMoveDirection);
-            angle += angleStep;
+            SpawnProjectile(attackData, direction, target);
         }
     }
 
-    private void FireOrbit(EnemyAttackData attackData)
+    private void FireOrbit(EnemyAttackData attackData, Transform target)
     {
 
     }
 
     private IEnumerator FireBurst(EnemyAttackData attackData, Transform target)
     {
-        Transform lastTarget = target;
-
         for (int i = 0; i < attackData.burstCount; i++)
         {
             if (target == null) yield break;
 
-            FireStraight(attackData, lastTarget);
+            FireStraight(attackData, target);
 
             yield return new WaitForSeconds(attackData.burstInterval);
         }
@@ -130,20 +148,25 @@ public class EnemyShooter : MonoBehaviour
     {
         for (int i = 0; i < attackData.fireCount; i++)
         {
+            if (target == null) yield break;
+
             // 한 번 공격마다 플레이어 위치 추적해 투사체 발사
             Vector2 targetDir = (target.position - transform.position).normalized;
             float baseAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
 
             for (int j = 0; j < attackData.burstCount; j++)
             {
-                float angle = baseAngle + Random.Range(-attackData.spreadAngle / 2f, attackData.spreadAngle / 2f);
+                float angle = baseAngle + Random.Range(
+                    -attackData.spreadAngle * 0.5f,
+                    attackData.spreadAngle * 0.5f
+                );
 
-                float dirX = Mathf.Cos(angle * Mathf.Deg2Rad);
-                float dirY = Mathf.Sin(angle * Mathf.Deg2Rad);
+                Vector2 direction = new Vector2(
+                    Mathf.Cos(angle * Mathf.Deg2Rad),
+                    Mathf.Sin(angle * Mathf.Deg2Rad)
+                );
 
-                Vector2 randomDir = new Vector2(dirX, dirY).normalized;
-
-                SpawnProjectile(attackData, randomDir);
+                SpawnProjectile(attackData, direction, target);
 
                 yield return new WaitForSeconds(attackData.burstInterval);
             }
@@ -153,6 +176,8 @@ public class EnemyShooter : MonoBehaviour
     // 타겟 근처에 투사체 잠깐 스폰해 닿으면 피해
     private IEnumerator FireAOE(EnemyAttackData attackData, Transform target)
     {
+        if (target == null) yield break;
+
         Vector2 centerPos = target.position;
 
         for (int i = 0; i < attackData.aoeCount; i++)
@@ -163,7 +188,6 @@ public class EnemyShooter : MonoBehaviour
 
             WarningMarker warning = PoolManager.Instance.GetPool(attackData.warningPrefab);
             warning.transform.position = spawnPos;
-
             // 람다식으로 WarningMarker 내의 onComplete 발생 시 SpawnProjectileAt 메서드가 실행되도록 넘겨줌
             warning.PlayWarningEffect(attackData.warningDuration);
 
@@ -173,7 +197,8 @@ public class EnemyShooter : MonoBehaviour
                 executeTime = Time.time + attackData.warningDuration,
                 position = spawnPos,
                 data = attackData,
-                marker = warning
+                marker = warning,
+                target = target
             });
 
             yield return null;
@@ -188,38 +213,84 @@ public class EnemyShooter : MonoBehaviour
             PoolManager.Instance.ReturnPool(task.marker);
         }
 
-        SpawnProjectileAt(task.data, task.position);
+        SpawnProjectileAt(task.data, task.position, task.target, 0.5f);
     }
 
-    private void SpawnProjectile(EnemyAttackData attackData, Vector2 direction)
+    private IEnumerator FireHoming(EnemyAttackData data, Transform target)
     {
-        EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
-        bullet.AoeLifetime = 4f;
-        bullet.InitBullet(attackData.attackDamage);
+        int projectileCount = Mathf.Max(data.projectileCount, 1);
+        float angleRange = data.spreadAngle;
+        float angleStep = projectileCount > 1
+            ? angleRange / (projectileCount - 1)
+            : 0f;
 
-        // 투사체의 현재 위치를 몬스터의 위치로 설정
-        bullet.transform.position = transform.position;
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        for (int i = 0; i < projectileCount; i++)
         {
-            rb.linearVelocity = direction * attackData.projectileSpeed;
+            if (target == null) yield break;
+
+            Vector2 targetDir = target.position - transform.position;
+            float baseAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;
+            float angle = baseAngle - angleRange * 0.5f + angleStep * i;
+
+            Vector2 direction = new Vector2(
+                Mathf.Cos(angle * Mathf.Deg2Rad),
+                Mathf.Sin(angle * Mathf.Deg2Rad)
+            );
+
+            SpawnHomingProjectile(data, direction, target);
+
+            if (data.burstInterval > 0f)
+            {
+                yield return new WaitForSeconds(data.burstInterval);
+            }
         }
     }
 
-    private void SpawnProjectileAt(EnemyAttackData attackData, Vector2 spawnPosition)
+    private void SpawnProjectile(EnemyAttackData attackData, Vector2 direction, Transform target, float lifetime = 4f)
+    {
+        EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
+
+        bullet.transform.position = transform.position;
+
+        bullet.InitBullet(
+            attackData.attackDamage,
+            direction,
+            attackData.projectileSpeed,
+            target,
+            lifetime
+        );
+    }
+
+    private void SpawnProjectileAt(EnemyAttackData attackData, Vector2 spawnPosition, Transform target, float lifetime = 0.5f)
     {
         // 총알을 풀에서 꺼내고 잠깐의 공격을 구현하기 위해 0.5초로 지속시간 설정
         EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
-        bullet.AoeLifetime = 0.5f;
-        bullet.InitBullet(attackData.attackDamage);
 
         bullet.transform.position = spawnPosition;
 
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null)
-        {
-            // 제자리에 생성되어야 하기 때문에 이동속도를 0으로 고정
-            rb.linearVelocity = Vector2.zero;
-        }
+        bullet.InitBullet(
+            attackData.attackDamage,
+            Vector2.zero,
+            0f,
+            target,
+            lifetime
+        );
+    }
+
+    private void SpawnHomingProjectile(EnemyAttackData attackData, Vector2 direction, Transform target, float lifetime = 4f)
+    {
+        EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
+
+        bullet.transform.position = transform.position;
+
+        bullet.InitHomingBullet(
+            attackData.attackDamage,
+            direction,
+            attackData.projectileSpeed,
+            target,
+            lifetime,
+            attackData.homingTurnSpeed,
+            attackData.homingDuration
+        );
     }
 }

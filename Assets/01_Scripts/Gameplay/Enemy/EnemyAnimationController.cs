@@ -17,7 +17,7 @@ public class EnemyAnimationController : MonoBehaviour
     // 애니메이터의 런타임 애니메이터 컨트롤러를 교체
     public void SetupAnimator(RuntimeAnimatorController controller)
     {
-        if (controller != null)
+        if (animator != null && controller != null)
         {
             animator.runtimeAnimatorController = controller;
 
@@ -28,22 +28,30 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void PlayMove(bool isMove)
     {
+        if (animator == null) return;
+
         animator.SetBool(isMovingHash, isMove);
     }
 
     public void TriggerAttack()
     {
+        if (animator == null) return;
+
         animator.SetTrigger(attackHash);
     }
 
     public void TriggerDead()
     {
+        if (animator == null) return;
+
         animator.SetTrigger(dieHash);
     }
 
     // 오브젝트 풀에서 꺼내어질 때 파라미터 초기화하는 메서드
     public void ResetAllParameters()
     {
+        if (animator == null) return;
+
         animator.SetBool(isMovingHash, false);
         animator.ResetTrigger(attackHash);
         animator.ResetTrigger(dieHash);

@@ -16,6 +16,9 @@ public class EnemySpawner : MonoBehaviour
 
     public static EnemySpawner Instance { get; private set; }
 
+    [Header("타겟 플레이어")]
+    [SerializeField] private Transform targetTransform;
+
     [Header("스폰 영역")]
     [SerializeField] private float minX = -10.0f;
     [SerializeField] private float maxX = 10f;
@@ -145,8 +148,8 @@ public class EnemySpawner : MonoBehaviour
         EnemyController enemy = PoolManager.Instance.GetPool(enemyPrefab);
         // 몬스터 정보 주입 후 태스크에 전달된 랜덤 위치로 설정
         enemy.Initialize(task.enemyData);
+        enemy.SetTarget(targetTransform);
         enemy.transform.position = task.position;
-        enemy.transform.rotation = Quaternion.identity;
     }
         
     private void StopAllSpawnCoroutines()

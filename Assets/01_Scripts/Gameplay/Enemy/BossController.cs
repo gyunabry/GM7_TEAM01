@@ -13,7 +13,8 @@ public class BossController : MonoBehaviour, IDamageable
     public enum BossState {            
         Chasing,        // 추적 상태
         ActionRunning,  // 공격 상태
-        PhaseTransition // 페이즈 전환 상태
+        PhaseTransition, // 페이즈 전환 상태
+        Dead
     }
 
     [Header("보스 데이터")]
@@ -26,69 +27,157 @@ public class BossController : MonoBehaviour, IDamageable
     [SerializeField] private int currentPhaseIndex = 0;
     private List<EnemyPatternData> currentPatterns;
 
+    [Header("충돌 판정")]
+    [SerializeField] private float hitRadius = 1.0f;
+    [SerializeField] private float playerHitRadius = 0.5f;
+
+    [Header("공격 설정")]
+    [SerializeField] private float patternCheckInterval = 0.15f;
+    [SerializeField] private float patternInterval = 2f;
+    [SerializeField] private float dashWindUpTime = 0.5f;
+    [SerializeField] private float rangeWindUpTime = 0.2f;
+    [SerializeField] private float afterActionDelay = 0.2f;
+
     [Header("보스 이벤트")]
     [SerializeField] private VoidEventChannel bossDeadEvent;
     [SerializeField] private HpEventChannel bossDamagedEvent;
 
     [Header("컴포넌트 참조")]
-    private Rigidbody2D rb;
-    private NavMeshAgent agent;
     private Transform target;
+    private PlayerController targetPlayer;
     private EnemyShooter bossShooter;
     private SpriteRenderer sr;
     private EnemyAnimationController animationController;
 
-    [SerializeField] private LayerMask targetLayer;
+    private static Transform cachedPlayerTarget;
 
-    private float patternTimer = 0f;
+    private Coroutine bossLoopRoutine;
+    private Coroutine visualRoutine;
+    private Coroutine attackRoutine;
+
+    private WaitForSeconds patternCheckWait;
+    private WaitForSeconds visualWait;
+
+    private float patternTimer;
     private int patternIndex;
-
+    private bool canMove = true;
+    private bool hasHitDuringAction;
+    private bool isDeadHandled;
 
     public string BossName => bossData != null ? bossData.bossName : string.Empty;
     public float CurrentHp => currentHp;
     public float MaxHp => maxHp;
+    public float HitRadius => hitRadius;
+    public Transform Target => target;
 
-    public bool IsDead => currentHp <= 0;
+    public bool IsDead => currentHp <= 0 || currentState == BossState.Dead;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
-        agent = GetComponent<NavMeshAgent>();
         bossShooter = GetComponent<EnemyShooter>();
         animationController = GetComponent<EnemyAnimationController>();
         sr = GetComponentInChildren<SpriteRenderer>();
 
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
+        patternCheckWait = new WaitForSeconds(patternCheckInterval);
+        visualWait = new WaitForSeconds(0.1f);
     }
 
     private void Start()
     {
         InitializeBoss();
-        StartCoroutine(BossLoopCo());
+
+        ConnectTargetOnce();
+
+        if (bossLoopRoutine == null)
+        {
+            bossLoopRoutine = StartCoroutine(BossLoopCo());
+        }
+
+        if (visualRoutine == null)
+        {
+            visualRoutine = StartCoroutine(VisualUpdateCo());
+        }
     }
 
     private void Update()
     {
-        FlipSprite();
-        UpdateAnimation();
+        MoveToTarget();
+    }
+
+    public void SetTarget(Transform newTarget)
+    {
+        target = newTarget;
+        cachedPlayerTarget = newTarget;
+        targetPlayer = newTarget != null ? newTarget.GetComponent<PlayerController>() : null;
+    }
+
+    public void Initialize(BossData newBossData, Transform newTarget)
+    {
+        bossData = newBossData;
+        SetTarget(newTarget);
+        InitializeBoss();
+    }
+
+    private void ConnectTargetOnce()
+    {
+        if (target != null) return;
+
+        if (cachedPlayerTarget == null)
+        {
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null)
+            {
+                cachedPlayerTarget = player.transform;
+            }
+        }
+
+        target = cachedPlayerTarget;
+        targetPlayer = target != null ? target.GetComponent<PlayerController>() : null;
     }
 
     private void InitializeBoss()
     {
-        if (bossData == null || bossData.phases.Count == 0) return;
+        if (bossData == null) return;
+
+        if (animationController != null)
+        {
+            animationController.SetupAnimator(bossData.runtimeAnimator);
+        }
 
         maxHp = bossData.maxHp;
         currentHp = maxHp;
 
-        agent.speed = bossData.moveSpeed;
-
         // 1페이즈 세팅
         currentPhaseIndex = 0;
-        currentPatterns = bossData.phases[currentPhaseIndex].phasePatterns;
+        currentPatterns = bossData.phases != null && bossData.phases.Count > 0
+            ? bossData.phases[currentPhaseIndex].phasePatterns
+            : null;
+
+        patternTimer = 0f;
+        patternIndex = 0;
+        canMove = true;
+        isDeadHandled = false;
 
         // 현재 상태를 추적 상태로 전환
         currentState = BossState.Chasing;
+    }
+
+    private void MoveToTarget()
+    {
+        if (!canMove || IsDead || currentState != BossState.Chasing || target == null)
+        {
+            return;
+        }
+
+        Vector3 direction = target.position - transform.position;
+        direction.z = 0f;
+
+        if (direction.sqrMagnitude <= 0.001f)
+        {
+            return;
+        }
+
+        transform.position += direction.normalized * bossData.moveSpeed * Time.deltaTime;
     }
 
     // 이동과 패턴 실행 메인 루프를 관리하는 코루틴
@@ -96,54 +185,38 @@ public class BossController : MonoBehaviour, IDamageable
     {
         while (!IsDead)
         {
-            DetectPlayer();
-            if (target == null)
+            ConnectTargetOnce();
+
+            if (target == null || currentState != BossState.Chasing)
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return patternCheckWait;
                 continue;
             }
 
-            FaceToTarget();
+            patternTimer += patternCheckInterval;
 
-            switch (currentState)
+            if (patternTimer >= patternInterval)
             {
-                case BossState.Chasing:
-                    if (!agent.enabled) agent.enabled = true;
-                    agent.isStopped = false;
-                    agent.SetDestination(target.position);
-
-                    patternTimer += 0.15f;
-                    if (patternTimer >= 2f)
-                    {
-                        SelectAndExecutePattern();
-                    }
-                    break;
-
-                case BossState.ActionRunning:
-                    //agent.enabled = false;
-                    break;
-
-                case BossState.PhaseTransition:
-                    //agent.enabled = false;
-                    break;
+                SelectAndExecutePattern();
             }
-            yield return new WaitForSeconds(0.15f);
+
+            yield return patternCheckWait;
         }
+
+        bossLoopRoutine = null;
     }
 
-    // 반경 20 안에 있는 플레이어를 찾아서 타겟으로 등록
-    private void DetectPlayer()
+    private IEnumerator VisualUpdateCo()
     {
-        if (target != null) return;
-        Collider2D collider = Physics2D.OverlapCircle(transform.position, 20f, targetLayer);
-        if (collider != null) target = collider.transform;
-    }
+        while (!IsDead)
+        {
+            FlipSprite();
+            UpdateAnimation();
 
-    private void FaceToTarget()
-    {
-        if (target == null) return;
-        float directionX = target.position.x - transform.position.x;
-        // SpriteRenderer 추가 후 flipX 여부
+            yield return visualWait;
+        }
+
+        visualRoutine = null;
     }
 
     // 패턴 데이터의 공격 시퀀스를 순회하며 실행
@@ -157,138 +230,181 @@ public class BossController : MonoBehaviour, IDamageable
 
         // 상태 전환 및 코루틴 실행
         currentState = BossState.ActionRunning;
-        StartCoroutine(ExecuteBossPatternCo(pattern));
+        patternTimer = 0f;
+
+        attackRoutine = StartCoroutine(ExecuteBossPatternCo(pattern));
     }
 
     private IEnumerator ExecuteBossPatternCo(EnemyPatternData pattern)
     {
-        patternTimer = 0f;
-
         foreach (EnemyAttackData attackData in pattern.attackSequence)
         {
+            hasHitDuringAction = false;
+
             yield return StartCoroutine(HandleAttackDataCo(attackData));
             yield return new WaitForSeconds(pattern.actionDelay);
         }
 
         // 패턴 종료 후 다시 추적 상태로 전환
-        if (currentState == BossState.ActionRunning)
+        if (!IsDead && currentState == BossState.ActionRunning)
         {
             currentState = BossState.Chasing;
+            canMove = true;
         }
+
+        attackRoutine = null;
     }
 
     private IEnumerator HandleAttackDataCo(EnemyAttackData attackData)
     {
         switch (attackData.attackType)
         {
+            case AttackType.Melee:
+                animationController?.TriggerAttack();
+                yield return StartCoroutine(BossMeleeCo(attackData));
+                break;
+
             case AttackType.Dash:
                 yield return StartCoroutine(BossDashCo(attackData));
                 break;
+
             case AttackType.Range:
                 yield return StartCoroutine(ExecuteRangeAttack(attackData));
-                animationController.TriggerAttack();
                 break;
         }
+    }
+
+    private IEnumerator BossMeleeCo(EnemyAttackData attackData)
+    {
+        TryDamageTargetOnContact(attackData.attackDamage);
+
+        yield return new WaitForSeconds(afterActionDelay);
     }
 
     private IEnumerator BossDashCo(EnemyAttackData attackData)
     {
+        if (target == null)
+        {
+            currentState = BossState.Chasing;
+            yield break;
+        }
+
         // 대쉬 전 대기 동작
-        agent.enabled = false;
-        Vector3 lastPosition = target.position; // 대쉬 직전 타겟 위치 저장
-        Vector3 dashDirection = (lastPosition - transform.position).normalized;
-        yield return new WaitForSeconds(0.5f);
+        canMove = false;
+
+        Vector3 dashDirection = target.position - transform.position;
+        dashDirection.z = 0f;
+
+        if (dashDirection.sqrMagnitude <= 0.001f)
+        {
+            canMove = true;
+            yield break;
+        }
+
+        dashDirection.Normalize();
+
+        if (animationController != null)
+        {
+            animationController.TriggerAttack();
+        }
+
+        yield return new WaitForSeconds(dashWindUpTime);
 
         // 대쉬 실행
-        float dashSpeed = attackData.dashSpeed;
-        float dashRange = attackData.dashRange;
+        float dashSpeed = Mathf.Max(attackData.dashSpeed, 0.01f);
+        float dashRange = Mathf.Max(attackData.dashRange, 0f);
         float dashDuration = dashRange / dashSpeed;
-        float startTime = Time.time;
+        float elpased = 0f;
 
-        while (Time.time - startTime < 0.3f)
+        while (elpased < dashDuration)
         {
-            rb.linearVelocity = dashDirection * dashSpeed;
+            transform.position += dashDirection * dashSpeed * Time.deltaTime;
+
+            TryDamageTargetOnce(attackData.attackDamage);
+
+            elpased += Time.deltaTime;
             yield return null;
         }
-        rb.linearVelocity = Vector2.zero;
-        
-        // NavMeshAgent를 껐다 다시 켰을 때 위치를 실제 위치와 동기화
-        agent.Warp(transform.position);
+
+        yield return new WaitForSeconds(afterActionDelay);
+
         // 추적 재개
-        agent.enabled = true;
+        canMove = true;
     }
 
     private IEnumerator ExecuteRangeAttack(EnemyAttackData data)
     {
-        agent.isStopped = true; // 원거리 공격 시 추적 일시정지
-        yield return new WaitForSeconds(0.2f); // 발사 전 딜레이
+        canMove = false; // 원거리 공격 시 추적 일시정지
 
-        bossShooter.Fire(data, target);
-
-        // TODO: 수치 조정 필요
-        yield return new WaitForSeconds(currentPatterns[currentPhaseIndex].actionDelay); // 발사 후 딜레이
-        agent.isStopped = false;
-    }
-
-    // 테스트 후 제거
-    #region 탄막 패턴
-    private void FireStraight(EnemyAttackData attackData)
-    {
-        // 타겟 방향으로 발사
-        Vector2 direction = (target.position - transform.position).normalized;
-        SpawnProjectile(attackData, direction);
-    }
-
-    private void FireCone(EnemyAttackData attackData)
-    {
-        float angleRange = attackData.spreadAngle; // 데이터 상 발사각
-        float startAngle = -angleRange * 0.5f; // 시작 각도
-        float angleStep = angleRange / (attackData.projectileCount - 1); // 투사체 간 간격
-
-        for (int i = 0; i < attackData.projectileCount; i++)
+        if (animationController != null)
         {
-            float angle = startAngle + angleStep * i;
-            Vector2 direction = Quaternion.Euler(0, 0, angle) * transform.right;
-            SpawnProjectile(attackData, direction);
+            animationController.TriggerAttack();
+        }
+
+        yield return new WaitForSeconds(rangeWindUpTime); // 발사 전 딜레이
+
+        if (bossShooter != null && target != null)
+        {
+            bossShooter.Fire(data, target);
+        }
+
+        yield return new WaitForSeconds(afterActionDelay); // 발사 후 딜레이
+        canMove = true;
+    }
+
+    #region 공격 판정
+    private void TryDamageTargetOnce(float damage)
+    {
+        if (hasHitDuringAction || target == null)
+        {
+            return;
+        }
+
+        if (targetPlayer == null)
+        {
+            targetPlayer = target.GetComponent<PlayerController>();
+        }
+
+        if (targetPlayer == null)
+        {
+            return;
+        }
+
+        float totalRadius = hitRadius + playerHitRadius;
+        float totalRadiusSqr = totalRadius * totalRadius;
+
+        Vector3 toTarget = target.position - transform.position;
+        toTarget.z = 0f;
+
+        if (toTarget.sqrMagnitude <= totalRadiusSqr)
+        {
+            targetPlayer.TakeDamage(damage);
+            hasHitDuringAction = true;
         }
     }
 
-    private void FireCircle(EnemyAttackData attackData)
+    private void TryDamageTargetOnContact(float damage)
     {
-        // 360도를 투사체 개수만큼 나누어 전방위로 발사
-        float angleStep = 360f / attackData.projectileCount;
-        float angle = 0f;
-
-        for (int i = 0; i < attackData.projectileCount; i++)
+        if (target == null)
         {
-            float projectileDirXPosition = transform.position.x + Mathf.Sin((angle * Mathf.PI) / 180);
-            float projectileDirYPosition = transform.position.y + Mathf.Cos((angle * Mathf.PI) / 180);
-
-            Vector2 projectileVector = new Vector2(projectileDirXPosition, projectileDirYPosition);
-            Vector2 projectileMoveDirection = (projectileVector - (Vector2)transform.position).normalized;
-
-            SpawnProjectile(attackData, projectileMoveDirection);
-            angle += angleStep;
+            return;
         }
-    }
 
-    // 보스 전용 패턴
-    private void FireOrbit(EnemyAttackData attackData)
-    {
-
-    }
-
-    private void SpawnProjectile(EnemyAttackData attackData, Vector2 direction)
-    {
-        EnemyBullet bullet = PoolManager.Instance.GetPool(attackData.projectilePrefab);
-        bullet.InitBullet(attackData.attackDamage);
-
-        // 투사체의 현재 위치를 몬스터의 위치로 설정
-        bullet.transform.position = transform.position;
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        PlayerController player = target.GetComponent<PlayerController>();
+        if (player == null)
         {
-            rb.linearVelocity = direction * attackData.projectileSpeed;
+            return;
+        }
+
+        float totalRadius = hitRadius + playerHitRadius;
+        float totalRadiusSqr = totalRadius * totalRadius;
+
+        Vector3 toTarget = target.position - transform.position;
+        toTarget.z = 0f;
+
+        if (toTarget.sqrMagnitude <= totalRadiusSqr)
+        {
+            player.TakeDamage(damage);
         }
     }
     #endregion
@@ -307,64 +423,98 @@ public class BossController : MonoBehaviour, IDamageable
         // 인게임 UI 내 보스 체력 UI 갱신
         bossDamagedEvent?.RaiseEvent(currentHp, maxHp);
 
-        int nextPhaseIndex = currentPhaseIndex + 1;
-        // index는 0부터 시작하기 때문에 Count - 1과 같음
-        if (nextPhaseIndex < bossData.phases.Count)
+        if (currentHp > 0f)
         {
-            // 다음 페이즈 진입 HP 저장
-            float nextPhaseHp = bossData.maxHp * bossData.phases[nextPhaseIndex].hpThreshold;
-            if (currentHp <= nextPhaseHp)
-            {
-                StopAllCoroutines();
-                StartCoroutine(PhaseTransitionCo(nextPhaseIndex));
-            }
+            TryEnterNextPhase();
         }
 
         if (IsDead) Die();
     }
 
+    private void TryEnterNextPhase()
+    {
+        if (bossData == null || bossData.phases == null)
+        {
+            return;
+        }
+
+        int nextPhaseIndex = currentPhaseIndex + 1;
+        if (nextPhaseIndex >= bossData.phases.Count)
+        {
+            return;
+        }
+
+        float nextPhaseHp = bossData.maxHp * bossData.phases[nextPhaseIndex].hpThreshold;
+        if (currentHp <= nextPhaseHp)
+        {
+            if (attackRoutine != null)
+            {
+                StopCoroutine(attackRoutine);
+                attackRoutine = null;
+            }
+
+            StartCoroutine(PhaseTransitionCo(nextPhaseIndex));
+        }
+    }
+
     private IEnumerator PhaseTransitionCo(int targetPhaseIndex)
     {
         currentState = BossState.PhaseTransition;
-        currentPhaseIndex = targetPhaseIndex; // 인덱스 갱신
+        canMove = false;
 
-        // 페이즈 전환 시 실행중인 공격, 이동 정지
-        rb.linearVelocity = Vector2.zero;
-        if (!agent.enabled) agent.enabled = true;
-        agent.isStopped = false;
+        currentPhaseIndex = targetPhaseIndex; // 인덱스 갱신
 
         // TODO: 2페이즈 연출
         Debug.Log($"{bossData.bossName} {currentPhaseIndex + 1}페이즈 돌입");
 
-        //// 보스가 중앙으로 이동하도록 설정
-        //Vector3 mapCenter = Vector3.zero;
-        //agent.SetDestination(mapCenter);
-        //while (Vector3.Distance(transform.position, mapCenter) > 0.5f)
-        //{
-        //    yield return null;
-        //}
+        yield return new WaitForSeconds(0.5f);
 
         // 새 페이즈의 패턴으로 교체
         currentPatterns = bossData.phases[currentPhaseIndex].phasePatterns;
         patternIndex = 0;
+        patternTimer = 0f;
+
+        canMove = true;
         currentState = BossState.Chasing;
-
-        StartCoroutine(BossLoopCo());
-
-        yield return null;
     }
 
     private void Die()
     {
-        // 사망 시 보스의 모든 코루틴 종료
-        StopAllCoroutines();
+        if (isDeadHandled)
+        {
+            return;
+        }
 
-        animationController.TriggerDead();
+        isDeadHandled = true;
+        currentState = BossState.Dead;
+        canMove = false;
 
-        rb.linearVelocity = Vector2.zero;
+        if (bossLoopRoutine != null)
+        {
+            StopCoroutine(bossLoopRoutine);
+            bossLoopRoutine = null;
+        }
+
+        if (visualRoutine != null)
+        {
+            StopCoroutine(visualRoutine);
+            visualRoutine = null;
+        }
+
+        if (attackRoutine != null)
+        {
+            StopCoroutine(attackRoutine);
+            attackRoutine = null;
+        }
+
+        if (animationController != null)
+        {
+            animationController.TriggerDead();
+        }
 
         bossDeadEvent?.RaiseEvent();
-        //Destroy(gameObject); // 보스 사망 연출을 위해 파괴 X
+
+        // 보스 사망 연출을 위해 Destroy(gameObject)는 호출하지 않음
     }
 
     private void FlipSprite()
@@ -382,25 +532,25 @@ public class BossController : MonoBehaviour, IDamageable
     {
         if (animationController == null) return;
 
-        bool isMoving = agent.velocity.sqrMagnitude > 0.001f;
+        bool isMoving = canMove && currentState == BossState.Chasing && target != null && !IsDead;
         animationController.PlayMove(isMoving);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        CollisionHandler(collision.gameObject);
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    CollisionHandler(collision.gameObject);
+    //}
 
-    private void OnCollisionEnterStay2D(Collision2D collision)
-    {
-        CollisionHandler(collision.gameObject);
-    }
+    //private void OnCollisionEnterStay2D(Collision2D collision)
+    //{
+    //    CollisionHandler(collision.gameObject);
+    //}
 
-    private void CollisionHandler(GameObject targetObj)
-    {
-        if (targetObj.gameObject.TryGetComponent<PlayerController>(out PlayerController player))
-        {
-            player.TakeDamage(bossData.damage);
-        }
-    }
+    //private void CollisionHandler(GameObject targetObj)
+    //{
+    //    if (targetObj.gameObject.TryGetComponent<PlayerController>(out PlayerController player))
+    //    {
+    //        player.TakeDamage(bossData.damage);
+    //    }
+    //}
 }

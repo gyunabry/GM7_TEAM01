@@ -15,7 +15,8 @@ public enum BulletPattern
     Orbit,
     Burst,
     BurstAround,
-    AOE
+    AOE,
+    Homing
 }
 
 [CreateAssetMenu(fileName = "Enemy Attack Data", menuName = "GamePlay/EnemyAttackData")]
@@ -56,4 +57,8 @@ public class EnemyAttackData : ScriptableObject
     public int aoeCount;
     public WarningMarker warningPrefab;
     public float warningDuration;
+
+    [Header("À¯µµÅº ¼³Á¤")]
+    public float homingTurnSpeed;
+    public float homingDuration;
 }
