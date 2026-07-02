@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 
-public enum Difficulty { Normal, Hard, Hell}
+public enum Difficulty { Normal, Hard, Hell }
 public class WaveManager : MonoBehaviour
 {
     public static WaveManager Instance { get; private set; }

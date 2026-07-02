@@ -259,6 +259,14 @@ public class PlayerController : MonoBehaviour, IDamageable
             OnHpChanged?.Invoke(NowHp, maxHp);
         }
     }
+
+    public void RestoreHp(float healAmount)
+    {
+        if (NowHp >= maxHp) return;
+
+        // 힐을 받아 최대 체력을 넘어가게 되면 maxHp로 고정
+        NowHp = Mathf.Max(NowHp + healAmount, maxHp);
+    }
     
     public void OnWeaponArm(PlayerWeaponSO.WeaponType weaponType)
     {

@@ -1,4 +1,4 @@
-using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,22 +11,36 @@ public class EnemyData : ScriptableObject
     public int armor;
     public float moveSpeed;
 
-    [Header("공격 패턴")]
+    [Header("Attack Patterns")]
     public List<EnemyPatternData> enemyPattern;
 
-    [Header("드랍 아이템")]
-    public List<DropItemBase> dropItem;
+    [Header("Drop Items")]
+    [SerializeField] private List<DropItemEntry> dropItems;
 
-    [Header("애니메이션 설정")]
+    [Header("Animation Settings")]
     public RuntimeAnimatorController runtimeAnimator;
 
-    // 추후 드랍 확률 반영
     public void DropItem(Vector3 dropPosition)
     {
-        foreach (DropItemBase item in dropItem)
+        if (dropItems == null) return;
+
+        foreach (DropItemEntry dropItem in dropItems)
         {
-            if (item == null) continue;
-            item.SpawnFromPool(dropPosition);
+            if (dropItem == null || dropItem.item == null) continue;
+
+            if (UnityEngine.Random.value <= dropItem.dropChance)
+            {
+                dropItem.item.SpawnFromPool(dropPosition);
+            }
         }
     }
+}
+
+[Serializable]
+public class DropItemEntry
+{
+    public DropItemBase item;
+
+    [Range(0f, 1f)]
+    public float dropChance = 1f;
 }

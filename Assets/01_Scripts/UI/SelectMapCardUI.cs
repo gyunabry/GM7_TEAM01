@@ -26,18 +26,36 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private bool isClickable = false;
     private ICardPanel targetPanel;
+    private bool hasCachedOriginalValues;
 
     private Image[] childUi;
     
 
     private void Awake()
     {
-        rectTransform = GetComponent<RectTransform>();
-        childUi = GetComponentsInChildren<Image>();
-        originalPosition = rectTransform.anchoredPosition;
-        originalScale = transform.localScale;
+        CacheReferences();
         //targetPanel = GetComponentInParent<ICardPanel>();
         HideInstant();
+    }
+
+    private void CacheReferences()
+    {
+        if (rectTransform == null)
+        {
+            rectTransform = GetComponent<RectTransform>();
+        }
+
+        if (childUi == null || childUi.Length == 0)
+        {
+            childUi = GetComponentsInChildren<Image>();
+        }
+
+        if (!hasCachedOriginalValues && rectTransform != null)
+        {
+            originalPosition = rectTransform.anchoredPosition;
+            originalScale = transform.localScale;
+            hasCachedOriginalValues = true;
+        }
     }
 
     public void InitPanel(ICardPanel panel)
@@ -45,9 +63,15 @@ public class SelectMapCardUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         targetPanel = panel;
     }
 
-    private void HideInstant()
+    public void HideInstant()
     {
-        childUi[1].gameObject.SetActive(false);
+        CacheReferences();
+
+        if (childUi != null && childUi.Length > 1)
+        {
+            childUi[1].gameObject.SetActive(false);
+        }
+
         isClickable = false;
         transform.DOKill();
         if (canvasGroup != null)

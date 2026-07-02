@@ -6,7 +6,8 @@ public class TitleSceneController : MonoBehaviour
     [Header("UI 그룹")]
     [SerializeField] private CanvasGroup titleCG;
     [SerializeField] private CanvasGroup optionCG;
-    [SerializeField] private GameObject selectCanvas;
+    [SerializeField] private GameObject mapPanel;
+    [SerializeField] private GameObject difficultPanel;
 
     [Header("타이틀 버튼 참조")]
     [SerializeField] private Button startButton;
@@ -16,11 +17,27 @@ public class TitleSceneController : MonoBehaviour
     //[Header("옵션 버튼 참조")]
     //[SerializeField] private Button optionButton;
 
-    [Header("맵 선택 UI 버튼 참조")]
-    [SerializeField] private Button closeButton;
+    [Header("맵 선택 UI 버튼")]
+    [SerializeField] private Button mapCloseButton;
+
+    [Header("난이도 선택 UI 버튼")]
+    [SerializeField] private Button difficultCloseButton;
+
+    private MapCardUI mapCardUI;
+    private DifficultySelectUI difficultySelectUI;
 
     private void Start()
     {
+        if (mapPanel != null)
+        {
+            mapCardUI = mapPanel.GetComponentInChildren<MapCardUI>(true);
+        }
+
+        if (difficultPanel != null)
+        {
+            difficultySelectUI = difficultPanel.GetComponentInChildren<DifficultySelectUI>(true);
+        }
+
         // 캔버스 그룹 초기화
         if (titleCG != null)
             CanvasGroupController.EnableCG(titleCG);
@@ -36,15 +53,34 @@ public class TitleSceneController : MonoBehaviour
             exitButton.onClick.AddListener(() => OnClickExitButton());
         
         // 맵 선택 UI 버튼
-        if (closeButton != null)
-            closeButton.onClick.AddListener(() => OnClickCloseButton()); 
+        if (mapCloseButton != null)
+            mapCloseButton.onClick.AddListener(() => OnClickMapCloseButton());
+        if (difficultCloseButton != null)
+            difficultCloseButton.onClick.AddListener(() => OnClickDifficultCloseButton());
     }
 
     #region 타이틀 UI 버튼 액션
     public void OnClickStartButton()
     {
         // GameSceneManager.Instance.LoadScene(SceneType.Game);
-        selectCanvas.SetActive(true);
+        if (difficultySelectUI != null && difficultySelectUI.gameObject.activeInHierarchy)
+        {
+            difficultySelectUI.Close();
+        }
+        else if (difficultPanel != null)
+        {
+            difficultPanel.SetActive(false);
+        }
+
+        if (mapCardUI != null)
+        {
+            mapCardUI.Open();
+        }
+        else if (mapPanel != null)
+        {
+            mapPanel.SetActive(true);
+        }
+
         CanvasGroupController.DisableCG(titleCG);
     }
 
@@ -62,10 +98,39 @@ public class TitleSceneController : MonoBehaviour
     #endregion
 
     #region 맵 선택 UI 버튼 액션
-    public void OnClickCloseButton()
+    public void OnClickMapCloseButton()
     {
-        selectCanvas?.SetActive(false);
+        if (mapCardUI != null)
+        {
+            mapCardUI.Close();
+        }
+        else if (mapPanel != null)
+        {
+            mapPanel.SetActive(false);
+        }
+
         CanvasGroupController.EnableCG(titleCG);
+    }
+
+    public void OnClickDifficultCloseButton()
+    {
+        if (difficultySelectUI != null)
+        {
+            difficultySelectUI.Close();
+        }
+        else if (difficultPanel != null)
+        {
+            difficultPanel.SetActive(false);
+        }
+
+        if (mapCardUI != null)
+        {
+            mapCardUI.Open();
+        }
+        else if (mapPanel != null)
+        {
+            mapPanel.SetActive(true);
+        }
     }
     #endregion
 }

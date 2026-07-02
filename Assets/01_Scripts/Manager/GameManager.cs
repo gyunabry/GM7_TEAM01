@@ -4,6 +4,17 @@ using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
+    // 현재 메뉴 상태를 한 번에 관리하기 위해 열거형으로 선언
+    private enum PauseMenuState
+    {
+        Playing,
+        PauseMenu,
+        OptionMenu,
+        GameOver,
+        LevelUp,
+        Result
+    }
+
     public static GameManager Instance { get; private set; }
 
     [Header("구독할 이벤트")]
@@ -26,6 +37,8 @@ public class GameManager : MonoBehaviour
     private int currentExp;
 
     private InputAction pauseAction;
+
+    private PauseMenuState pauseMenuState = PauseMenuState.Playing;
 
     public int Level => level;
     public int CurrentExp => currentExp;
@@ -84,9 +97,57 @@ public class GameManager : MonoBehaviour
     {
         if (pauseAction.WasPressedThisFrame())
         {
-            PauseGame();
-            GameSceneController.Instance.ShowPauseUI();
+            HandlePauseInput();
         }
+    }
+
+    private void HandlePauseInput()
+    {
+        switch (pauseMenuState)
+        {
+            case PauseMenuState.Playing:
+                OpenPauseMenu();
+                break;
+
+            case PauseMenuState.PauseMenu:
+                ResumeFromPause();
+                break;
+
+            case PauseMenuState.OptionMenu:
+                CloseOptionToPause();
+                break;
+        }
+    }
+
+    public void OpenPauseMenu()
+    {
+        PauseGame();
+        pauseMenuState = PauseMenuState.PauseMenu;
+        GameSceneController.Instance.ShowPauseUI();
+    }
+
+    public void ResumeFromPause()
+    {
+        pauseMenuState = PauseMenuState.Playing;
+        GameSceneController.Instance.ClosePauseUI();
+        ResumeGame();
+    }
+    
+    public void OpenOptionMenu()
+    {
+        pauseMenuState = PauseMenuState.OptionMenu;
+        GameSceneController.Instance.ShowOptionUI();
+    }
+
+    public void CloseOptionToPause()
+    {
+        pauseMenuState = PauseMenuState.PauseMenu;
+        GameSceneController.Instance.CloseOptionUI();
+    }
+
+    public void OpenResultUI()
+    {
+        pauseMenuState = PauseMenuState.Result;
     }
 
     public void SetNeedExp()
@@ -123,6 +184,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
     public void AddKillCount()
     {
         KillCount++;
