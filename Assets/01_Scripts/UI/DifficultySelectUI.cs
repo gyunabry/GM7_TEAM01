@@ -37,8 +37,19 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
     }
     private void OnEnable()
     {
+        if (!isOpen)
+        {
+            Open();
+        }
+
         co = StartCoroutine(FirstSelectCard());
     }
+
+    private void OnDisable()
+    {
+        ResetPanelState();
+    }
+
     IEnumerator FirstSelectCard()
     {
         yield return null;
@@ -51,9 +62,17 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
 
     public void Open()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+            return;
+        }
+
         if (isOpen) return;
         isOpen = true;
         isSelected = false;
+        DOTween.Kill(this);
+        ResetCards();
         difficultySelectPanel.SetActive(true);
 
        
@@ -61,7 +80,7 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
         panelCavasGroup.blocksRaycasts = true;
         panelCavasGroup.interactable = false;
 
-        panelCavasGroup.DOFade(1.0f, 0.25f).OnComplete(() =>
+        panelCavasGroup.DOFade(1.0f, 0.25f).SetTarget(this).OnComplete(() =>
         {
             panelCavasGroup.interactable = true;
             PlayCardOpenTween(); 
@@ -70,7 +89,7 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
 
     private void PlayCardOpenTween()
     {
-        Sequence sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence().SetTarget(this);
         for (int i = 0; i < difficultyCards.Length; i++)
         {
             int index = i;
@@ -91,7 +110,7 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
         isSelected = true;
         panelCavasGroup.interactable = false;
 
-        Sequence sequence = DOTween.Sequence();
+        Sequence sequence = DOTween.Sequence().SetTarget(this);
         int chosenDifficultyIndex = 0;
 
         for (int i = 0; i < difficultyCards.Length; i++)
@@ -120,13 +139,42 @@ public class DifficultySelectUI : MonoBehaviour, ICardPanel
 
     }
 
+    public void Close()
+    {
+        CloseInstant();
+    }
+
     private void CloseInstant()
+    {
+        ResetPanelState();
+        difficultySelectPanel.SetActive(false);
+    }
+
+    private void ResetPanelState()
     {
         isOpen = false;
         isSelected = false;
-        difficultySelectPanel.SetActive(false);
+        DOTween.Kill(this);
         panelCavasGroup.alpha = 0.0f;
         panelCavasGroup.blocksRaycasts = false;
         panelCavasGroup.interactable = false;
+        ResetCards();
+
+        if (co != null)
+        {
+            StopCoroutine(co);
+            co = null;
+        }
+    }
+
+    private void ResetCards()
+    {
+        for (int i = 0; i < difficultyCards.Length; i++)
+        {
+            if (difficultyCards[i] != null)
+            {
+                difficultyCards[i].HideInstant();
+            }
+        }
     }
 }

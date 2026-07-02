@@ -41,11 +41,34 @@ public class MapCardUI : MonoBehaviour, ICardPanel
         Open();
     }
 
+    private void OnEnable()
+    {
+        if (!isOpen)
+        {
+            Open();
+        }
+
+        co = StartCoroutine(FirstSelectCard());
+    }
+
+    private void OnDisable()
+    {
+        ResetPanelState();
+    }
+
     public void Open()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+            return;
+        }
+
         if (isOpen) return;
         isOpen = true;
         isSelected = false;
+        DOTween.Kill(this);
+        ResetCards();
         mapSelectPanel.SetActive(true);
 
         panelCanvasGroup.alpha = 0.0f;
@@ -53,16 +76,13 @@ public class MapCardUI : MonoBehaviour, ICardPanel
         panelCanvasGroup.interactable = true;
 
         
-        panelCanvasGroup.DOFade(1.0f, 0.25f).OnComplete(() =>
+        panelCanvasGroup.DOFade(1.0f, 0.25f).SetTarget(this).OnComplete(() =>
         {
             panelCanvasGroup.interactable = true;
             PlayCardOpenTween();
         });
     }
-    public void OnEnable()
-    {
-        co = StartCoroutine(FirstSelectCard());
-    }
+
     IEnumerator FirstSelectCard()
     {
         yield return null;
@@ -88,7 +108,7 @@ public class MapCardUI : MonoBehaviour, ICardPanel
                     {
                         mapCards[index].PlayOpenTween();
                     }
-                }, false);
+                }, false).SetTarget(this);
             }
         }
     }
@@ -114,7 +134,7 @@ public class MapCardUI : MonoBehaviour, ICardPanel
             // GameSceneData에 선택된 스테이지의 데이터 저장
             GameSceneData.SelectedStage = selectCard.MapStageData;
 
-            CloseInstant();
+            //CloseInstant();
 
             if (difficultySelectUI != null)
             {
@@ -122,19 +142,48 @@ public class MapCardUI : MonoBehaviour, ICardPanel
                 difficultySelectUI.Open();
             }
             
-        }, false);
+        }, false).SetTarget(this);
     }
     public void SelectCard(DeSelectCardUI selectCard)
     {
 
     }
+
+    public void Close()
+    {
+        CloseInstant();
+    }
+
     private void CloseInstant()
+    {
+        ResetPanelState();
+    }
+
+    private void ResetPanelState()
     {
         isOpen = false;
         isSelected = false;
-        mapSelectPanel.SetActive(false);
-        panelCanvasGroup.alpha = 0.0f;
-        panelCanvasGroup.blocksRaycasts = false;
-        panelCanvasGroup.interactable = false;
+        DOTween.Kill(this);
+        panelCanvasGroup.alpha = 1.0f;
+        panelCanvasGroup.blocksRaycasts = true;
+        panelCanvasGroup.interactable = true;
+        ResetCards();
+
+        if (co != null)
+        {
+            StopCoroutine(co);
+            co = null;
+        }
+    }
+
+    private void ResetCards()
+    {
+        for (int i = 0; i < mapCards.Length; i++)
+        {
+            if (mapCards[i] != null)
+            {
+                mapCards[i].HideInstant();
+            }
+        }
     }
 }

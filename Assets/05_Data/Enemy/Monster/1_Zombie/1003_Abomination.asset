@@ -19,6 +19,9 @@ MonoBehaviour:
   moveSpeed: 1.5
   enemyPattern:
   - {fileID: 11400000, guid: ee69e06baf0a3dd48904ef02631bc802, type: 2}
-  dropItem:
-  - {fileID: 8961237026755449203, guid: 81ff6f6a284f27641989548480a12787, type: 3}
+  dropItems:
+  - item: {fileID: 8961237026755449203, guid: 81ff6f6a284f27641989548480a12787, type: 3}
+    dropChance: 1
+  - item: {fileID: 3791253550718468618, guid: ffaa29c629901d940bcd8967de7374e2, type: 3}
+    dropChance: 0.04
   runtimeAnimator: {fileID: 22100000, guid: fceb54c6394d95e489c6290818d65d44, type: 2}
