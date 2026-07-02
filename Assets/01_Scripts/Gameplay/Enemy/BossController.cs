@@ -49,8 +49,7 @@ public class BossController : MonoBehaviour, IDamageable
     private SpriteRenderer sr;
     private EnemyAnimationController animationController;
 
-    // 추후 제거할 수 있음
-    private BoxCollider2D bossCollider;
+    private Collider2D[] bossColliders;
 
     private static Transform cachedPlayerTarget;
 
@@ -81,7 +80,7 @@ public class BossController : MonoBehaviour, IDamageable
         animationController = GetComponent<EnemyAnimationController>();
         sr = GetComponentInChildren<SpriteRenderer>();
 
-        bossCollider = GetComponent<BoxCollider2D>();
+        bossColliders = GetComponentsInChildren<Collider2D>();
 
         patternCheckWait = new WaitForSeconds(patternCheckInterval);
         visualWait = new WaitForSeconds(0.1f);
@@ -493,8 +492,11 @@ public class BossController : MonoBehaviour, IDamageable
         isDeadHandled = true;
         currentState = BossState.Dead;
         canMove = false;
-        // 플레이어에게 공격받지 않기 위해 콜라이더 비활성화
-        bossCollider.enabled = false;
+        // 플레이어에게 공격받지 않기 위해 모든 콜라이더 비활성화
+        foreach (Collider2D bossCollider in bossColliders)
+        {
+            bossCollider.enabled = false;
+        }
 
         if (bossLoopRoutine != null)
         {

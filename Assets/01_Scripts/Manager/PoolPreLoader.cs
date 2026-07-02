@@ -6,6 +6,7 @@ public class PoolPreLoader : MonoBehaviour
     [SerializeField] private EnemyController enemyPrefab;
     [SerializeField] private EnemyBullet enemyBulletPrefab;
     [SerializeField] private ExpGem expPrefab;
+    [SerializeField] private Meal mealPrefab;
     [SerializeField] private HitText hitTextPrefab;
     [SerializeField] private WarningMarker warningPrefab;
     [SerializeField] private VFXAdd attackVfxPrefab;
@@ -15,6 +16,7 @@ public class PoolPreLoader : MonoBehaviour
     [SerializeField] private int enemyCount;
     [SerializeField] private int enemyBulletCount;
     [SerializeField] private int expCount = 100;
+    [SerializeField] private int mealCount = 20;
     [SerializeField] private int hitTextCount = 30;
     [SerializeField] private int warningCount = 30;
     [SerializeField] private int attackVfxCount = 30;
@@ -24,6 +26,7 @@ public class PoolPreLoader : MonoBehaviour
         PoolManager.Instance.PreLoadPool(enemyPrefab, enemyCount);
         PoolManager.Instance.PreLoadPool(enemyBulletPrefab, enemyBulletCount);
         PoolManager.Instance.PreLoadPool(expPrefab, expCount);
+        PoolManager.Instance.PreLoadPool(mealPrefab, mealCount);
         PoolManager.Instance.PreLoadPool(hitTextPrefab, hitTextCount);
         PoolManager.Instance.PreLoadPool(warningPrefab, warningCount);
         PoolManager.Instance.PreLoadPool(attackVfxPrefab, attackVfxCount);

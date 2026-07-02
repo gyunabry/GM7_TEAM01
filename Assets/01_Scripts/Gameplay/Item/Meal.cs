@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Meal : DropItemBase, ICollectable
 {
-    [SerializeField] private float healAmount = 10f;
+    [SerializeField] private float healAmount = 5f;
     private bool isPulled = false;
     private Transform pullTarget;
     private float currentPullSpeed;
@@ -17,9 +17,10 @@ public class Meal : DropItemBase, ICollectable
 
     public override void Collect(PlayerController player)
     {
-        // ÇÃ·¹ÀÌ¾î È¸º¹ ·ÎÁ÷
-        // SFX Àç»ı
-        // ¿ÀºêÁ§Æ® Ç®·Î ¹İÈ¯
+        // í”Œë ˆì´ì–´ íšŒë³µ ë¡œì§
+        player.RestoreHp(healAmount);
+        // SFX ì¬ìƒ
+        // ì˜¤ë¸Œì íŠ¸ í’€ë¡œ ë°˜í™˜
         ReturnToPool();
     }
 
@@ -32,8 +33,11 @@ public class Meal : DropItemBase, ICollectable
 
     public override DropItemBase SpawnFromPool(Vector3 position)
     {
-        DropItemBase spawnedItem = PoolManager.Instance.GetPool(this);
+        Meal spawnedItem = PoolManager.Instance.GetPool(this);
         spawnedItem.transform.position = position;
+        spawnedItem.isPulled = false;
+        spawnedItem.pullTarget = null;
+        spawnedItem.currentPullSpeed = 0f;
 
         return spawnedItem;
     }
