@@ -20,7 +20,6 @@ public class LevelUp : MonoBehaviour
     private PlayerWeaponSO[] weaponList;
     private Image[] weaponImage = new Image[3];
     private Button[] go = new Button[3];
-    private Button[] gochill = new Button[3];
     private Coroutine co;
     private PlayerAttack weaponStat;
 
@@ -112,8 +111,6 @@ public class LevelUp : MonoBehaviour
                 {
                     Button[] gobu = new Button[3];
                     go[i] = Instantiate(button);
-                    gobu = go[i].GetComponentsInChildren<Button>();
-                    gochill[i] = gobu[1];
                 }
                 while (true)
                 {
@@ -130,7 +127,7 @@ public class LevelUp : MonoBehaviour
                     {
                         ranUp[i] = 4;
                     }
-                    else if(91 <= randomUpgrade && randomUpgrade <= 100) //범위
+                    else if(91 <= randomUpgrade && randomUpgrade <= 100) //범위 && 크기
                     {
                         ranUp[i] = 3;
                     }
@@ -144,30 +141,30 @@ public class LevelUp : MonoBehaviour
                 {
                     if (i == 0)
                     {
-                        gochill[0].onClick.AddListener(() => GetUpgrade(0));
+                        go[0].onClick.AddListener(() => GetUpgrade(0));
                     }
                     else if (i == 1)
                     {
-                        gochill[1].onClick.AddListener(() => GetUpgrade(1));
+                        go[1].onClick.AddListener(() => GetUpgrade(1));
                     }
                     else if (i == 2)
                     {
-                        gochill[2].onClick.AddListener(() => GetUpgrade(2));
+                        go[2].onClick.AddListener(() => GetUpgrade(2));
                     }
                 }
                 else //무기 업글 메서드
                 {
                     if (i == 0)
                     {
-                        gochill[0].onClick.AddListener(() => GetStatUpgrade(0));
+                        go[0].onClick.AddListener(() => GetStatUpgrade(0));
                     }
                     else if (i == 1)
                     {
-                        gochill[1].onClick.AddListener(() => GetStatUpgrade(1));
+                        go[1].onClick.AddListener(() => GetStatUpgrade(1));
                     }
                     else if (i == 2)
                     {
-                        gochill[2].onClick.AddListener(() => GetStatUpgrade(2));
+                        go[2].onClick.AddListener(() => GetStatUpgrade(2));
                     }
                 }
                 ranAvo[i] = Random.Range(0, weaponList[ran[i]].upgrades.Count);
@@ -187,7 +184,7 @@ public class LevelUp : MonoBehaviour
                     text.text = $"{weaponList[ran[i]].upgrades[ranAvo[i]].upgradeName}";
                     upText[1].text = weaponList[ran[i]].upgrades[ranAvo[i]].upgradeDes;
                     Image[] childImageAvo = go[i].GetComponentsInChildren<Image>();
-                    weaponImage[i] = childImageAvo[3];
+                    weaponImage[i] = childImageAvo[1];
                     Sprite spriteAvo = await Addressables.LoadAssetAsync<Sprite>(iconNameAvo).Task;
                     weaponImage[dho].sprite = spriteAvo;
                     dho++;
@@ -208,7 +205,7 @@ public class LevelUp : MonoBehaviour
                     }
                     else if (ranUp[i] == 3)
                     {
-                        upText[1].text = $"범위 {weaponList[ran[i]].GetUpValueRange()} 증가";
+                        upText[1].text = $"범위 {weaponList[ran[i]].GetUpValueRange()} 증가, 크기 {weaponList[ran[i]].GetUpValueSize()} 증가";
                     }
                     else if (ranUp[i] == 4)
                     {
@@ -216,11 +213,11 @@ public class LevelUp : MonoBehaviour
                     }
                     else if (ranUp[i] == 5)
                     {
-                        upText[1].text = $"크기 {weaponList[ran[i]].GetUpValueSize()} 증가";
+                        
                     }
-                    text.text = weaponList[ran[i]].weaponName;
+                    text.text = $"{weaponList[ran[i]].weaponName} +{weaponList[ran[i]].upgradeCount}";
                     Image[] childImage = go[i].GetComponentsInChildren<Image>();
-                    weaponImage[i] = childImage[3];
+                    weaponImage[i] = childImage[1];
                     Sprite sprite = await Addressables.LoadAssetAsync<Sprite>(iconName).Task;
                     weaponImage[dho].sprite = sprite;
                     dho++;
@@ -234,26 +231,24 @@ public class LevelUp : MonoBehaviour
                 {
                     Button[] gobu = new Button[3];
                     go[i] = Instantiate(button);
-                    gobu = go[i].GetComponentsInChildren<Button>();
-                    gochill[i] = gobu[1];
                 }
                 Image[] childImage = go[i].GetComponentsInChildren<Image>();
-                weaponImage[i] = childImage[3];
+                weaponImage[i] = childImage[1];
                 Sprite sprite = await Addressables.LoadAssetAsync<Sprite>(iconName).Task;
                 weaponImage[dho].sprite = sprite;
                 dho++;
                 go[i].transform.SetParent(transform);
                 if (i == 0)
                 {
-                    gochill[0].onClick.AddListener(() => GetWeapon(0));
+                    go[0].onClick.AddListener(() => GetWeapon(0));
                 }
                 else if (i == 1)
                 {
-                    gochill[1].onClick.AddListener(() => GetWeapon(1));
+                    go[1].onClick.AddListener(() => GetWeapon(1));
                 }
                 else if (i == 2)
                 {
-                    gochill[2].onClick.AddListener(() => GetWeapon(2));
+                    go[2].onClick.AddListener(() => GetWeapon(2));
                 }
                 TextMeshProUGUI text = go[i].GetComponentInChildren<TextMeshProUGUI>();
                 TextMeshProUGUI[] upText = go[i].GetComponentsInChildren<TextMeshProUGUI>();
@@ -263,7 +258,7 @@ public class LevelUp : MonoBehaviour
             }
             if (i == 0)
             {
-                go[i].transform.localPosition = new Vector3(-500f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(-550f, 0f, 0f);
             }
             else if (i == 1)
             {
@@ -271,7 +266,7 @@ public class LevelUp : MonoBehaviour
             }
             else if (i == 2)
             {
-                go[i].transform.localPosition = new Vector3(500f, 0f, 0f);
+                go[i].transform.localPosition = new Vector3(550f, 0f, 0f);
             }
             go[i].gameObject.SetActive(true);
         }
@@ -282,9 +277,9 @@ public class LevelUp : MonoBehaviour
         playerController.OnWeaponArm(weaponList[ran[jk]].weaponType);
         i = 0;
         dho = 0;
-        gochill[0].onClick.RemoveAllListeners();
-        gochill[1].onClick.RemoveAllListeners();
-        gochill[2].onClick.RemoveAllListeners();
+        go[0].onClick.RemoveAllListeners();
+        go[1].onClick.RemoveAllListeners();
+        go[2].onClick.RemoveAllListeners();
         gameObject.SetActive(false);
 
         playerController.SetWeaponArm();
@@ -310,6 +305,7 @@ public class LevelUp : MonoBehaviour
         else if (ranUp[jk] == 3)
         {
             weaponList[ran[jk]].AddStatUpgradeRange(weaponList[ran[jk]].GetUpValueRange());
+            weaponList[ran[jk]].AddStatUpgradeSize(weaponList[ran[jk]].GetUpValueSize());
         }
         else if (ranUp[jk] == 4)
         {
@@ -328,9 +324,9 @@ public class LevelUp : MonoBehaviour
         }
         i = 0;
         dho = 0;
-        gochill[0].onClick.RemoveAllListeners();
-        gochill[1].onClick.RemoveAllListeners();
-        gochill[2].onClick.RemoveAllListeners();
+        go[0].onClick.RemoveAllListeners();
+        go[1].onClick.RemoveAllListeners();
+        go[2].onClick.RemoveAllListeners();
         gameObject.SetActive(false);
 
         playerController.SetWeaponArm();
@@ -347,9 +343,9 @@ public class LevelUp : MonoBehaviour
         }
         i = 0;
         dho = 0;
-        gochill[0].onClick.RemoveAllListeners();
-        gochill[1].onClick.RemoveAllListeners();
-        gochill[2].onClick.RemoveAllListeners();
+        go[0].onClick.RemoveAllListeners();
+        go[1].onClick.RemoveAllListeners();
+        go[2].onClick.RemoveAllListeners();
         gameObject.SetActive(false);
 
         playerController.SetWeaponArm();

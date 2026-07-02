@@ -225,14 +225,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 996661441327463699, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
-      propertyPath: button
-      value: 
-      objectReference: {fileID: 9200449709777796302, guid: 7981c3041ef53ee4cb0f625cbfcead52, type: 3}
-    - target: {fileID: 996661441327463699, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
-      propertyPath: needUpCount
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 996661441327463699, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
       propertyPath: playerWeapon
       value: 
       objectReference: {fileID: 872488056}
@@ -243,10 +235,6 @@ PrefabInstance:
     - target: {fileID: 1843929781002007539, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
       propertyPath: m_Name
       value: LevelUpCanvas
-      objectReference: {fileID: 0}
-    - target: {fileID: 1843929781002007539, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4240178210618358875, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
       propertyPath: m_Pivot.x
@@ -326,10 +314,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4240178210618358875, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5933505230929659585, guid: 6624141f2d84ff34bb744d5428654cdc, type: 3}
-      propertyPath: m_RenderMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

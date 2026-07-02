@@ -39,6 +39,9 @@ public class PlayerWeaponSO : ScriptableObject
 
     [Header("weaponUnlock")]
     public bool unlocking;
+
+    [Header("weaponTotalDamage")]
+    public int totalDamage;
     
     public float GetUpgradeDamage(int i)
     {
@@ -128,6 +131,7 @@ public class PlayerWeaponSO : ScriptableObject
         statUpgrades.nowUpgradeSize = 0;
         upgradeCount = 0;
         weaponAttackSpeedUpgradeCount = 0;
+        totalDamage = 0;
     }
     //업그레이드 수치 가져오기
     public float GetUpValueDamage()
