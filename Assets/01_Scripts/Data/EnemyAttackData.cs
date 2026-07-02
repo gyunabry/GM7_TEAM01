@@ -40,12 +40,6 @@ public class EnemyAttackData : ScriptableObject
     [Tooltip("투사체 발사 각도")]
     public float spreadAngle;
 
-    [Header("궤도 공격")]
-    [Tooltip("궤도 반지름")]
-    public float orbitRadius;
-    [Tooltip("궤도 회전 속도")]
-    public float orbitSpeed;
-
     [Header("연속 발사 설정")]
     public int burstCount = 1;
     public float burstInterval = 0.2f;

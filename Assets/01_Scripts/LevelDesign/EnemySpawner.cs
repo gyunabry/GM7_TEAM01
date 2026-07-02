@@ -86,12 +86,8 @@ public class EnemySpawner : MonoBehaviour
         while (elapsed < duration)
         {
             float intervalTime = info.spawnInterval;
-            // 웨이브 남은 시간이 지정된 인터벌보다 작다면 남은 시간만큼만 진행
-            if (elapsed + intervalTime > duration)
-            {
-                intervalTime = duration - elapsed;
-            }
 
+            yield return new WaitForSeconds(intervalTime);
             elapsed += intervalTime;
 
             // 현재 시점의 애니메이션 커브 값 평가
@@ -132,8 +128,6 @@ public class EnemySpawner : MonoBehaviour
                     });
                 }
             }
-            yield return new WaitForSeconds(info.spawnInterval);
-            elapsed += info.spawnInterval;
         }
     }
 

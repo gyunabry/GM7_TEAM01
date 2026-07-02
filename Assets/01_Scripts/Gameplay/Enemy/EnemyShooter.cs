@@ -55,9 +55,6 @@ public class EnemyShooter : MonoBehaviour
             case BulletPattern.Circle:
                 FireCircle(attackData, target);
                 break;
-            case BulletPattern.Orbit:
-                FireOrbit(attackData, target);
-                break;
             case BulletPattern.Burst:
                 StartCoroutine(FireBurst(attackData, target));
                 break;
@@ -124,11 +121,6 @@ public class EnemyShooter : MonoBehaviour
 
             SpawnProjectile(attackData, direction, target);
         }
-    }
-
-    private void FireOrbit(EnemyAttackData attackData, Transform target)
-    {
-
     }
 
     private IEnumerator FireBurst(EnemyAttackData attackData, Transform target)
