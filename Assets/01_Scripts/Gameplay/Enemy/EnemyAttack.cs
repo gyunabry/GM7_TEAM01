@@ -246,13 +246,13 @@ public class EnemyAttack : MonoBehaviour
 
     private void TryDamageTargetOnContact(float damage)
     {
-        if (enemyController != null || enemyController.target == null)
+        if (enemyController == null || enemyController.target == null)
         {
             return;
         }
 
         PlayerController player = enemyController.target.GetComponent<PlayerController>();
-        if (player != null)
+        if (player == null)
         {
             return;
         }

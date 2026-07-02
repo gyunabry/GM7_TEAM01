@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class GameManager : MonoBehaviour
     private int[] requireExp = new int[100];
     private int currentExp;
 
+    private InputAction pauseAction;
+
     public int Level => level;
     public int CurrentExp => currentExp;
     public int[] RequireExp => requireExp;
@@ -38,6 +41,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        pauseAction = InputSystem.actions.FindAction("Pause");
     }
 
     private void Start()
@@ -72,6 +77,15 @@ public class GameManager : MonoBehaviour
         if (bossClearEvent != null)
         {
             bossClearEvent.OnEventRaised -= OnBossDead;
+        }
+    }
+
+    private void Update()
+    {
+        if (pauseAction.WasPressedThisFrame())
+        {
+            PauseGame();
+            GameSceneController.Instance.ShowPauseUI();
         }
     }
 

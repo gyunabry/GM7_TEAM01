@@ -5,15 +5,17 @@ using UnityEngine.UI;
 
 public class GameSceneController : MonoBehaviour
 {
+    public static GameSceneController Instance { get; private set; }
+
     [Header("플레이어 사망 이벤트")]
     [SerializeField] private VoidEventChannel playerDeadEvent;
     [Header("보스 클리어 이벤트")]
     [SerializeField] private VoidEventChannel bossClearEvent;
 
     [Header("패널")]
-    [SerializeField] private CanvasGroup pauseCG;   // 일시정지 시 보여줄 패널
-    [SerializeField] private CanvasGroup optionCG;  // 일시정지 메뉴 중 옵션을 선택했을 때 보여줄 패널
-    [SerializeField] private CanvasGroup gameoverCG; // 게임오버 시 보여줄 패널
+    [SerializeField] private GameObject pausePanel;   // 일시정지 시 보여줄 패널
+    [SerializeField] private GameObject optionPanel;  // 일시정지 메뉴 중 옵션을 선택했을 때 보여줄 패널
+    [SerializeField] private GameObject gameoverPanel; // 게임오버 시 보여줄 패널
 
     [Header("일시정지")]
     [SerializeField] private Button resumeButton;
@@ -25,6 +27,18 @@ public class GameSceneController : MonoBehaviour
     [SerializeField] private TMP_Text gameoverText;
     [SerializeField] private Button goRestartButton;
     [SerializeField] private Button goTitleButton;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -53,35 +67,45 @@ public class GameSceneController : MonoBehaviour
     }
 
     #region 일시정지 메뉴
-    public void OnClickResumeButton()
+    public void ShowPauseUI()
+    {
+        optionPanel.SetActive(false);
+        pausePanel.SetActive(true);
+    }
+
+    private void OnClickResumeButton()
     {
         GameManager.Instance.ResumeGame();
     }
 
-    public void OnClickRestartButton()
+    private void OnClickRestartButton()
     {
         // 해당 난이도로 재시작
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void OnClickOptionButton()
+    private void OnClickOptionButton()
     {
-        CanvasGroupController.EnableCG(optionCG);
-        CanvasGroupController.DisableCG(pauseCG);
+        optionPanel.SetActive(true);
+        pausePanel.SetActive(false);
     }
 
-    public void OnClickExitButton()
+    private void OnClickExitButton()
     {
         Debug.Log("타이틀로 돌아갑니다.");
         GameSceneManager.Instance.LoadScene(SceneType.Title);
     }
     #endregion
 
+    #region 환경설정 메뉴
+
+    #endregion
+
     private void OnPlayerDead()
     {
-        CanvasGroupController.EnableCG(gameoverCG);
-        CanvasGroupController.DisableCG(optionCG);
-        CanvasGroupController.DisableCG(pauseCG);
+        gameoverPanel.SetActive(true);
+        optionPanel.SetActive(false);
+        pausePanel.SetActive(false);
 
         gameoverText.text = "YOU DIED";
         gameoverText.color = Color.red;
@@ -89,9 +113,9 @@ public class GameSceneController : MonoBehaviour
 
     private void OnBossClear()
     {
-        CanvasGroupController.EnableCG(gameoverCG);
-        CanvasGroupController.DisableCG(optionCG);
-        CanvasGroupController.DisableCG(pauseCG);
+        gameoverPanel.SetActive(true);
+        optionPanel.SetActive(false);
+        pausePanel.SetActive(false);
 
         gameoverText.text = "클리어!";
         gameoverText.color = Color.green;
