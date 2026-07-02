@@ -268,11 +268,12 @@ public class PlayerAttack : MonoBehaviour
         Vector2 rightDir = new Vector2(-basePosi.y, basePosi.x);
 
         float Posi = playerWeapon.GetStatUpgradeSize();
+        float pullSize = playerWeapon.GetStatUpgradeSize();
         Posi = Posi / 10;
+        pullSize = pullSize / 100;
         Vector3 pullPosi = targetPosi.position - (Vector3)(direction * 0.6f);
-        Vector3 pullMainPosi = targetPosi.position - (Vector3)(direction * 0.2f);
+        Vector3 pullMainPosi = targetPosi.position - (Vector3)(direction * (0.2f - pullSize));
         
-
         Vector3 leftPosi = pullPosi + (Vector3)(rightDir * (1.6f + Posi));
         Vector3 rightPosi = pullPosi - (Vector3)(rightDir * (1.6f + Posi));
 
@@ -345,9 +346,11 @@ public class PlayerAttack : MonoBehaviour
         Vector2 rightDir = new Vector2(-basePosi.y, basePosi.x);
 
         float Posi = playerWeapon.GetStatUpgradeSize();
+        float pullSize = playerWeapon.GetStatUpgradeSize();
         Posi = Posi / 10;
+        pullSize = pullSize / 100;
         Vector3 pullPosi = targetPosi.position - (Vector3)(direction * 1f);
-        Vector3 pullMainPosi = targetPosi.position - (Vector3)(direction * 0.2f);
+        Vector3 pullMainPosi = targetPosi.position - (Vector3)(direction * (0.2f - pullSize));
 
 
         Vector3 leftPosi = pullPosi + (Vector3)(rightDir * (0.8f + Posi));
