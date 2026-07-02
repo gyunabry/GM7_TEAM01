@@ -24,12 +24,12 @@ MonoBehaviour:
   weaponAttackSpeed: 0.9
   weaponRange: 3
   weaponCri: 0
-  weaponSize: 10
+  weaponSize: 15
   weaponPiercing: 0
-  weaponAttackSpeedUpgradeCount: 0
+  weaponAttackSpeedUpgradeCount: 3
   upgrades:
   - upgradeName: "\uB300\uAC80"
-    upgradeDamage: 30
+    upgradeDamage: 45
     upgradeArmorPiercing: 10
     upgradeAttackSpeed: 0
     upgradeRange: 2
@@ -38,21 +38,22 @@ MonoBehaviour:
     upgradeDes: "\uB113\uC740 \uBC94\uC704\uAC00 \uD2B9\uC9D5\uC778 \uC9C4\uD654"
     upgradeSprite: {fileID: -8601833956312487032, guid: 74c7a773443c45145a3ecaf0b33003c8, type: 3}
   - upgradeName: "\uB2E8\uAC80"
-    upgradeDamage: 10
+    upgradeDamage: 20
     upgradeArmorPiercing: 15
     upgradeAttackSpeed: -0.5
     upgradeRange: 0
-    upgradeCri: 30
-    upgradeSize: 10
+    upgradeCri: 40
+    upgradeSize: 15
     upgradeDes: "\uBE60\uB978 \uACF5\uACA9\uC18D\uB3C4\uAC00 \uD2B9\uC9D5\uC778 \uC9C4\uD654"
     upgradeSprite: {fileID: -8070790144581709556, guid: 55c02a3d1fbcac549802c0a671ded235, type: 3}
   statUpValue:
-    upgradeStatDamage: 10
+    upgradeStatDamage: 5
     upgradeStatArmorPiercing: 5
-    upgradeStatAttackSpeed: -0.1
+    upgradeStatAttackSpeed: -0.05
     upgradeStatRange: 1
-    upgradeStatCri: 10
-    upgradeStatSize: 2
-  upgradeNum: 0
-  upgradeCount: 0
+    upgradeStatCri: 5
+    upgradeStatSize: 3
+  upgradeNum: 1
+  upgradeCount: 20
   unlocking: 0
+  totalDamage: 97760
